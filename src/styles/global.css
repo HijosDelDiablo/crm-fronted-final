@@ -1,0 +1,38 @@
+@import "./variables.css";
+
+body {
+  font-family: "Inter", sans-serif;
+  background: var(--background-soft);
+  color: var(--text-main);
+  margin: 0;
+}
+
+/* efecto glass */
+.glass {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(18px);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+}
+
+/* tarjetas modernas */
+.card-modern {
+  border-radius: var(--radius);
+  background: white;
+  padding: 24px;
+  box-shadow: var(--shadow-soft);
+}
+
+/* botones modernos */
+.btn-primary-modern {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border: none !important;
+  color: white;
+  padding: 10px 20px;
+  border-radius: var(--radius);
+  font-weight: 600;
+}
+
+.btn-primary-modern:hover {
+  opacity: 0.88;
+}

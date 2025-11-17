@@ -1,0 +1,60 @@
+.landing-section {
+  padding: 100px 0;
+}
+
+/* HERO */
+.hero-title {
+  font-size: 4rem;
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1.1;
+}
+
+.hero-subtitle {
+  font-size: 1.25rem;
+  color: var(--text-secondary);
+  margin-top: 20px;
+  max-width: 500px;
+}
+
+/* Botón principal */
+.btn-landing {
+  background: linear-gradient(120deg, var(--primary), var(--secondary));
+  color: white;
+  padding: 14px 30px;
+  border-radius: 14px;
+  border: none;
+  font-size: 1.1rem;
+  font-weight: 600;
+  transition: 0.25s;
+}
+
+.btn-landing:hover {
+  opacity: 0.85;
+}
+
+/* glass effect */
+.card-glass {
+  backdrop-filter: blur(22px);
+  background: rgba(255, 255, 255, 0.5);
+  padding: 30px;
+  border-radius: 22px;
+  box-shadow: var(--shadow-strong);
+}
+
+/* IA section */
+.ia-box {
+  background: white;
+  padding: 40px;
+  border-radius: 22px;
+  box-shadow: var(--shadow-soft);
+}
+
+/* Footer */
+.footer {
+  padding: 40px 0;
+  background: var(--background-soft);
+  text-align: center;
+  color: var(--text-secondary);
+  margin-top: 60px;
+}
