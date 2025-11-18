@@ -2,6 +2,8 @@ import Hero from "./Hero";
 import Features from "./Features";
 import IASection from "./IASection";
 import CTA from "./CTAA";
+import Nav from "./Nav";
+
 import Footer from "./Footer";
 
 import "./landing.css";
@@ -9,6 +11,7 @@ import "./landing.css";
 export default function Landing() {
   return (
     <>
+      <Nav />
       <Hero />
       <Features />
       <IASection />

@@ -1,59 +1,68 @@
-// src/components/Navbar.jsx
-import { NavLink, Link } from "react-router-dom";
-import "./Navbar.css";
+// src/components/layout/Navbar.jsx
+import { Navbar, Nav, Container, Button } from "react-bootstrap";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import logo from "../../assets/logos/logoAuto.jpg";
+import "./nav.css";
 
-export default function Navbar() {
+export default function MainNavbar() {
+  const navigate = useNavigate();
+
   return (
-    <header className="navbar">
-      <div className="navbar-inner">
+    <Navbar expand="lg" className="main-navbar" fixed="top">
+      <Container>
         {/* Logo */}
-        <Link to="/" className="logo">
-          {/* Cambia la ruta de la imagen por la tuya */}
-          <img src="/logo-autobots.png" alt="Autobots IA" />
-          <span>AUTOBOTS</span>
-        </Link>
+        <Navbar.Brand
+          as={Link}
+          to="/"
+          className="d-flex align-items-center gap-2"
+        >
+          <img src={logo} className="nav-logo" alt="Autobots" />
+          <span className="logo-text">Autobots IA</span>
+        </Navbar.Brand>
 
-        {/* Links */}
-        <nav className="nav-links">
-          <NavLink to="/" className="nav-item">
-            Inicio
-          </NavLink>
-          <NavLink to="/soluciones" className="nav-item">
-            Soluciones
-          </NavLink>
-          <NavLink to="/autos" className="nav-item">
-            Autos Conectados
-          </NavLink>
-          <NavLink to="/precios" className="nav-item">
-            Precios
-          </NavLink>
-          <NavLink to="/soporte" className="nav-item">
-            Soporte
-          </NavLink>
-        </nav>
+        {/* Botón hamburguesa */}
+        <Navbar.Toggle aria-controls="main-navbar-nav" />
 
-        {/* Acciones */}
-        <div className="nav-actions">
-          <button className="btn-ghost">Iniciar sesión</button>
-          <button className="btn-primary">Comenzar</button>
-        </div>
-      </div>
+        <Navbar.Collapse id="main-navbar-nav">
+          {/* Links */}
+          <Nav className="ms-auto align-items-lg-center gap-lg-4">
+            <NavLink className="nav-link" to="/">
+              Inicio
+            </NavLink>
+            <NavLink className="nav-link" to="/soluciones">
+              Soluciones
+            </NavLink>
+            <NavLink className="nav-link" to="/modulos">
+              Módulos
+            </NavLink>
+            <NavLink className="nav-link" to="/precios">
+              Precios
+            </NavLink>
+            <NavLink className="nav-link" to="/soporte">
+              Soporte
+            </NavLink>
+          </Nav>
 
-      {/* Sub barra tipo Apple */}
-      <div className="nav-subbar">
-        <div className="sub-item">
-          <span className="sub-title">IA para Flotas</span>
-          <span className="sub-desc">Optimiza rutas y combustible.</span>
-        </div>
-        <div className="sub-item">
-          <span className="sub-title">Autobots Cloud</span>
-          <span className="sub-desc">Monitorea tus vehículos en tiempo real.</span>
-        </div>
-        <div className="sub-item">
-          <span className="sub-title">Integraciones</span>
-          <span className="sub-desc">Conecta tu ERP, CRM y más.</span>
-        </div>
-      </div>
-    </header>
+          {/* Botones */}
+          <div className="d-flex align-items-center gap-2 mt-3 mt-lg-0 ms-lg-4">
+            <Button
+              variant="outline-primary"
+              className="btn-nav-ghost"
+              onClick={() => navigate("/login")}
+            >
+              Iniciar sesión
+            </Button>
+
+            <Button
+              variant="primary"
+              className="btn-nav-primary"
+              onClick={() => navigate("/registro")}
+            >
+              Comenzar
+            </Button>
+          </div>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
   );
 }
