@@ -2,37 +2,44 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from 'react-hot-toast';
 import Landing from "./pages/Landing/Landing";
 import Auth from "./pages/Auth/Auth";
+import { useAuth } from "./hooks/useAuth";
+import AuthContex from "./context/AuthContext";
 // import Login from "./pages/Login/Login"; // lo crearás después
 // import Dashboard from "./pages/Dashboard/Dashboard"; // más adelante
 
 function App() {
+
+  const { user, login, logout, setUser } = useAuth();
+
   return (
     <BrowserRouter>
-      <Routes>
-        {/* LANDING COMO PÁGINA INICIAL */}
-        <Route path="/" element={<Landing />} />
+      <AuthContex.Provider value={{ user, setUser }}>
+        <Routes>
+          {/* LANDING COMO PÁGINA INICIAL */}
+          <Route path="/" element={<Landing />} />
 
-        {/* LOGIN */}
-        <Route path="/login" element={<Auth />} />
+          {/* LOGIN */}
+          <Route path="/login" element={<Auth />} />
 
 
-        {/* SISTEMA INTERNO */}
-        {/* <Route path="/dashboard" element={<Dashboard />} /> */}
+          {/* SISTEMA INTERNO */}
+          {/* <Route path="/dashboard" element={<Dashboard />} /> */}
 
-        {/* ETC */}
-      </Routes>
+          {/* ETC */}
+        </Routes>
+      </AuthContex.Provider>
       <Toaster
-      position="top-center"
-      toastOptions={{
-        duration: 3500,
-        style: {
-          padding: '10px 14px',
-          fontSize: '14px',
-          borderRadius: '10px',
-          boxShadow: '0 6px 18px rgba(0,0,0,0.12)'
-        }
-      }}
-    />
+        position="top-center"
+        toastOptions={{
+          duration: 3500,
+          style: {
+            padding: '10px 14px',
+            fontSize: '14px',
+            borderRadius: '10px',
+            boxShadow: '0 6px 18px rgba(0,0,0,0.12)'
+          }
+        }}
+      />
     </BrowserRouter>
   );
 }
