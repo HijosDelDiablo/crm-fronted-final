@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import './../../styles/Auth.css';
 import ButtonPrimary from '../../components/shared/ButtonPrimary';
-import { loginFetch, registerFetch } from '../../hooks/auth';
+import { loginFetch, registerFetch } from '../../api/auth';
 import { notifyError, notifySuccess } from '../../components/shared/Alerts';
 import { validateField } from './validations';
 import { useAuth } from '../../hooks/useAuth';
@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 const Auth = () => {
   const from = location.state?.from?.pathname || '/login';
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { setUser } = useAuth();
   const [view, setView] = useState('login'); // 'login', 'register', 'recovery'
   const [formData, setFormData] = useState({
     email: '',
@@ -73,7 +73,6 @@ const Auth = () => {
     try {
       if (view === 'login') {
         const response = await loginFetch(formData);
-        console.log("Responseeee:  ",response);
         
         if (!response.status) {
           notifyError(response.message);
@@ -81,10 +80,11 @@ const Auth = () => {
           return;
         }
 
+        setUser(response.user);
+        
         notifySuccess(response.message || 'Inicio de sesión exitoso');
         setIsLoading(false);
-        login(response.user);
-
+        
         if (response.user.rol === "ADMIN") {
           notifySuccess('Módulo de administración aun no implementado');
           navigate('/');
@@ -97,7 +97,7 @@ const Auth = () => {
           setIsLoading(false);
           return;
         }
-
+        
 
       } else if (view === 'register') {
         console.log('Register:', {

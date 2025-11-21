@@ -5,7 +5,6 @@ export const useLocalStorage = () => {
 
   const setItem = (key, value) => {
     localStorage.setItem(key, value);
-        console.log("User to add: ",key," : ",value);
 
     setValue(value);
   };
