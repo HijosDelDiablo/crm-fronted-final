@@ -1,15 +1,17 @@
 :root {
-  --primary: #39C4E8;
-  --secondary: #1463A7;
-  --accent: #5B2D90;
+  /* Acento tipo iOS, pero solo para botones y detalles */
+  --primary: #007aff;
+  --secondary: #111827;
+  --accent: #6366f1;
 
-  --text-main: #0E1A2B;
-  --text-secondary: #2F3A4A;
+  /* Colores de texto y fondo muy neutros */
+  --text-main: #0b1120;
+  --text-secondary: #4b5563;
 
-  --background: #FFFFFF;
-  --background-soft: #F4F7FA;
+  --background: #ffffff;
+  --background-soft: #f5f5f7; /* gris muy claro estilo Apple */
 
   --radius: 16px;
-  --shadow-soft: 0 4px 20px rgba(0,0,0,0.04);
-  --shadow-strong: 0 8px 32px rgba(0,0,0,0.12);
+  --shadow-soft: 0 8px 30px rgba(15, 23, 42, 0.06);
+  --shadow-strong: 0 18px 60px rgba(15, 23, 42, 0.12);
 }
