@@ -1,7 +1,7 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import './../../styles/Auth.css';
 import ButtonPrimary from '../../components/shared/ButtonPrimary';
-import { loginFetch, registerFetch } from '../../hooks/auth';
+import { loginFetch, registerFetch } from '../../api/auth';
 import { notifyError, notifySuccess } from '../../components/shared/Alerts';
 import { validateField } from './validations';
 import { useAuth } from '../../hooks/useAuth';
@@ -11,7 +11,7 @@ import { handleLoginResponse } from '../../utils/authUtils';
 const Auth = () => {
   const from = location.state?.from?.pathname || '/login';
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { setUser } = useAuth();
   const [view, setView] = useState('login'); // 'login', 'register', 'recovery'
   const [formData, setFormData] = useState({
     email: '',
@@ -74,7 +74,7 @@ const Auth = () => {
     try {
       if (view === 'login') {
         const response = await loginFetch(formData);
-        handleLoginResponse(response, navigate, login, setIsLoading);
+        handleLoginResponse(response, navigate, setUser, setIsLoading);
 
       } else if (view === 'register') {
         console.log('Register:', {
@@ -311,9 +311,6 @@ const Auth = () => {
                   Inicia sesión
                 </button>
               </p>
-              <p className="auth-legal">
-                Al continuar aceptas los Términos de uso y el Aviso de privacidad.
-              </p>
             </>
           )}
           {view === 'recovery' && (
@@ -324,6 +321,9 @@ const Auth = () => {
             </p>
           )}
         </div>
+        <p className="auth-legal">
+          Al continuar aceptas los Términos de uso y el Aviso de privacidad.
+        </p>
       </div>
     </div>
   );

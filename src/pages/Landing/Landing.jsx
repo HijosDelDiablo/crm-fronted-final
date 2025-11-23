@@ -8,8 +8,7 @@ import Footer from "./Footer";
 
 import "./landing.css";
 
-export default function Landing() {
-
+const Landing = () => {
   return (
     <>
       <Nav />
@@ -21,3 +20,5 @@ export default function Landing() {
     </>
   );
 }
+
+export default Landing;

@@ -2,8 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from 'react-hot-toast';
 import Landing from "./pages/Landing/Landing";
 import Auth from "./pages/Auth/Auth";
-import { useAuth } from "./hooks/useAuth";
-import AuthContex from "./context/AuthContext";
+import { AuthContextProvider } from "./context/AuthContextProvider";
 import Login from "./pages/login/login";
 import Registro from "./pages/login/registro";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -14,11 +13,10 @@ import LoginGoogle from "./pages/Auth/LoginGoogle";
 
 function App() {
 
-  const { user, login, logout, setUser } = useAuth();
 
   return (
     <BrowserRouter>
-      <AuthContex.Provider value={{ user, setUser }}>
+      <AuthContextProvider>
         <Routes>
           {/* LANDING COMO PÁGINA INICIAL */}
           <Route path="/" element={<Landing />} />
@@ -33,7 +31,7 @@ function App() {
 
           {/* ETC */}
         </Routes>
-      </AuthContex.Provider>
+      </AuthContextProvider>
       <Toaster
         position="top-center"
         toastOptions={{

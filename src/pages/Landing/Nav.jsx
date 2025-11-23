@@ -4,23 +4,19 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import logo from "../../assets/logos/logoAuto.jpg";
 import "./nav.css";
 import NavbarTop from "../../components/layout/Navbar";
-import { useContext } from "react";
-import { AuthContext } from "../../context/AuthContext";
+import { useAuth } from "../../hooks/useAuth";
 
 export default function MainNavbar() {
   const navigate = useNavigate();
-  const { user } = useContext(AuthContext);
-  const role = user?.role;
+  const { user } = useAuth();
 
-  console.log("User: ", user);
-  console.log("Role: ", role);
-
-
-  if (role === 'ADMIN') {
-    return <NavbarTop />;
-  }
-  if (!user || user === null || !role) {
+  console.log("user", user);
+  if (!user) {
     console.warn("No hay usuario");
+  }
+
+  if (user && user.rol === 'ADMIN') {
+    return <NavbarTop />;
   }
 
   return (
