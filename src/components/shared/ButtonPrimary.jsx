@@ -1,10 +1,10 @@
 import '../../styles/ButtonPrimary.css'
-const ButtonPrimary = ({btnType, isDisabled, text}) => {
+const ButtonPrimary = ({ btnType, isDisabled, text }) => {
   return (
     <div>
-      <button type={btnType} className="btn-primary" disabled={isDisabled}>
-           {text}
-          </button>
+      <button type={btnType} className="btn-auth-main w-100 mb-2" disabled={isDisabled}>
+        {text}
+      </button>
     </div>
   )
 }

@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import './../../styles/Auth.css';
 import ButtonPrimary from '../../components/shared/ButtonPrimary';
-import { loginFetch, registerFetch } from '../../hooks/auth';
+import { loginFetch, loginGoogleFetch, registerFetch } from '../../hooks/auth';
 import { notifyError, notifySuccess } from '../../components/shared/Alerts';
 import { validateField } from './validations';
 import { useAuth } from '../../hooks/useAuth';
@@ -73,8 +73,8 @@ const Auth = () => {
     try {
       if (view === 'login') {
         const response = await loginFetch(formData);
-        console.log("Responseeee:  ",response);
-        
+        console.log("Responseeee:  ", response);
+
         if (!response.status) {
           notifyError(response.message);
           setIsLoading(false);
@@ -90,7 +90,7 @@ const Auth = () => {
           navigate('/');
         }
         else if (response.user.rol === "CLIENTE") {
-          
+
           navigate('/');
         } else {
           notifyError('Rol de usuario no reconocido');
@@ -133,6 +133,7 @@ const Auth = () => {
   const handleGoogleAuth = async () => {
     //  GOOGLE AUTH IMPLEMENTATION
     console.log('Google Auth iniciado');
+    await loginGoogleFetch();
     // window.location.href = '/api/auth/google';
     // O usa Firebase, Auth0, etc.
     notifyError('Funcionalidad de Google Auth no implementada');
@@ -154,17 +155,26 @@ const Auth = () => {
   return (
     <div className="auth-container">
       <div className="auth-card">
+        {/* Logo */}
+        <div className="logo-container">
+          <div className="logo-icon">AI</div>
+          <div className="logo-text">
+            <span className="logo-title">Autobots IA</span>
+            <span className="logo-subtitle">CRM automotriz con IA</span>
+          </div>
+        </div>
+
         {/* Header */}
         <div className="auth-header">
           <h1 className="auth-title">
-            {view === 'login' && 'Bienvenido'}
+            {view === 'login' && 'Iniciar sesión'}
             {view === 'register' && 'Crear cuenta'}
             {view === 'recovery' && 'Recuperar contraseña'}
           </h1>
           <p className="auth-subtitle">
-            {view === 'login' && 'Ingresa a tu cuenta'}
-            {view === 'register' && 'Completa tus datos'}
-            {view === 'recovery' && 'Te enviaremos un link de recuperación'}
+            {view === 'login' && 'Entra a tu panel y continúa donde te quedaste.'}
+            {view === 'register' && 'Completa tus datos para registrarte.'}
+            {view === 'recovery' && 'Te enviaremos un link de recuperación.'}
           </p>
         </div>
 
@@ -190,7 +200,7 @@ const Auth = () => {
           )}
 
           <div className="form-group">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email">Correo electrónico</label>
             <input
               type="email"
               id="email"
@@ -199,7 +209,7 @@ const Auth = () => {
               onChange={handleChange}
               onBlur={handleBlur}
               className={errors.email && touched.email ? 'error' : ''}
-              placeholder="tu@email.com"
+              placeholder="tucorreo@email.com"
             />
             {errors.email && touched.email && (
               <span className="error-message">{errors.email}</span>
@@ -272,21 +282,20 @@ const Auth = () => {
                   checked={formData.rememberMe}
                   onChange={handleChange}
                 />
-                <span>Recordarme</span>
+                <span>Recuérdame</span>
               </label>
               <button
                 type="button"
-                className="link-button"
+                className="forgot-password"
                 onClick={() => switchView('recovery')}
               >
                 ¿Olvidaste tu contraseña?
               </button>
             </div>
           )}
-
           <ButtonPrimary btnType="submit" isDisabled={isLoading} text={
             isLoading ? 'Cargando...' : (
-              view === 'login' ? 'Iniciar sesión' :
+              view === 'login' ? 'Entrar' :
                 view === 'register' ? 'Registrarse' :
                   'Enviar link'
             )
@@ -302,7 +311,7 @@ const Auth = () => {
             </div>
 
             <button type="button" className="btn-google" onClick={handleGoogleAuth}>
-              <svg width="18" height="18" viewBox="0 0 18 18">
+              <svg width="20" height="20" viewBox="0 0 18 18">
                 <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" />
                 <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z" />
                 <path fill="#FBBC05" d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.347 6.175 0 7.55 0 9s.348 2.825.957 4.039l3.007-2.332z" />
@@ -316,24 +325,25 @@ const Auth = () => {
         {/* Footer */}
         <div className="auth-footer">
           {view === 'login' && (
-            <p>
-              ¿No tienes cuenta?{' '}
-              <button type="button" className="link-button" onClick={() => switchView('register')}>
-                Regístrate
-              </button>
-            </p>
+            <>
+              <p className="mb-2">¿No tienes cuenta?</p>
+              <p>Crea una cuenta para comenzar tu experiencia. <button type="button" className="link-register" onClick={() => switchView('register')}>Regístrate</button></p>
+            </>
           )}
           {view === 'register' && (
             <p>
               ¿Ya tienes cuenta?{' '}
-              <button type="button" className="link-button" onClick={() => switchView('login')}>
+              <button type="button" className="link-register" onClick={() => switchView('login')}>
                 Inicia sesión
               </button>
+              <p className="auth-legal">
+                Al continuar aceptas los Términos de uso y el Aviso de privacidad.
+              </p>
             </p>
           )}
           {view === 'recovery' && (
             <p>
-              <button type="button" className="link-button" onClick={() => switchView('login')}>
+              <button type="button" className="link-register" onClick={() => switchView('login')}>
                 ← Volver al login
               </button>
             </p>
