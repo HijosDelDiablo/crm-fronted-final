@@ -5,10 +5,13 @@ import CTA from "./CTAA";
 import Footer from "./Footer";
 
 import "./landing.css";
+import { useAuth } from "../../hooks/useAuth";
 
-export default function Landing() {
+const Landing = ()=> {
   //test
-  // No se como obtener el user desde aqui
+ 
+  const { user, isLoggedIn } = useAuth();
+  console.log("Landing user:", user);
   return (
     <>
       <Hero />
@@ -19,3 +22,5 @@ export default function Landing() {
     </>
   );
 }
+
+export default Landing;

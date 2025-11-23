@@ -1,8 +1,8 @@
-import  { createContext } from 'react'
+import { createContext } from "react";
 
 export const AuthContext = createContext({
-  jwtUser: null,
-  setUser: () => '',
+  user: null,
+  isLoggedIn: null,
+  setUser: () => {},
+  setIsLoggedIn: () => {}
 });
-
-export default AuthContext;
