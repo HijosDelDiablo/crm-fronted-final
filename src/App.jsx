@@ -6,16 +6,19 @@ import { AuthContextProvider } from "./context/AuthContextProvider";
 import NotFound from "./pages/NotFound/NotFound";
 import "bootstrap/dist/css/bootstrap.min.css";
 import LoginGoogle from "./pages/Auth/LoginGoogle";
+import ProtectedAdminRoutes from "./utils/ProtectedAdminRoutes";
+import useHeartbeat from "./utils/useHeartBeat";
 
 // import Login from "./pages/Login/Login"; // lo crearás después
 // import Dashboard from "./pages/Dashboard/Dashboard"; // más adelante
 
 function App() {
 
-
+ useHeartbeat();
   return (
     <BrowserRouter>
       <AuthContextProvider>
+        
         <Routes>
           <Route path="*" element={<NotFound />} />
           {/* LANDING COMO PÁGINA INICIAL */}
@@ -27,6 +30,9 @@ function App() {
 
 
           {/* SISTEMA INTERNO */}
+          {/*<Route element={<ProtectedAdminRoutes />}>
+            
+          </Route>}
           {/* <Route path="/dashboard" element={<Dashboard />} /> */}
 
           {/* ETC */}
