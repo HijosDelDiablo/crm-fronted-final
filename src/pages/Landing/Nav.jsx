@@ -3,9 +3,25 @@ import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import logo from "../../assets/logos/logoAuto.jpg";
 import "./nav.css";
+import NavbarTop from "../../components/layout/Navbar";
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
 
 export default function MainNavbar() {
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
+  const role = user?.role;
+
+  console.log("User: ", user);
+  console.log("Role: ", role);
+
+
+  if (role === 'ADMIN') {
+    return <NavbarTop />;
+  }
+  if (!user || user === null || !role) {
+    console.warn("No hay usuario");
+  }
 
   return (
     <Navbar expand="lg" className="main-navbar" fixed="top">

@@ -9,8 +9,7 @@ import Footer from "./Footer";
 import "./landing.css";
 
 export default function Landing() {
-  //test
-  // No se como obtener el user desde aqui
+
   return (
     <>
       <Nav />

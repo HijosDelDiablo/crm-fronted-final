@@ -1,11 +1,12 @@
 import React, { useContext, useState } from 'react';
 import './../../styles/Auth.css';
 import ButtonPrimary from '../../components/shared/ButtonPrimary';
-import { loginFetch, loginGoogleFetch, registerFetch } from '../../hooks/auth';
+import { loginFetch, registerFetch } from '../../hooks/auth';
 import { notifyError, notifySuccess } from '../../components/shared/Alerts';
 import { validateField } from './validations';
 import { useAuth } from '../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
+import { handleLoginResponse } from '../../utils/authUtils';
 
 const Auth = () => {
   const from = location.state?.from?.pathname || '/login';
@@ -73,31 +74,7 @@ const Auth = () => {
     try {
       if (view === 'login') {
         const response = await loginFetch(formData);
-        console.log("Responseeee:  ", response);
-
-        if (!response.status) {
-          notifyError(response.message);
-          setIsLoading(false);
-          return;
-        }
-
-        notifySuccess(response.message || 'Inicio de sesión exitoso');
-        setIsLoading(false);
-        login(response.user);
-
-        if (response.user.rol === "ADMIN") {
-          notifySuccess('Módulo de administración aun no implementado');
-          navigate('/');
-        }
-        else if (response.user.rol === "CLIENTE") {
-
-          navigate('/');
-        } else {
-          notifyError('Rol de usuario no reconocido');
-          setIsLoading(false);
-          return;
-        }
-
+        handleLoginResponse(response, navigate, login, setIsLoading);
 
       } else if (view === 'register') {
         console.log('Register:', {
@@ -106,19 +83,12 @@ const Auth = () => {
           password: formData.password
         });
         if (await registerFetch(formData)) {
-
           setView('login');
           notifySuccess('Registro exitoso. Ya puedes, iniciar sesión.');
         };
 
       } else if (view === 'recovery') {
         console.log('Recovery:', { email: formData.email });
-        // await fetch('/api/forgot-password', {
-        //   method: 'POST',
-        //   headers: { 'Content-Type': 'application/json' },
-        //   body: JSON.stringify({ email: formData.email })
-        // });
-
         notifyError('Funcionalidad de recuperación no implementada');
         setView('login');
       }
@@ -133,10 +103,13 @@ const Auth = () => {
   const handleGoogleAuth = async () => {
     //  GOOGLE AUTH IMPLEMENTATION
     console.log('Google Auth iniciado');
-    await loginGoogleFetch();
-    // window.location.href = '/api/auth/google';
-    // O usa Firebase, Auth0, etc.
-    notifyError('Funcionalidad de Google Auth no implementada');
+    try {
+      navigate(import.meta.env.VITE_URL_API_AUTH + '/googleInWeb');
+    } catch (error) {
+      console.error("Error en loginGoogleFetch: ", error);
+      notifyError('Error en el inicio de sesión: ' + error.message);
+    }
+    //notifyError('Funcionalidad de Google Auth no implementada');
   };
 
   const switchView = (newView) => {
@@ -331,15 +304,17 @@ const Auth = () => {
             </>
           )}
           {view === 'register' && (
-            <p>
-              ¿Ya tienes cuenta?{' '}
-              <button type="button" className="link-register" onClick={() => switchView('login')}>
-                Inicia sesión
-              </button>
+            <>
+              <p>
+                ¿Ya tienes cuenta?{' '}
+                <button type="button" className="link-register" onClick={() => switchView('login')}>
+                  Inicia sesión
+                </button>
+              </p>
               <p className="auth-legal">
                 Al continuar aceptas los Términos de uso y el Aviso de privacidad.
               </p>
-            </p>
+            </>
           )}
           {view === 'recovery' && (
             <p>

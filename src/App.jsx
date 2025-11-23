@@ -7,6 +7,7 @@ import AuthContex from "./context/AuthContext";
 import Login from "./pages/login/login";
 import Registro from "./pages/login/registro";
 import "bootstrap/dist/css/bootstrap.min.css";
+import LoginGoogle from "./pages/Auth/LoginGoogle";
 
 // import Login from "./pages/Login/Login"; // lo crearás después
 // import Dashboard from "./pages/Dashboard/Dashboard"; // más adelante
@@ -24,6 +25,7 @@ function App() {
 
           {/* LOGIN */}
           <Route path="/login" element={<Auth />} />
+          <Route path="/loginGoogle" element={<LoginGoogle />} />
 
 
           {/* SISTEMA INTERNO */}

@@ -1,11 +1,4 @@
-export const loginGoogleFetch = async () => {
-    try {
-        window.location.href = import.meta.env.VITE_URL_API_AUTH + '/googleInWeb';
-    } catch (error) {
-        console.error("Error en loginGoogleFetch: ", error);
-        return { status: false, message: 'Error en el inicio de sesión: ' + error.message };
-    }
-}
+
 export const loginFetch = async (formData) => {
     try {
         const response = await fetch(import.meta.env.VITE_URL_API_AUTH + '/login', {
