@@ -3,8 +3,7 @@ import { Toaster } from 'react-hot-toast';
 import Landing from "./pages/Landing/Landing";
 import Auth from "./pages/Auth/Auth";
 import { AuthContextProvider } from "./context/AuthContextProvider";
-import Login from "./pages/login/login";
-import Registro from "./pages/login/registro";
+import NotFound from "./pages/NotFound/NotFound";
 import "bootstrap/dist/css/bootstrap.min.css";
 import LoginGoogle from "./pages/Auth/LoginGoogle";
 
@@ -18,6 +17,7 @@ function App() {
     <BrowserRouter>
       <AuthContextProvider>
         <Routes>
+          <Route path="*" element={<NotFound />} />
           {/* LANDING COMO PÁGINA INICIAL */}
           <Route path="/" element={<Landing />} />
 
