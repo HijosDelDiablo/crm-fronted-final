@@ -4,14 +4,12 @@ import ButtonPrimary from '../../components/shared/ButtonPrimary';
 import { loginFetch, registerFetch } from '../../api/auth';
 import { notifyError, notifySuccess } from '../../components/shared/Alerts';
 import { validateField } from './validations';
-import { useAuth } from '../../hooks/useAuth';
+import AuthService from './AuthService';
 import { useNavigate } from 'react-router-dom';
 import { handleLoginResponse } from '../../utils/authUtils';
 
 const Auth = () => {
-  const from = location.state?.from?.pathname || '/login';
   const navigate = useNavigate();
-  const { setUser } = useAuth();
   const [view, setView] = useState('login'); // 'login', 'register', 'recovery'
   const [formData, setFormData] = useState({
     email: '',
@@ -74,7 +72,7 @@ const Auth = () => {
     try {
       if (view === 'login') {
         const response = await loginFetch(formData);
-        handleLoginResponse(response, navigate, setUser, setIsLoading);
+        handleLoginResponse(response, navigate, (u) => AuthService.login(u), setIsLoading);
 
       } else if (view === 'register') {
         console.log('Register:', {

@@ -9,13 +9,7 @@ export const handleLoginResponse = (response, navigate, login, setIsLoading) => 
 
     notifySuccess(response.message || 'Inicio de sesión exitoso');
     setIsLoading(false);
-    login({
-        email: response.user.email,
-        name: response.user.name,
-        rol: "ADMIN",
-        _id: response.user._id,
-        accessToken: response.user.accessToken
-    });
+    login(response.user);
 
     if (response.user.rol === "ADMIN") {
         notifySuccess('Módulo de administración aun no implementado');

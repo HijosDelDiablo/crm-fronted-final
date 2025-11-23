@@ -8,7 +8,12 @@ import { useAuth } from "../../hooks/useAuth";
 
 export default function MainNavbar() {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, isLoggedIn } = useAuth();
+
+  // Si isLoggedIn es null, significa que AuthContextProvider aún está verificando
+  if (isLoggedIn === null) {
+    return null; // O un <Spinner />
+  }
 
   console.log("user", user);
   if (!user) {
