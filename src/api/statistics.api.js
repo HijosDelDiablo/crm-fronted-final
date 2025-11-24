@@ -1,3 +1,5 @@
+import { fetchHeader } from "../utils/fetch-header.util";
+
 export const getSalesReport = async(startDate,endDate) => {
     const response = await fetch(import.meta.env.VITE_APP_API_URL + '/dashboard/reporte-ventas?startDate='
         +startDate+'&endDate='+endDate, {
@@ -13,7 +15,7 @@ export const getSalesReport = async(startDate,endDate) => {
 };
 
 export const getTopProducts = async() => {
-    const response = await fetch(import.meta.env.VITE_APP_API_URL + '/dashboard/top-products', {
+    const response = await fetch(import.meta.env.VITE_APP_API_URL + '/dashboard/top-productos', {
             method: 'GET',
             ...fetchHeader()
         });

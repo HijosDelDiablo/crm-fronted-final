@@ -1,70 +1,82 @@
-import { createChart, LineSeries } from 'lightweight-charts';
+import { createChart, AreaSeries } from 'lightweight-charts';
 import { useRef, useEffect } from 'react';
 
-const Graphic = ({data, width = 400, height = 300}) => {
+const Graphic = ({ data, colors: {
+    backgroundColor = '#131722',
+    lineColor = '#2962FF',
+    textColor = '#D9D9D9',
+    areaTopColor = '#2962FF',
+    areaBottomColor = 'rgba(41, 98, 255, 0.28)',
+} = {} }) => {
     const chartContainerRef = useRef(null);
     const chartRef = useRef(null);
 
     useEffect(() => {
         if (!chartContainerRef.current) return;
 
-        // Crear el chart solo una vez
+        const handleResize = () => {
+            if (chartRef.current && chartContainerRef.current) {
+                chartRef.current.applyOptions({ width: chartContainerRef.current.clientWidth, height: chartContainerRef.current.clientHeight });
+            }
+        };
+
         chartRef.current = createChart(chartContainerRef.current, {
-            width: width,
-            height: height,
-             layout: {
-        background: { color: '#131722' },    // Fondo oscuro TradingView
-        textColor: '#D9D9D9',                // Texto claro
-    },
-    grid: {
-        vertLines: {
-            color: 'rgba(42, 46, 57, 0.5)',  // Líneas verticales suaves
-        },
-        horzLines: {
-            color: 'rgba(42, 46, 57, 0.5)',  // Líneas horizontales suaves
-        },
-    },
-    crosshair: {
-        mode: 1,
-        vertLine: {
-            color: 'rgba(255, 255, 255, 0.3)',
-            width: 1,
-            style: 0,
-            labelBackgroundColor: '#131722'
-        },
-        horzLine: {
-            color: 'rgba(255, 255, 255, 0.3)',
-            width: 1,
-            style: 0,
-            labelBackgroundColor: '#131722'
-        }
-    },
-    timeScale: {
-        borderColor: 'rgba(197, 203, 206, 0.4)',
-    },
-    rightPriceScale: {
-        borderColor: 'rgba(197, 203, 206, 0.4)',
-    }
+            layout: {
+                background: { color: backgroundColor },
+                textColor: textColor,
+            },
+            grid: {
+                vertLines: { color: 'rgba(42, 46, 57, 0.5)' },
+                horzLines: { color: 'rgba(42, 46, 57, 0.5)' },
+            },
+            width: chartContainerRef.current.clientWidth,
+            height: chartContainerRef.current.clientHeight,
+            crosshair: {
+                mode: 1,
+                vertLine: {
+                    color: 'rgba(255, 255, 255, 0.3)',
+                    width: 1,
+                    style: 0,
+                    labelBackgroundColor: '#131722'
+                },
+                horzLine: {
+                    color: 'rgba(255, 255, 255, 0.3)',
+                    width: 1,
+                    style: 0,
+                    labelBackgroundColor: '#131722'
+                }
+            },
+            timeScale: {
+                borderColor: 'rgba(197, 203, 206, 0.4)',
+            },
+            rightPriceScale: {
+                borderColor: 'rgba(197, 203, 206, 0.4)',
+            }
         });
 
-        const lineSeries = chartRef.current.addSeries(LineSeries);
-        lineSeries.setData(data);
+        chartRef.current.timeScale().fitContent();
 
-            chartRef.current.timeScale().fitContent();
+        const newSeries = chartRef.current.addSeries(AreaSeries, { 
+            lineColor, 
+            topColor: areaTopColor, 
+            bottomColor: areaBottomColor 
+        });
+        newSeries.setData(data);
+
+        const resizeObserver = new ResizeObserver(() => handleResize());
+        resizeObserver.observe(chartContainerRef.current);
 
         return () => {
-            // limpiar chart al desmontar
+            resizeObserver.disconnect();
             chartRef.current.remove();
         };
-    }, []);
+    }, [data, backgroundColor, lineColor, textColor, areaTopColor, areaBottomColor]);
 
     return (
-        <>
-            <div 
-                ref={chartContainerRef} 
-                style={{ width: '400px', height: '300px' }}
-            />
-        </>
+        <div
+            ref={chartContainerRef}
+            style={{ width: '100%', height: '100%', minHeight: '300px' }}
+        />
     );
 };
 
