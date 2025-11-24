@@ -14,7 +14,7 @@ export default function MainNavbar() {
   if (isLoggedIn === null) {
     return null; // O un <Spinner />
   }
-console.log("user", user);
+//console.log("user", user);
   if (!user) {
     console.warn("No hay usuario");
   }
