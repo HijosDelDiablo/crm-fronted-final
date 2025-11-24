@@ -9,7 +9,9 @@ import {
     getTopSellers, 
     getSellerWithMoreActivity 
 } from '../../api/statistics.api';
-import './Dashboard.css'; // We will create this next
+import './Dashboard.css'; 
+import NavTop from '../../components/layout/Navbar'
+
 
 const Dashboard = () => {
     const swapyRef = useRef(null);
@@ -86,6 +88,8 @@ const Dashboard = () => {
     }
 
     return (
+        <>
+            <NavTop />
         <div className="dashboard-container" ref={swapyRef}>
             <div className="dashboard-header">
                 <h1>Dashboard</h1>
@@ -148,8 +152,21 @@ const Dashboard = () => {
                     <div className="dashboard-item" data-swapy-item="item-5">
                         <div className="chart-card">
                             <h3>Sales Overview</h3>
-                            <div className="chart-container">
-                                <Graphic data={dashboardData.salesData} />
+                            <div 
+                                className="chart-container"
+                                onMouseDown={(e) => e.stopPropagation()}
+                                onTouchStart={(e) => e.stopPropagation()}
+                            >
+                                <Graphic 
+                                    data={dashboardData.salesData} 
+                                    colors={{
+                                        backgroundColor: 'transparent',
+                                        lineColor: '#007aff',
+                                        textColor: 'rgba(209, 213, 219, 0.92)',
+                                        areaTopColor: '#007aff',
+                                        areaBottomColor: 'rgba(0, 122, 255, 0.28)',
+                                    }}
+                                />
                             </div>
                         </div>
                     </div>
@@ -161,7 +178,11 @@ const Dashboard = () => {
                          <div className="chart-card">
                             <h3>Activity Trend</h3>
                             {/* Reusing Graphic with dummy data or different data if available */}
-                            <div className="chart-container">
+                            <div 
+                                className="chart-container"
+                                onMouseDown={(e) => e.stopPropagation()}
+                                onTouchStart={(e) => e.stopPropagation()}
+                            >
                                 <Graphic 
                                     data={[
                                         { time: '2023-01-01', value: 10 },
@@ -170,7 +191,13 @@ const Dashboard = () => {
                                         { time: '2023-04-01', value: 20 },
                                         { time: '2023-05-01', value: 25 },
                                     ]} 
-                                    colors={{ lineColor: '#FF4560', areaTopColor: '#FF4560', areaBottomColor: 'rgba(255, 69, 96, 0.28)' }}
+                                    colors={{
+                                        backgroundColor: 'transparent',
+                                        lineColor: '#6366f1',
+                                        textColor: 'rgba(209, 213, 219, 0.92)',
+                                        areaTopColor: '#6366f1',
+                                        areaBottomColor: 'rgba(99, 102, 241, 0.28)',
+                                    }}
                                 />
                             </div>
                         </div>
@@ -178,6 +205,7 @@ const Dashboard = () => {
                 </div>
             </div>
         </div>
+        </>
     );
 };
 
