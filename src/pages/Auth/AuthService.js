@@ -11,7 +11,7 @@ class AuthService {
       this.user = JSON.parse(saved);
     }
   }
-
+   
   // Notifica a todos los componentes suscritos
   notify() {
     this.subscribers.forEach((callback) => callback(this.user));
