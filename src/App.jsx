@@ -9,6 +9,7 @@ import LoginGoogle from "./pages/Auth/LoginGoogle";
 import ProtectedAdminRoutes from "./utils/ProtectedAdminRoutes";
 import useHeartbeat from "./utils/useHeartBeat";
 import Dashboard from "./pages/Dashboard/Dashboard";
+import Pricings from "./pages/Pricings/Pricings";
 
 // import Login from "./pages/Login/Login"; // lo crearás después
 // import Dashboard from "./pages/Dashboard/Dashboard"; // más adelante
@@ -34,6 +35,7 @@ function App() {
           <Route element={<ProtectedAdminRoutes />}>
             
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/pricings" element={<Pricings />} />
           </Route>
 
           {/* ETC */}
