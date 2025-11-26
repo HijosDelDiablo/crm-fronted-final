@@ -1,5 +1,5 @@
 
-import React, { useEffect, useRef, useState } from 'react';
+import  { useEffect, useRef, useState } from 'react';
 import { createSwapy } from 'swapy';
 import Graphic from './Graphic';
 import InsightCard from './InsightCard';
@@ -11,9 +11,11 @@ import {
 } from '../../api/statistics.api';
 import './Dashboard.css'; 
 import NavTop from '../../components/layout/Navbar'
+import { useNavigate } from 'react-router-dom';
 
 
 const Dashboard = () => {
+    const navigate = useNavigate();
     const swapyRef = useRef(null);
     const [dashboardData, setDashboardData] = useState({
         totalSales: 0,
@@ -33,10 +35,10 @@ const Dashboard = () => {
 
             try {
                 const [salesReport, topProducts, topSellers, activeSeller] = await Promise.all([
-                    getSalesReport(formattedStart, formattedEnd),
-                    getTopProducts(),
-                    getTopSellers(),
-                    getSellerWithMoreActivity()
+                    getSalesReport(formattedStart, formattedEnd, navigate),
+                    getTopProducts(navigate),
+                    getTopSellers(navigate),
+                    getSellerWithMoreActivity(navigate)
                 ]);
 
                 // Process sales data for chart
