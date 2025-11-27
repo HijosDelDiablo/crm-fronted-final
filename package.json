@@ -13,11 +13,13 @@
     "@vite-pwa/assets-generator": "^1.0.2",
     "bootstrap": "^5.3.8",
     "dotenv": "^17.2.3",
+    "lightweight-charts": "^5.0.9",
     "react": "^19.2.0",
     "react-bootstrap": "^2.10.10",
     "react-dom": "^19.2.0",
     "react-hot-toast": "^2.6.0",
-    "react-router-dom": "^7.9.6"
+    "react-router-dom": "^7.9.6",
+    "swapy": "^1.0.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",

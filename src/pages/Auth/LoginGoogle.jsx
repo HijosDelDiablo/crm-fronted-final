@@ -1,31 +1,43 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { useAuth } from "../../hooks/useAuth";
+import { useState, useEffect } from "react";
+import AuthService  from "./AuthService";
 import { handleLoginResponse } from "../../utils/authUtils";
 
 const LoginGoogle = () => {
     const navigate = useNavigate();
-    const { login } = useAuth();
     const [isLoading, setIsLoading] = useState(true);
 
-    const [token, setToken] = useState(null);
-    const [user, setUser] = useState({});
-    const [response, setResponse] = useState({});
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+        const userParam = urlParams.get('user');
 
-    // Capturar el token desde la URL
-    const urlParams = new URLSearchParams(window.location.search);
-    setToken(urlParams.get('token'));
-    setUser(urlParams.get('user'));
+       // console.log("Token: ",token);
+        //console.log("User: ",userParam);
+        
+        let user = {};
+        try {
+             user = userParam ? JSON.parse(userParam) : null;
+        } catch (e) {
+            console.error("Error parsing user param", e);
+            user = null;
+        }
 
-    if (!token || token === null || !user || user === null) {
-        setResponse({ status: false, message: 'Error en el inicio de sesión con credenciales de Google' });
-    }
-    setResponse({ status: true, message: 'Inicio de sesión exitoso', user: { ...user, accessToken: token } });
-    handleLoginResponse(response, navigate, login, setIsLoading);
+        let response = {};
+
+        if (!token || !user) {
+            response = { status: false, message: 'Error en el inicio de sesión con credenciales de Google' };
+        } else {
+            response = { status: true, message: 'Inicio de sesión exitoso', user: { ...user, accessToken: token } };
+        }
+
+        handleLoginResponse(response, navigate, (u) => AuthService.login(u), setIsLoading);
+        
+    }, [navigate]);
 
     return (
         <>
-
+           {isLoading ? <div>Cargando...</div> : <div>Error al iniciar sesión con Google</div>}
         </>
     );
 };

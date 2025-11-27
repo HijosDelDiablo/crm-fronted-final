@@ -7,14 +7,21 @@ import NotFound from "./pages/NotFound/NotFound";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Home from "./pages/inicio/Home";
 import LoginGoogle from "./pages/Auth/LoginGoogle";
+import ProtectedAdminRoutes from "./utils/ProtectedAdminRoutes";
+import useHeartbeat from "./utils/useHeartBeat";
+import Dashboard from "./pages/Dashboard/Dashboard";
+import Pricings from "./pages/Pricings/Pricings";
 
 // import Login from "./pages/Login/Login"; // lo crearás después
 // import Dashboard from "./pages/Dashboard/Dashboard"; // más adelante
 
 function App() {
+
+ useHeartbeat();
   return (
     <BrowserRouter>
       <AuthContextProvider>
+        
         <Routes>
           <Route path="*" element={<NotFound />} />
           {/* LANDING COMO PÁGINA INICIAL */}
@@ -23,6 +30,14 @@ function App() {
           {/* LOGIN */}
           <Route path="/login" element={<Auth />} />
           <Route path="/loginGoogle" element={<LoginGoogle />} />
+
+
+          {/* SISTEMA INTERNO */}
+          <Route element={<ProtectedAdminRoutes />}>
+            
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/pricings" element={<Pricings />} />
+          </Route>
 
           {/* SISTEMA INTERNO, uso del dashboard */}
           {/* <Route path="panel" element={<PanelInicio />} /> */}

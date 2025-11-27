@@ -12,8 +12,8 @@ export const handleLoginResponse = (response, navigate, login, setIsLoading) => 
     login(response.user);
 
     if (response.user.rol === "ADMIN") {
-        notifySuccess('Módulo de administración aun no implementado');
-        navigate('/');
+        //notifySuccess('Módulo de administración aun no implementado');
+        navigate('/dashboard');
     } else if (response.user.rol === "CLIENTE") {
         navigate('/');
     } else {
