@@ -2,7 +2,6 @@ import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import logo from '../../assets/logos/logoAuto.jpg';
 
-import "./Navbar.css";
 
 export default function NavbarTop() {
   return (

@@ -11,6 +11,7 @@ import ProtectedAdminRoutes from "./utils/ProtectedAdminRoutes";
 import useHeartbeat from "./utils/useHeartBeat";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Pricings from "./pages/Pricings/Pricings";
+import Clients from "./pages/Clients/Clients";
 
 // import Login from "./pages/Login/Login"; // lo crearás después
 // import Dashboard from "./pages/Dashboard/Dashboard"; // más adelante
@@ -37,6 +38,7 @@ function App() {
             
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/pricings" element={<Pricings />} />
+          <Route path="/clientes" element={<Clients />} />
           </Route>
 
           {/* SISTEMA INTERNO, uso del dashboard */}

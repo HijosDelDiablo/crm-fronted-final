@@ -58,7 +58,7 @@ const Pricing = ({ data, onClick }) => {
             />
             <div className="pricing-user-details">
               <span className="pricing-user-role">Cliente</span>
-              <a href={`/clients/${client.id}`} className="pricing-user-name" onClick={(e) => e.stopPropagation()}>
+              <a href={`/clientes/${client.id}`} className="pricing-user-name" onClick={(e) => e.stopPropagation()}>
                 {client.name}
               </a>
             </div>

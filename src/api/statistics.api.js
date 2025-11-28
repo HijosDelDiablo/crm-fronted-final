@@ -21,21 +21,23 @@ export const getTopProducts = async(navigate) => {
             ...fetchHeader()
         });
         if(response.ok){
-            return response.json();
+            const data = await response.json();
+            return data;
         }else{
             if(response.status === 401) navigate('/login');
             console.error('Error al obtener el top de productos');
             return null;
         }
-};
-
-export const getTopSellers = async(navigate) => {
-    const response = await fetch(import.meta.env.VITE_APP_API_URL + '/dashboard/top-vendedores', {
+    };
+    
+    export const getTopSellers = async(navigate) => {
+        const response = await fetch(import.meta.env.VITE_APP_API_URL + '/dashboard/top-vendedores', {
             method: 'GET',
             ...fetchHeader()
         });
         if(response.ok){
-            return response.json();
+            const data = await response.json();
+            return data;
         }else{
             if(response.status === 401) navigate('/login');
             console.error('Error al obtener el top de vendedores');

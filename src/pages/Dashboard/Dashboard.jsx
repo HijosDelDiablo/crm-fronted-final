@@ -3,6 +3,8 @@ import  { useEffect, useRef, useState } from 'react';
 import { createSwapy } from 'swapy';
 import Graphic from './Graphic';
 import InsightCard from './InsightCard';
+import InsightCardSubtitle from './InsightCardSubtitle';
+import InsightCardImage from './InsightCardImage';
 import { 
     getSalesReport, 
     getTopProducts, 
@@ -29,8 +31,8 @@ const Dashboard = () => {
     useEffect(() => {
         const fetchData = async () => {
             const today = new Date();
-            const lastMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);
-            const formattedStart = lastMonth.toISOString().split('T')[0];
+            const lastThreeMonths = new Date(today.getFullYear(), today.getMonth() - 3, 1);
+            const formattedStart = lastThreeMonths.toISOString().split('T')[0];
             const formattedEnd = today.toISOString().split('T')[0];
 
             try {
@@ -51,7 +53,7 @@ const Dashboard = () => {
                 chartData.sort((a, b) => new Date(a.time) - new Date(b.time));
 
                 setDashboardData({
-                    totalSales: salesReport?.totalSales || 0,
+                    totalSales: salesReport || 0,
                     salesData: chartData,
                     topProduct: topProducts?.[0], // Assuming array
                     topSeller: topSellers?.[0],   // Assuming array
@@ -102,9 +104,10 @@ const Dashboard = () => {
                 {/* Slot 1: Total Sales Card */}
                 <div className="dashboard-slot slot-small" data-swapy-slot="slot-1">
                     <div className="dashboard-item" data-swapy-item="item-1">
-                        <InsightCard 
+                        <InsightCardSubtitle
                             title="Total Sales" 
-                            value={`$${dashboardData.totalSales.toLocaleString()}`} 
+                            value={dashboardData.totalSales.totalCotizaciones || 'N/A'} 
+                            value2={"$"+dashboardData.totalSales.montoTotal.toFixed(2) || 'N/A'} 
                             icon="💰"
                             trend="up"
                             trendValue="12%"
@@ -116,9 +119,10 @@ const Dashboard = () => {
                 {/* Slot 2: Top Seller */}
                 <div className="dashboard-slot slot-small" data-swapy-slot="slot-2">
                     <div className="dashboard-item" data-swapy-item="item-2">
-                        <InsightCard 
+                        <InsightCardImage 
+                        imageUrl={dashboardData.topSeller?.fotoPerfil || 'N/A'}
                             title="Top Seller" 
-                            value={dashboardData.topSeller?.sellerName || 'N/A'} 
+                            value={dashboardData.topSeller?.nombre || 'N/A'} 
                             icon="🏆"
                             color="#FEB019"
                         />
@@ -130,7 +134,7 @@ const Dashboard = () => {
                     <div className="dashboard-item" data-swapy-item="item-3">
                         <InsightCard 
                             title="Most Active" 
-                            value={dashboardData.mostActiveSeller?.sellerName || 'N/A'} 
+                            value={dashboardData.mostActiveSeller?.nombre || 'N/A'} 
                             icon="⚡"
                             color="#FF4560"
                         />
@@ -140,9 +144,10 @@ const Dashboard = () => {
                 {/* Slot 4: Top Product */}
                 <div className="dashboard-slot slot-small" data-swapy-slot="slot-4">
                     <div className="dashboard-item" data-swapy-item="item-4">
-                        <InsightCard 
+                        <InsightCardImage 
+                            imageUrl={dashboardData.topProduct?.imagenUrl }
                             title="Top Product" 
-                            value={dashboardData.topProduct?.productName || 'N/A'} 
+                            value={dashboardData.topProduct?.nombre || 'N/A'} 
                             icon="📦"
                             color="#775DD0"
                         />
