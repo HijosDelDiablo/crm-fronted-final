@@ -9,7 +9,8 @@ import {
     getSalesReport, 
     getTopProducts, 
     getTopSellers, 
-    getSellerWithMoreActivity 
+    getSellerWithMoreActivity, 
+    getTopSalesByPeriod
 } from '../../api/statistics.api';
 import './Dashboard.css'; 
 import NavTop from '../../components/layout/Navbar'
@@ -36,7 +37,8 @@ const Dashboard = () => {
             const formattedEnd = today.toISOString().split('T')[0];
 
             try {
-                const [salesReport, topProducts, topSellers, activeSeller] = await Promise.all([
+                const [salesByPeriod, salesReport, topProducts, topSellers, activeSeller] = await Promise.all([
+                    getTopSalesByPeriod(navigate),
                     getSalesReport(formattedStart, formattedEnd, navigate),
                     getTopProducts(navigate),
                     getTopSellers(navigate),
@@ -44,10 +46,14 @@ const Dashboard = () => {
                 ]);
 
                 // Process sales data for chart
-                const chartData = salesReport?.salesByDate?.map(item => ({
-                    time: item.date,
-                    value: item.sales
-                })) || [];
+                const chartData = salesByPeriod.map(item => {
+                    let fecha = new Date(item.createdAt);
+                    let formatedDate = fecha.toISOString().split('T')[0];
+                    return {
+                        time: formatedDate,
+                        value: parseInt((item.cotizacion.totalPagado).toFixed(2))
+                    }
+                }) || [];
 
                 // Sort chart data by date just in case
                 chartData.sort((a, b) => new Date(a.time) - new Date(b.time));
