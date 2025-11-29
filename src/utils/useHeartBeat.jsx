@@ -1,10 +1,7 @@
 import { useEffect } from 'react';
 import { userActivityFetch } from '../api/user_activity.api';
-import { useNavigate } from 'react-router-dom';
 
 const useHeartbeat = () => {
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     let lastActivity = Date.now();
@@ -25,7 +22,7 @@ const useHeartbeat = () => {
 
       // solo mando heartbeat si hubo actividad en los últimos 8 minutos
       if (now - lastActivity < 8 * 60 * 1000) {
-        userActivityFetch(navigate);
+        userActivityFetch();
       }
     }, 60000);
 
