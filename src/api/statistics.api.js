@@ -1,5 +1,6 @@
 import { fetchApiGet } from "../utils/api-fetch-factory.util";
 
+// Apis Dashboard
 export const getSalesReport = async (startDate, endDate, navigate) => {
     return await fetchApiGet('/dashboard/reporte-ventas?startDate='
         + startDate + '&endDate=' + endDate, navigate, 'Error al obtener el reporte de ventas')
@@ -16,6 +17,7 @@ export const getTopSellers = async (navigate) => {
 export const getTopSalesByPeriod = async (navigate) => {
     return await fetchApiGet('/dashboard/ventas-periodo', navigate, 'Error al obtener ventas por periodo');
 }
+
 
 export const getFavoritesProducts = async (limit = 100, year = 2025, startWeek = 1, endWeek = 52, navigate) => {
     return await fetchApiGet('/statistics/favorites/top/' +
