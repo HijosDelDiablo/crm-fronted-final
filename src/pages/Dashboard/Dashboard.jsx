@@ -132,7 +132,8 @@ const Dashboard = () => {
                 {/* Slot 3: Most Active */}
                 <div className="dashboard-slot slot-small" data-swapy-slot="slot-3">
                     <div className="dashboard-item" data-swapy-item="item-3">
-                        <InsightCard 
+                        <InsightCardImage
+                            imageUrl={dashboardData.mostActiveSeller?.fotoPerfil || 'N/A'} 
                             title="Most Active" 
                             value={dashboardData.mostActiveSeller?.nombre || 'N/A'} 
                             icon="⚡"
