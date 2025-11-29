@@ -36,7 +36,7 @@ export default function MainNavbar() {
               Segmentos
             </a>
             <a href="#precios" className="nav-link">
-              Creditos
+              Créditos
             </a>
             <a href="#carros" className="nav-link">
               Carros
