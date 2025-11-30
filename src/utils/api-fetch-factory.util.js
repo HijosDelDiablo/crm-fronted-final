@@ -14,9 +14,10 @@ export const fetchApiGet = async (url, navigate, errorMessage) => {
     }
 };
 
-export const fetchApiPost = async (url, navigate, errorMessage) => {
+export const fetchApiPost = async (url, body, navigate, errorMessage) => {
     const response = await fetch(import.meta.env.VITE_APP_API_URL + url, {
         method: 'POST',
+        body: JSON.stringify(body),
         ...fetchHeader()
     });
     if (response.ok) {
