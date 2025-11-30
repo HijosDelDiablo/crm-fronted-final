@@ -1,15 +1,6 @@
-import { fetchHeader } from "../utils/fetch-header.util";
+import { fetchApiGet } from "../utils/api-fetch-factory.util";
 
-export const getPricings = async(navigate) => {
-    const response = await fetch(import.meta.env.VITE_APP_API_URL + '/cotizacion/all', {
-            method: 'GET',
-            ...fetchHeader()
-        });
-        if(response.ok){
-            return response.json();
-        }else{
-            if(response.status === 401) navigate('/login');
-            console.error('Error al obtener las cotizaciones');
-            return null;
-        }
+export const getPricings = async (navigate) => {
+    const response = await fetchApiGet('/cotizacion/all', navigate, 'Error al obtener las cotizaciones');
+    return response;
 };
