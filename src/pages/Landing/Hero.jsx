@@ -3,7 +3,7 @@ import { Container, Row, Col, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useRef, useEffect } from "react";
 import "./hero.css";
-import carro2 from "../../assets/videos/carro-hero2.mp4";
+import carro2 from "../../assets/Videos/carro-hero2.mp4";
 
 export default function Hero() {
   const navigate = useNavigate();
