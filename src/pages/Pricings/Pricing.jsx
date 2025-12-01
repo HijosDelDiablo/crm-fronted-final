@@ -2,7 +2,8 @@ import React from 'react';
 import './Pricing.css';
 
 const Pricing = ({ pricing, onClick }) => {
-  const {  coche, vendedor, cliente } = pricing;
+  if (!pricing) return null;
+  const { coche, vendedor, cliente } = pricing;
 
   // Validate essential data exists (allow missing seller)
   if (!coche || !cliente) {
@@ -20,9 +21,9 @@ const Pricing = ({ pricing, onClick }) => {
     <div className="pricing-card pricing-card-horizontal" onClick={onClick}>
       {/* Product Image Section */}
       <div className="pricing-card-img-container">
-        <img 
-          src={coche.imageUrl} 
-          alt={`${coche.marca} ${coche.modelo}`} 
+        <img
+          src={coche.imageUrl}
+          alt={`${coche.marca} ${coche.modelo}`}
           className="pricing-card-img"
         />
         <span className={`pricing-status-badge ${pricing.status === 'Aprobada' ? 'bg-success' : pricing.status === 'Rechazada' ? 'bg-danger' : 'bg-warning'}`}>
@@ -57,9 +58,9 @@ const Pricing = ({ pricing, onClick }) => {
         <div className="pricing-footer">
           {/* Client (Left) */}
           <div className="pricing-user-info">
-            <img 
-              src={cliente.fotoPerfil} 
-              alt={cliente.nombre} 
+            <img
+              src={cliente.fotoPerfil}
+              alt={cliente.nombre}
               className="pricing-user-img"
             />
             <div className="pricing-user-details">
@@ -72,7 +73,7 @@ const Pricing = ({ pricing, onClick }) => {
 
           {/* Seller (Right) */}
           <div className="pricing-user-info seller justify-content-end">
-             <div className="pricing-user-details text-end me-2">
+            <div className="pricing-user-details text-end me-2">
               <span className="pricing-user-role">Vendedor</span>
               {vendedor ? (
                 <a href={`/sellers/${vendedor.id}`} className="pricing-user-name" onClick={(e) => e.stopPropagation()}>
@@ -82,9 +83,9 @@ const Pricing = ({ pricing, onClick }) => {
                 <span className="pricing-user-name text-muted fst-italic">Por asignar</span>
               )}
             </div>
-            <img 
-              src={vendedor ? vendedor.fotoPerfil : "https://ui-avatars.com/api/?name=NA&background=random"} 
-              alt={vendedor ? vendedor.nombre : "No asignado"} 
+            <img
+              src={vendedor ? vendedor.fotoPerfil : "https://ui-avatars.com/api/?name=NA&background=random"}
+              alt={vendedor ? vendedor.nombre : "No asignado"}
               className="pricing-user-img"
             />
           </div>

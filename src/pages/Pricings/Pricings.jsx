@@ -85,9 +85,13 @@ export default function Pricings() {
       }
     }
 
-    if (clientIdFromUrl && pricingsData.length > 0) {
+    console.log("pricingsData", pricingsData);
+    console.log("clientIdFromUrl", clientIdFromUrl);
+
+    if (clientIdFromUrl && clientIdFromUrl !== "undefined" && pricingsData.length > 0) {
       //Show pricings of client
-      const filtered = pricingsData.filter(p => p.cliente._id === clientIdFromUrl);
+      console.log("clientIdFromUrl into if", clientIdFromUrl);
+      const filtered = pricingsData.filter(p => p.cliente?._id === clientIdFromUrl);
 
       if (filtered.length > 0) {
         setPricingsOfClient(filtered);
