@@ -4,6 +4,7 @@ import { Modal, Button, Navbar } from "react-bootstrap";
 import './Pricings.css';
 import NavbarTop from "../../components/layout/Navbar";
 import { getPricings } from "../../api/pricings.api";
+import { getSellersWithNumClients, setSellerToClient, setSellerToPricing } from "../../api/sellers.api";
 import { useNavigate } from "react-router-dom";
 
 export default function Pricings() {
@@ -11,11 +12,51 @@ export default function Pricings() {
   const [showModal, setShowModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [pricingsData, setPricings] = useState([]);
+  const [sellers, setSellers] = useState([]);
+  const [showAllSellers, setShowAllSellers] = useState(false);
 
   const handleClose = () => setShowModal(false);
-  const handleShow = (item) => {
+  const handleShow = async (item) => {
     setSelectedItem(item);
     setShowModal(true);
+    
+    // Fetch sellers if needed (status is Pending/In Review and no seller assigned)
+    if ((item.status === 'Pendiente' || item.status === 'En revisión') && !item.vendedor) {
+      const sellersData = await getSellersWithNumClients(navigate);
+      if (sellersData) {
+        console.log("sellersData",sellersData);
+        setSellers(sellersData);
+      }
+    }
+  };
+
+  const handleAssignSeller = async (seller) => {
+    if (!selectedItem) return;
+
+    // 1. Assign seller to client
+    const clientData = {
+      userId: selectedItem.cliente._id,
+      sellerId: seller._id
+    };
+    await setSellerToClient(clientData, navigate);
+
+    // 2. Assign seller to pricing
+    const pricingData = {
+      pricingId: selectedItem._id,
+      sellerId: seller._id
+    };
+    const updatedPricing = await setSellerToPricing(pricingData, navigate);
+
+    if (updatedPricing) {
+      // Update local state
+      const updatedItem = { ...selectedItem, vendedor: { id: seller._id, nombre: seller.nombre, fotoPerfil: seller.fotoPerfil } };
+      setSelectedItem(updatedItem);
+      
+      const updatedPricings = pricingsData.map(p => 
+        p._id === selectedItem._id ? updatedItem : p
+      );
+      setPricings(updatedPricings);
+    }
   };
   useEffect(() => {
     getPricingsData();
@@ -165,12 +206,53 @@ export default function Pricings() {
                         </div>
                       </div>
                       <div className="col-md-6">
-                        <div className="d-flex align-items-center p-2 border rounded">
-                          <img src={selectedItem.vendedor.fotoPerfil} alt="Seller" className="rounded-circle me-3" width="50" height="50" />
-                          <div>
-                            <small className="text-muted d-block">Vendedor</small>
-                            <span className="fw-bold">{selectedItem.vendedor.nombre}</span>
-                          </div>
+                        <div className="d-flex align-items-center p-2 border rounded h-100">
+                          {selectedItem.vendedor ? (
+                            <>
+                              <img src={selectedItem.vendedor.fotoPerfil} alt="Seller" className="rounded-circle me-3" width="50" height="50" />
+                              <div>
+                                <small className="text-muted d-block">Vendedor</small>
+                                <span className="fw-bold">{selectedItem.vendedor.nombre}</span>
+                              </div>
+                            </>
+                          ) : (
+                            <div className="w-100">
+                              <div className="d-flex align-items-center mb-2">
+                                <div className="bg-secondary rounded-circle me-3 d-flex align-items-center justify-content-center text-white" style={{width: 50, height: 50}}>?</div>
+                                <div>
+                                  <small className="text-muted d-block">Vendedor</small>
+                                  <span className="fw-bold fst-italic">Por asignar</span>
+                                </div>
+                              </div>
+                              
+                              {(selectedItem.status === 'Pendiente' || selectedItem.status === 'En revisión') && (
+                                <div className="mt-2">
+                                  <p className="mb-2 small fw-bold">Asignar Vendedor:</p>
+                                  <div className="list-group" style={{maxHeight: '200px', overflowY: 'auto'}}>
+                                    {(showAllSellers ? sellers : sellers.slice(0, 10)).map(seller => (
+                                      <button   
+                                        key={seller._id} 
+                                        type="button" 
+                                        className="list-group-item list-group-item-action d-flex align-items-center p-2"
+                                        onClick={() => handleAssignSeller(seller)}
+                                      >
+                                        <img src={seller.fotoPerfil} alt={seller.nombre} className="rounded-circle me-2" width="30" height="30" />
+                                        <span className="small">{seller.nombre}</span>
+                                      </button>
+                                    ))}
+                                  </div>
+                                  {sellers.length > 10 && (
+                                    <button 
+                                      className="btn btn-link btn-sm p-0 mt-1" 
+                                      onClick={() => setShowAllSellers(!showAllSellers)}
+                                    >
+                                      {showAllSellers ? "Mostrar menos" : "Mostrar todos"}
+                                    </button>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>

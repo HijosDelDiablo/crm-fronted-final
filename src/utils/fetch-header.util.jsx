@@ -7,7 +7,7 @@ export const fetchHeader = () => {
     if (!user || !user.accessToken) {
         return { headers: {} }; 
     }
-    //console.log(user.accessToken)
+    console.log(user.accessToken)
     return {
         headers: {
             "Content-Type": "application/json",

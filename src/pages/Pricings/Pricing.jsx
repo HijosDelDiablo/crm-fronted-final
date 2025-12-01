@@ -4,8 +4,8 @@ import './Pricing.css';
 const Pricing = ({ pricing, onClick }) => {
   const {  coche, vendedor, cliente } = pricing;
 
-  // Validate essential data exists
-  if (!coche || !vendedor || !cliente) {
+  // Validate essential data exists (allow missing seller)
+  if (!coche || !cliente) {
     console.warn('Incomplete pricing data:', pricing);
     return null;
   }
@@ -74,13 +74,17 @@ const Pricing = ({ pricing, onClick }) => {
           <div className="pricing-user-info seller justify-content-end">
              <div className="pricing-user-details text-end me-2">
               <span className="pricing-user-role">Vendedor</span>
-              <a href={`/sellers/${vendedor.id}`} className="pricing-user-name" onClick={(e) => e.stopPropagation()}>
-                {vendedor.nombre}
-              </a>
+              {vendedor ? (
+                <a href={`/sellers/${vendedor.id}`} className="pricing-user-name" onClick={(e) => e.stopPropagation()}>
+                  {vendedor.nombre}
+                </a>
+              ) : (
+                <span className="pricing-user-name text-muted fst-italic">Por asignar</span>
+              )}
             </div>
             <img 
-              src={vendedor.fotoPerfil} 
-              alt={vendedor.nombre} 
+              src={vendedor ? vendedor.fotoPerfil : "https://ui-avatars.com/api/?name=NA&background=random"} 
+              alt={vendedor ? vendedor.nombre : "No asignado"} 
               className="pricing-user-img"
             />
           </div>

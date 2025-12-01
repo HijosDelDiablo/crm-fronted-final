@@ -28,3 +28,17 @@ export const fetchApiPost = async (url, body, navigate, errorMessage) => {
         return null;
     }
 };
+
+export const fetchApiPostWithParams = async (url, navigate, errorMessage, method) => {
+    const response = await fetch(import.meta.env.VITE_APP_API_URL + url, {
+        method: method,
+        ...fetchHeader()
+    });
+    if (response.ok) {
+        return response.json();
+    } else {
+        if (response.status === 401) navigate('/login');
+        console.error(errorMessage);
+        return null;
+    }
+};
