@@ -3,10 +3,10 @@ import { Container, Row, Col, Modal, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import CardClient from './CardClient';
 import { useNavigate } from 'react-router-dom';
-import { getClients } from '../../api/clients.api';
-import NavbarTop from '../../components/layout/Navbar';
-import { getSellersWithNumClients, setSellerToClient } from '../../api/sellers.api';
-import { notifySuccess } from '../../components/shared/Alerts';
+import { getClients } from '../../../api/clients.api';
+import NavbarTop from '../../../components/layout/Navbar';
+import { getSellersWithNumClients, setSellerToClient } from '../../../api/sellers.api';
+import { notifySuccess } from '../../../components/shared/Alerts';
 
 const Clients = () => {
   const navigate = useNavigate();
