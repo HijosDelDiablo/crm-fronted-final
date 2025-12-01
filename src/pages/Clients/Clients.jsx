@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { Container, Row, Col, Modal, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import CardClient from './CardClient';
+import { useNavigate } from 'react-router-dom';
 
 const Clients = () => {
+  const navigate = useNavigate();
   const [selectedClient, setSelectedClient] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
@@ -114,7 +116,7 @@ const Clients = () => {
           <Button variant="secondary" onClick={handleClose}>
             Cerrar
           </Button>
-          <Button variant="primary" as={Link} to={`/quotations/${selectedClient?._id?.$oid}`}>
+          <Button variant="primary" onClick={() => navigate(`/pricings?idClient=${selectedClient?._id?.$oid}`)}>
             Ver Cotizaciones
           </Button>
         </Modal.Footer>
