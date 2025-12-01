@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { Container, Row, Col, Modal, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import CardClient from './CardClient';
+import { useNavigate } from 'react-router-dom';
 
 const Clients = () => {
+  const navigate = useNavigate();
   const [selectedClient, setSelectedClient] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
@@ -47,15 +49,15 @@ const Clients = () => {
       "createdAt": { "$date": "2025-11-11T15:30:00.000Z" }
     },
     {
-        "_id": { "$oid": "6914e9c415ba85599272b83f" },
-        "email": "ana.garcia@example.com",
-        "nombre": "Ana Garcia",
-        "telefono": "+528187654321",
-        "fotoPerfil": "https://randomuser.me/api/portraits/women/68.jpg",
-        "fechaNacimiento": "1995-11-30T00:00:00.000Z",
-        "activo": false,
-        "rol": "CLIENTE",
-        "createdAt": { "$date": "2025-11-05T09:15:00.000Z" }
+      "_id": { "$oid": "6914e9c415ba85599272b83f" },
+      "email": "ana.garcia@example.com",
+      "nombre": "Ana Garcia",
+      "telefono": "+528187654321",
+      "fotoPerfil": "https://randomuser.me/api/portraits/women/68.jpg",
+      "fechaNacimiento": "1995-11-30T00:00:00.000Z",
+      "activo": false,
+      "rol": "CLIENTE",
+      "createdAt": { "$date": "2025-11-05T09:15:00.000Z" }
     }
   ];
 
@@ -88,9 +90,9 @@ const Clients = () => {
           {selectedClient && (
             <div className="d-flex flex-column flex-md-row gap-4">
               <div className="text-center">
-                <img 
-                  src={selectedClient.fotoPerfil} 
-                  alt={selectedClient.nombre} 
+                <img
+                  src={selectedClient.fotoPerfil}
+                  alt={selectedClient.nombre}
                   className="rounded-circle img-thumbnail"
                   style={{ width: '150px', height: '150px', objectFit: 'cover' }}
                 />
@@ -114,7 +116,7 @@ const Clients = () => {
           <Button variant="secondary" onClick={handleClose}>
             Cerrar
           </Button>
-          <Button variant="primary" as={Link} to={`/quotations/${selectedClient?._id?.$oid}`}>
+          <Button variant="primary" onClick={() => navigate(`/pricings?idClient=${selectedClient?._id?.$oid}`)}>
             Ver Cotizaciones
           </Button>
         </Modal.Footer>

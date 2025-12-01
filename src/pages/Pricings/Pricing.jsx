@@ -1,8 +1,14 @@
 import React from 'react';
 import './Pricing.css';
 
-const Pricing = ({ data, onClick }) => {
-  const { product, pricing, seller, client } = data;
+const Pricing = ({ pricing, onClick }) => {
+  const {  coche, vendedor, cliente } = pricing;
+
+  // Validate essential data exists (allow missing seller)
+  if (!coche || !cliente) {
+    console.warn('Incomplete pricing data:', pricing);
+    return null;
+  }
 
   // Format date
   const formatDate = (dateObj) => {
@@ -15,8 +21,8 @@ const Pricing = ({ data, onClick }) => {
       {/* Product Image Section */}
       <div className="pricing-card-img-container">
         <img 
-          src={product.imageUrl} 
-          alt={`${product.marca} ${product.modelo}`} 
+          src={coche.imageUrl} 
+          alt={`${coche.marca} ${coche.modelo}`} 
           className="pricing-card-img"
         />
         <span className={`pricing-status-badge ${pricing.status === 'Aprobada' ? 'bg-success' : pricing.status === 'Rechazada' ? 'bg-danger' : 'bg-warning'}`}>
@@ -28,18 +34,18 @@ const Pricing = ({ data, onClick }) => {
       <div className="pricing-card-body">
         <div>
           <h5 className="card-title mb-1">
-            <a href={`/cars/${product._id?.$oid}`} onClick={(e) => e.stopPropagation()} className="text-decoration-none text-dark fw-bold">
-              {product.marca} {product.modelo}
+            <a href={`/cars/${coche._id?.$oid}`} onClick={(e) => e.stopPropagation()} className="text-decoration-none text-dark fw-bold">
+              {coche.marca} {coche.modelo}
             </a>
           </h5>
-          <p className="text-muted small mb-2">{product.ano}</p>
+          <p className="text-muted small mb-2">{coche.ano}</p>
 
           <div className="row g-1 small text-secondary">
             <div className="col-6">
-              <span className="fw-bold">Condición:</span> {product.condicion}
+              <span className="fw-bold">Condición:</span> {coche.condicion}
             </div>
             <div className="col-6">
-              <span className="fw-bold">Transmisión:</span> {product.transmision}
+              <span className="fw-bold">Transmisión:</span> {coche.transmision}
             </div>
             <div className="col-12 mt-1">
               <span className="fw-bold">Fecha:</span> {formatDate(pricing.fechaCreacion)}
@@ -52,14 +58,14 @@ const Pricing = ({ data, onClick }) => {
           {/* Client (Left) */}
           <div className="pricing-user-info">
             <img 
-              src={client.image} 
-              alt={client.name} 
+              src={cliente.fotoPerfil} 
+              alt={cliente.nombre} 
               className="pricing-user-img"
             />
             <div className="pricing-user-details">
               <span className="pricing-user-role">Cliente</span>
-              <a href={`/clientes/${client.id}`} className="pricing-user-name" onClick={(e) => e.stopPropagation()}>
-                {client.name}
+              <a href={`/clientes/${cliente.id}`} className="pricing-user-name" onClick={(e) => e.stopPropagation()}>
+                {cliente.nombre}
               </a>
             </div>
           </div>
@@ -68,13 +74,17 @@ const Pricing = ({ data, onClick }) => {
           <div className="pricing-user-info seller justify-content-end">
              <div className="pricing-user-details text-end me-2">
               <span className="pricing-user-role">Vendedor</span>
-              <a href={`/sellers/${seller.id}`} className="pricing-user-name" onClick={(e) => e.stopPropagation()}>
-                {seller.name}
-              </a>
+              {vendedor ? (
+                <a href={`/sellers/${vendedor.id}`} className="pricing-user-name" onClick={(e) => e.stopPropagation()}>
+                  {vendedor.nombre}
+                </a>
+              ) : (
+                <span className="pricing-user-name text-muted fst-italic">Por asignar</span>
+              )}
             </div>
             <img 
-              src={seller.image} 
-              alt={seller.name} 
+              src={vendedor ? vendedor.fotoPerfil : "https://ui-avatars.com/api/?name=NA&background=random"} 
+              alt={vendedor ? vendedor.nombre : "No asignado"} 
               className="pricing-user-img"
             />
           </div>
