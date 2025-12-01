@@ -18,6 +18,7 @@ export default function Pricings() {
   const [pricingsData, setPricings] = useState([]);
   const [sellers, setSellers] = useState([]);
   const [showAllSellers, setShowAllSellers] = useState(false);
+  const [pricingsOfClient, setPricingsOfClient] = useState([]);
 
   const handleClose = () => setShowModal(false);
   const handleShow = async (item) => {
@@ -62,9 +63,7 @@ export default function Pricings() {
       setPricings(updatedPricings);
     }
   };
-  useEffect(() => {
-    getPricingsData();
-  }, []);
+
 
   const getPricingsData = async () => {
     const response = await getPricings(navigate);
@@ -72,6 +71,10 @@ export default function Pricings() {
       setPricings(response);
     }
   };
+  useEffect(() => {
+    getPricingsData();
+  }, []);
+
   useEffect(() => {
     // Solo se intenta  abrir si tenemos un ID en la URL y ya hay datos cargados
     if (pricingIdFromUrl && pricingsData.length > 0) {
@@ -81,16 +84,20 @@ export default function Pricings() {
         handleShow(foundPricing); // Reutilizamos tu función handleShow para abrir el modal y cargar la data
       }
     }
+
     if (clientIdFromUrl && pricingsData.length > 0) {
       //Show pricings of client
-      const pricingsOfClient = pricingsData.filter(p => p.cliente._id === clientIdFromUrl);
-      if (pricingsOfClient.length > 0) {
-        setPricings(pricingsOfClient);
+      const filtered = pricingsData.filter(p => p.cliente._id === clientIdFromUrl);
+
+      if (filtered.length > 0) {
+        setPricingsOfClient(filtered);
       } else {
+        // Only notify if we have data but no matches for this client
+        // This prevents the error on initial load when pricingsData might be empty
         notifyError('No se encontraron cotizaciones para este cliente.\n Mostrando todas las cotizaciones.');
       }
     }
-  }, [pricingIdFromUrl]);
+  }, [pricingIdFromUrl, clientIdFromUrl, pricingsData]);
 
 
 
@@ -111,7 +118,7 @@ export default function Pricings() {
           <h1 className="pricings-title">Cotizaciones Recientes</h1>
 
           <div className="row g-4">
-            {pricingsData.map((pricing, index) => (
+            {(pricingsOfClient.length > 0 ? pricingsOfClient : pricingsData).map((pricing, index) => (
               <div className="col-12 col-md-6 col-lg-6 col-xl-4" key={index}>
                 <Pricing
                   pricing={pricing}
@@ -205,7 +212,7 @@ export default function Pricings() {
                         <div className="col-md-6">
                           <div className="pricing-detail-row">
                             <span className="pricing-detail-label">Status:</span>
-                            <span className={`badge ${selectedItem.status === 'Aprobada' ? 'bg-success' : selectedItem.status === 'Rechazada' ? 'bg-danger' : 'bg-warning'}`}>{selectedItem.status}</span>
+                            <span className={`badge ${selectedItem.status === 'Aprobada' ? 'bg-success' : selectedItem.status === 'Rechazada' ? 'bg-danger' : 'bg-warning'}`}>{selectedItem.vendedor ? selectedItem.status : 'Por asignar'}</span>
                           </div>
                         </div>
                         <div className="col-md-6">

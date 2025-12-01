@@ -49,15 +49,15 @@ const Clients = () => {
       "createdAt": { "$date": "2025-11-11T15:30:00.000Z" }
     },
     {
-        "_id": { "$oid": "6914e9c415ba85599272b83f" },
-        "email": "ana.garcia@example.com",
-        "nombre": "Ana Garcia",
-        "telefono": "+528187654321",
-        "fotoPerfil": "https://randomuser.me/api/portraits/women/68.jpg",
-        "fechaNacimiento": "1995-11-30T00:00:00.000Z",
-        "activo": false,
-        "rol": "CLIENTE",
-        "createdAt": { "$date": "2025-11-05T09:15:00.000Z" }
+      "_id": { "$oid": "6914e9c415ba85599272b83f" },
+      "email": "ana.garcia@example.com",
+      "nombre": "Ana Garcia",
+      "telefono": "+528187654321",
+      "fotoPerfil": "https://randomuser.me/api/portraits/women/68.jpg",
+      "fechaNacimiento": "1995-11-30T00:00:00.000Z",
+      "activo": false,
+      "rol": "CLIENTE",
+      "createdAt": { "$date": "2025-11-05T09:15:00.000Z" }
     }
   ];
 
@@ -90,9 +90,9 @@ const Clients = () => {
           {selectedClient && (
             <div className="d-flex flex-column flex-md-row gap-4">
               <div className="text-center">
-                <img 
-                  src={selectedClient.fotoPerfil} 
-                  alt={selectedClient.nombre} 
+                <img
+                  src={selectedClient.fotoPerfil}
+                  alt={selectedClient.nombre}
                   className="rounded-circle img-thumbnail"
                   style={{ width: '150px', height: '150px', objectFit: 'cover' }}
                 />
