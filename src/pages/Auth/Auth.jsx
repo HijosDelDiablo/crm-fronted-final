@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './../../styles/Auth.css';
 import ButtonPrimary from '../../components/shared/ButtonPrimary';
 import { loginFetch, registerFetch } from '../../api/auth';
 import { notifyError, notifySuccess } from '../../components/shared/Alerts';
 import { validateField } from './validations';
 import AuthService from './AuthService';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { handleLoginResponse } from '../../utils/authUtils';
 
 const Auth = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const isRegistro = searchParams.get('registro');
   const [view, setView] = useState('login'); // 'login', 'register', 'recovery'
   const [formData, setFormData] = useState({
     email: '',
@@ -23,6 +25,11 @@ const Auth = () => {
   const [touched, setTouched] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
+  useEffect(() => {
+    if (isRegistro) {
+      setView('register');
+    }
+  }, []);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;

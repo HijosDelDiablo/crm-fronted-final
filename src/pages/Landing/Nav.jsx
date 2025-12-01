@@ -59,7 +59,7 @@ export default function MainNavbar() {
             <Button
               variant="primary"
               className="btn-nav-primary"
-              onClick={() => navigate("/registro")}
+              onClick={() => navigate("/login?registro=true")}
             >
               Comenzar
             </Button>
