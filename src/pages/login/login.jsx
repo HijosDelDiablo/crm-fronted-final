@@ -1,12 +1,58 @@
-// src/pages/Login.jsx
-import { Container, Row, Col, Form, Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Container, Row, Col, Form, Button, Spinner } from "react-bootstrap";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import toast from "react-hot-toast";
+
+import { loginSuccess } from "../../redux/slices/authSlice";
+import api from "../../services/api";
 import "./auth.css";
 
 export default function Login() {
-  const handleLogin = (e) => {
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({ email: "", password: "" });
+  
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.type]: e.target.value });
+  };
+
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // TODO: lógica de login
+    
+    if (!formData.email || !formData.password) {
+      return toast.error("Por favor completa todos los campos");
+    }
+
+    setLoading(true);
+
+    try {
+      const { data } = await api.post("/auth/login", formData);
+
+      if (data.accessToken) {
+        dispatch(loginSuccess({ user: data.user, token: data.accessToken }));
+        
+        toast.success(`¡Bienvenido, ${data.user.nombre}!`);
+
+        if (data.user.rol === "CLIENTE") {
+          navigate("/client/catalogo");
+        } else {
+          navigate("/dashboard");
+        }
+      } else if (data.redirect) {
+        toast("Autenticación de dos pasos requerida");
+        // Aquí se haria la redireccion a una pantalla de ingresar código
+      }
+
+    } catch (error) {
+      console.error("Login error:", error);
+      const msg = error.response?.data?.message || "Error al iniciar sesión";
+      toast.error(msg);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -35,8 +81,11 @@ export default function Login() {
                   <Form.Label>Correo electrónico</Form.Label>
                   <Form.Control
                     type="email"
-                    placeholder="tucorreo@concesionario.com"
+                    placeholder="tucorreo@ejemplo.com"
                     required
+                    value={formData.email}
+                    onChange={handleChange}
+                    disabled={loading}
                   />
                 </Form.Group>
 
@@ -46,6 +95,9 @@ export default function Login() {
                     type="password"
                     placeholder="••••••••"
                     required
+                    value={formData.password}
+                    onChange={handleChange}
+                    disabled={loading}
                   />
                 </Form.Group>
 
@@ -60,14 +112,14 @@ export default function Login() {
                   <button
                     type="button"
                     className="auth-link-ghost"
-                    // onClick={() => ...}
+                    onClick={() => toast("Contacta al administrador para restablecer", { icon: "ℹ️" })}
                   >
                     ¿Olvidaste tu contraseña?
                   </button>
                 </div>
 
-                <Button type="submit" className="btn-auth-main w-100 mb-2">
-                  Entrar
+                <Button type="submit" className="btn-auth-main w-100 mb-2" disabled={loading}>
+                  {loading ? <Spinner size="sm" animation="border" /> : "Entrar"}
                 </Button>
               </Form>
 
@@ -77,7 +129,7 @@ export default function Login() {
 
               <div className="auth-switch-row">
                 <span className="auth-switch-text">
-                  Crea una cuenta para tu concesionario.
+                  Crea una cuenta para ver autos.
                 </span>
                 <Link to="/registro" className="auth-link-inline">
                   Regístrate

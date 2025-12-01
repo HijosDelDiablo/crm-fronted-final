@@ -1,6 +1,7 @@
 import NavbarTop from "./Navbar";
 import Sidebar from "./Sidebar";
 import "./Layout.css";
+import AIChatWidget from "../chat/AIChatWidget";
 
 export default function Layout({ children }) {
   return (
@@ -13,6 +14,8 @@ export default function Layout({ children }) {
           {children}
         </main>
       </div>
+
+      <AIChatWidget /> 
     </>
   );
 }
