@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import Pricing from "./Pricing";
 import { Modal, Button, Navbar } from "react-bootstrap";
 import './Pricings.css';
-import NavbarTop from "../../components/layout/Navbar";
-import { getPricings } from "../../api/pricings.api";
-import { getSellersWithNumClients, setSellerToClient, setSellerToPricing } from "../../api/sellers.api";
+import NavbarTop from "../../../components/layout/Navbar";
+import { getPricings } from "../../../api/pricings.api";
+import { getSellersWithNumClients, setSellerToClient, setSellerToPricing } from "../../../api/sellers.api";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { notifyError } from "../../components/shared/Alerts";
+import { notifyError } from "../../../components/shared/Alerts";
 
 export default function Pricings() {
   const navigate = useNavigate();
