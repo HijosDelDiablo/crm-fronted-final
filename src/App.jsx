@@ -3,54 +3,68 @@ import { Provider } from "react-redux";
 import { store } from "./redux/store";
 import { Toaster } from "react-hot-toast";
 import Landing from "./pages/Landing/Landing";
-import Login from "./pages/login/login";
-import Registro from "./pages/login/registro";
-import Catalogo from "./pages/Client/Catalogo";
-import MisCompras from "./pages/Client/MisCompras";
-import Layout from "./components/layout/Layout";
-import ProtectedRoute from "./components/shared/ProtectedRoute";
-
+import Auth from "./pages/Auth/Auth";
+import { AuthContextProvider } from "./context/AuthContextProvider";
+import NotFound from "./pages/NotFound/NotFound";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Home from "./pages/inicio/Home";
+import LoginGoogle from "./pages/Auth/LoginGoogle";
+import ProtectedAdminRoutes from "./utils/ProtectedAdminRoutes";
+import useHeartbeat from "./utils/useHeartBeat";
+import Dashboard from "./pages/AdminModules/Dashboard/Dashboard";
+import Pricings from "./pages/AdminModules/Pricings/Pricings"
+import Clients from "./pages/AdminModules/Clients/Clients";
+import Products from "./pages/Products";
+
+// import Login from "./pages/Login/Login"; // lo crearás después
+// import Dashboard from "./pages/Dashboard/Dashboard"; // más adelante
 
 function App() {
+
+  useHeartbeat();
   return (
-    <Provider store={store}>
-      <BrowserRouter>
-        <Toaster position="top-right" />
+    <BrowserRouter>
+      <AuthContextProvider>
+
         <Routes>
+          <Route path="*" element={<NotFound />} />
+          {/* LANDING COMO PÁGINA INICIAL */}
           <Route path="/" element={<Landing />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/registro" element={<Registro />} />
 
-          {/* Rutas Cliente Protegidas */}
-          <Route element={<ProtectedRoute allowedRoles={["CLIENTE"]} />}>
-            <Route
-              path="/client"
-              element={
-                <Layout>
-                  <Catalogo />
-                </Layout>
-              }
-            >
-              <Route path="catalogo" element={<Catalogo />} />
-              <Route path="mis-compras" element={<MisCompras />} />
-            </Route>
+          {/* LOGIN */}
+          <Route path="/login" element={<Auth />} />
+          <Route path="/loginGoogle" element={<LoginGoogle />} />
+
+
+          {/* SISTEMA INTERNO */}
+          <Route element={<ProtectedAdminRoutes />}>
+
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/pricings" element={<Pricings />} />
+            <Route path="/clientes" element={<Clients />} />
           </Route>
 
-          {/* Rutas Admin/Vendedor */}
-          <Route element={<ProtectedRoute allowedRoles={["ADMIN", "VENDEDOR"]} />}>
-            <Route
-              path="/dashboard"
-              element={
-                <Layout>
-                  <h1>Dashboard Admin</h1>
-                </Layout>
-              }
-            />
-          </Route>
+          {/* SISTEMA INTERNO, uso del dashboard */}
+          {/* <Route path="panel" element={<PanelInicio />} /> */}
+          {/* <Route path="/dashboard" element={<Dashboard />} /> */}
+          <Route path="/panel" element={<Home />} />
+          {/* ETC */}
         </Routes>
-      </BrowserRouter>
-    </Provider>
+      </AuthContextProvider>
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          duration: 3500,
+          style: {
+            padding: "10px 14px",
+            fontSize: "14px",
+            borderRadius: "10px",
+            boxShadow: "0 6px 18px rgba(0,0,0,0.12)",
+          },
+        }}
+      />
+    </BrowserRouter>
   );
 }
 

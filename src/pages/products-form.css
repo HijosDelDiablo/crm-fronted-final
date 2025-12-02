@@ -1,0 +1,102 @@
+/* products-form.css: Estilos puros para el formulario de productos */
+
+.product-form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+}
+
+@media (min-width: 768px) {
+    .product-form-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.product-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    margin-bottom: 0.2rem;
+}
+
+.product-form-group--full {
+    grid-column: 1 / -1;
+}
+
+.product-form-label {
+    font-weight: 600;
+    color: #234;
+    margin-bottom: 0.2rem;
+}
+
+.product-form-input {
+    border: 2px solid #cfe2ff;
+    border-radius: 0.6em;
+    padding: 0.6em 1em;
+    font-size: 1rem;
+    transition: border 0.2s, box-shadow 0.2s;
+    background: #fff;
+}
+
+.product-form-input:focus {
+    border-color: #2563eb;
+    outline: none;
+    box-shadow: 0 0 0 2px #b6d4fe;
+}
+
+.product-form-textarea {
+    min-height: 48px;
+    resize: vertical;
+}
+
+.product-form-file {
+    background: #f8fafc;
+    padding: 0.4em 0.5em;
+}
+
+.product-form-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    width: 100%;
+    margin-top: 1.2rem;
+}
+
+.product-form-cancel {
+    padding: 0.6em 1.5em;
+    border-radius: 0.6em;
+    background: #e5e7eb;
+    color: #374151;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.product-form-cancel:hover {
+    background: #d1d5db;
+}
+
+.product-form-submit {
+    padding: 0.6em 2em;
+    border-radius: 0.6em;
+    background: #2563eb;
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    min-width: 110px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, opacity 0.2s;
+}
+
+.product-form-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.product-form-submit:hover:not(:disabled) {
+    background: #1d4ed8;
+}
