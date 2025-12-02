@@ -8,6 +8,7 @@ import Sidebar from "../components/layout/Sidebar";
 
 export default function Products() {
     const [products, setProducts] = useState([]);
+    const [suppliers, setSuppliers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
     const [form, setForm] = useState({
@@ -23,7 +24,8 @@ export default function Products() {
         motor: "",
         color: "",
         numPuertas: "",
-        vin: ""
+        vin: "",
+        proveedor: ""
     });
     const [image, setImage] = useState(null);
     const [uploading, setUploading] = useState(false);
@@ -32,6 +34,7 @@ export default function Products() {
 
     useEffect(() => {
         fetchProducts();
+        fetchSuppliers();
     }, []);
 
     const fetchProducts = async () => {
@@ -53,6 +56,15 @@ export default function Products() {
             }
         } finally {
             setLoading(false);
+        }
+    };
+
+    const fetchSuppliers = async () => {
+        try {
+            const { data } = await api.get("/proveedores/activos");
+            setSuppliers(data);
+        } catch (err) {
+            toast.error("Error al cargar proveedores: " + (err.response?.data?.message || err.message));
         }
     };
 
@@ -87,6 +99,7 @@ export default function Products() {
                 precioBase: form.precioBase ? Number(form.precioBase) : undefined,
                 kilometraje: form.kilometraje ? Number(form.kilometraje) : undefined,
                 numPuertas: form.numPuertas ? Number(form.numPuertas) : undefined,
+                proveedor: form.proveedor || undefined
             };
             const { data } = await api.post("/products", payload);
             if (image) {
@@ -111,7 +124,8 @@ export default function Products() {
                 motor: "",
                 color: "",
                 numPuertas: "",
-                vin: ""
+                vin: "",
+                proveedor: ""
             });
             setImage(null);
             fetchProducts();
@@ -177,7 +191,8 @@ export default function Products() {
                                             <span><b>Kilometraje:</b> {p.kilometraje?.toLocaleString?.()} km</span><br />
                                             <span><b>Transmisión:</b> {p.transmision} <b>Motor:</b> {p.motor}</span><br />
                                             <span><b>Color:</b> {p.color} <b>Puertas:</b> {p.numPuertas}</span><br />
-                                            <span><b>VIN:</b> {p.vin}</span>
+                                            <span><b>VIN:</b> {p.vin}</span><br />
+                                            <span><b>Proveedor:</b> {suppliers.find(s => s._id === p.proveedor)?.nombre || 'N/A'}</span>
                                         </div>
                                         <div className="product-card-desc">{p.descripcion}</div>
                                     </div>
@@ -232,6 +247,17 @@ export default function Products() {
                                         <Form.Group className="product-form-group">
                                             <Form.Label className="product-form-label">Tipo</Form.Label>
                                             <Form.Control name="tipo" value={form.tipo} onChange={handleChange} className="product-form-input" />
+                                        </Form.Group>
+                                        <Form.Group className="product-form-group">
+                                            <Form.Label className="product-form-label">Proveedor</Form.Label>
+                                            <Form.Select name="proveedor" value={form.proveedor} onChange={handleChange} className="product-form-input">
+                                                <option value="">Seleccionar proveedor</option>
+                                                {suppliers.map((supplier) => (
+                                                    <option key={supplier._id} value={supplier._id}>
+                                                        {supplier.nombre}
+                                                    </option>
+                                                ))}
+                                            </Form.Select>
                                         </Form.Group>
                                     </div>
                                     {/* Columna 2 */}
