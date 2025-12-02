@@ -4,12 +4,13 @@ import "./dash.css";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import { logout } from "../../redux/slices/authSlice";
-import { House, Box, ShoppingBag, LogOut, Car, Menu } from "lucide-react";
+import { House, Box, ShoppingBag, LogOut, Car, Menu, Truck } from "lucide-react";
 
 // Menú del Administrador
 const ADMIN_MENU = [
   { icon: House, label: "Dashboard", path: "/dashboard" },
   { icon: Box, label: "Inventario", path: "/products" },
+  { icon: Truck, label: "Proveedores", path: "/suppliers" },
   // ... otros
 ];
 
@@ -36,9 +37,8 @@ export default function Sidebar() {
 
   return (
     <aside
-      className={`dashboard-sidebar d-flex flex-column ${
-        collapsed ? "sidebar--collapsed" : ""
-      }`}
+      className={`dashboard-sidebar d-flex flex-column ${collapsed ? "sidebar--collapsed" : ""
+        }`}
     >
       {/* HEADER */}
       <div className="sidebar-header">
@@ -75,9 +75,8 @@ export default function Sidebar() {
               <button
                 key={i}
                 type="button"
-                className={`sidebar-link d-flex align-items-center gap-2 ${
-                  active ? "sidebar-link--active" : ""
-                }`}
+                className={`sidebar-link d-flex align-items-center gap-2 ${active ? "sidebar-link--active" : ""
+                  }`}
                 onClick={() => navigate(item.path)}
               >
                 <Icon size={18} />
