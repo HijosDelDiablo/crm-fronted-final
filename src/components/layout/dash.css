@@ -1,23 +1,59 @@
+/* ===== LAYOUT GENERAL ===== */
+
 .dashboard-layout {
+  display: flex;
   min-height: 100vh;
   background: #f4f7fa;
 }
 
-/* SIDEBAR */
+/* El contenido de la derecha: que sea el que hace scroll */
+.dashboard-container {
+  flex: 1;
+  padding: 1.2rem 1.4rem;
+  overflow-y: auto;
+}
+
+/* ===== SIDEBAR ===== */
+
 .dashboard-sidebar {
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+
+  height: 100vh;
   width: 260px;
   background: #ffffff;
   border-right: 1px solid rgba(229, 231, 235, 0.9);
   display: flex;
   flex-direction: column;
-  padding: 1rem 1rem 1.2rem;
+  padding: 0.9rem 0.9rem 1rem;
+
+  transition: width 0.22s ease, box-shadow 0.22s ease,
+    transform 0.22s ease;
+  z-index: 20;
 }
+
+/* Cuando está colapsada: solo columna delgadita con el botón */
+.dashboard-sidebar.sidebar--collapsed {
+  width: 64px;
+  padding-inline: 0.6rem;
+}
+
+/* HEADER */
 
 .sidebar-header {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  padding: 0.4rem 0.3rem 1rem;
+  justify-content: space-between;
+  gap: 0.4rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid rgba(229, 231, 235, 0.9);
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .sidebar-logo {
@@ -32,22 +68,65 @@
   font-size: 0.95rem;
 }
 
+/* Botón hamburguesa */
+
+.sidebar-toggle-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: none;
+  background: #f3f4f6;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.18s ease, transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.sidebar-toggle-btn:hover {
+  background: #e5e7eb;
+  box-shadow: 0 0 0 1px rgba(209, 213, 219, 0.8);
+}
+
+.sidebar-toggle-icon {
+  transition: transform 0.22s ease;
+}
+
+/* Rotar un poco el ícono cuando está colapsado para que se note el cambio */
+.sidebar--collapsed .sidebar-toggle-icon {
+  transform: rotate(180deg);
+}
+
+/* ===== MENÚ ===== */
+
 .sidebar-nav {
   flex: 1;
-  margin-top: 0.5rem;
+  margin-top: 0.8rem;
 }
 
 .sidebar-link {
+  width: 100%;
   font-size: 0.9rem !important;
   color: #4b5563 !important;
   border-radius: 10px;
   padding: 0.55rem 0.7rem !important;
   margin-bottom: 0.25rem;
+  border: none;
+  background: transparent;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease,
+    transform 0.15s ease;
 }
 
 .sidebar-link:hover {
   background: #f3f4f6;
   color: #111827 !important;
+  transform: translateX(1px);
 }
 
 .sidebar-link--active {
@@ -55,7 +134,8 @@
   color: #f9fafb !important;
 }
 
-/* FOOTER USUARIO */
+/* ===== FOOTER USUARIO ===== */
+
 .sidebar-footer {
   margin-top: 0.8rem;
   border-top: 1px solid rgba(229, 231, 235, 0.9);
@@ -101,15 +181,25 @@
   cursor: pointer;
 }
 
-/* MAIN */
-.dashboard-main {
-  flex: 1;
-  padding: 1.2rem 1.4rem;
-}
+/* ===== RESPONSIVE: en pantallas chicas la barra puede quedar encima ===== */
 
-.dashboard-main-inner {
-  background: #ffffff;
-  border-radius: 18px;
-  padding: 1.2rem 1.4rem;
-  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+@media (max-width: 768px) {
+  .dashboard-layout {
+    flex-direction: row;
+  }
+
+  .dashboard-sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+  }
+
+  .dashboard-container {
+    margin-left: 64px; /* para que no se tape; ajusta si ocupas */
+  }
+
+  .dashboard-sidebar.sidebar--collapsed {
+    width: 56px;
+  }
 }
