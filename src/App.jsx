@@ -11,9 +11,9 @@ import Home from "./pages/inicio/Home";
 import LoginGoogle from "./pages/Auth/LoginGoogle";
 import ProtectedAdminRoutes from "./utils/ProtectedAdminRoutes";
 import useHeartbeat from "./utils/useHeartBeat";
-import Dashboard from "./pages/Dashboard/Dashboard";
-import Pricings from "./pages/Pricings/Pricings";
-import Clients from "./pages/Clients/Clients";
+import Dashboard from "./pages/AdminModules/Dashboard/Dashboard";
+import Pricings from "./pages/AdminModules/Pricings/Pricings"
+import Clients from "./pages/AdminModules/Clients/Clients";
 
 // import Login from "./pages/Login/Login"; // lo crearás después
 // import Dashboard from "./pages/Dashboard/Dashboard"; // más adelante
