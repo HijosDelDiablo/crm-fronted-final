@@ -4,7 +4,7 @@ import "./landing.css";
 
 import car1 from "../../assets/carros/Mazda.jpg";
 import car2 from "../../assets/carros/Honda.jpg";
-import car3 from "../../assets/carros/Toyota.jpg";
+import car3 from "../../assets/carros/toyota.jpg";
 
 export default function TopCarsSection() {
   const topCars = [

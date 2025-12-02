@@ -14,6 +14,7 @@ import useHeartbeat from "./utils/useHeartBeat";
 import Dashboard from "./pages/AdminModules/Dashboard/Dashboard";
 import Pricings from "./pages/AdminModules/Pricings/Pricings"
 import Clients from "./pages/AdminModules/Clients/Clients";
+import Products from "./pages/Products";
 
 // import Login from "./pages/Login/Login"; // lo crearás después
 // import Dashboard from "./pages/Dashboard/Dashboard"; // más adelante
@@ -39,6 +40,7 @@ function App() {
           <Route element={<ProtectedAdminRoutes />}>
 
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/products" element={<Products />} />
             <Route path="/pricings" element={<Pricings />} />
             <Route path="/clientes" element={<Clients />} />
           </Route>
