@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { Container, Row, Col, Card, Button, Spinner, Form, Modal } from "react-bootstrap";
 import toast from "react-hot-toast";
 import api from "../services/api";
+import "./products-cards.css";
 
 export default function Products() {
     const [products, setProducts] = useState([]);
@@ -135,23 +136,21 @@ export default function Products() {
                 <Row>
                     {products.map((p) => (
                         <Col md={4} key={p._id} className="mb-4">
-                            <Card>
+                            <Card className="product-card">
                                 {p.imageUrl && (
-                                    <Card.Img variant="top" src={p.imageUrl} style={{ height: 200, objectFit: "cover" }} />
+                                    <Card.Img variant="top" src={p.imageUrl} className="card-img-top" />
                                 )}
                                 <Card.Body>
-                                    <Card.Title>{p.marca} {p.modelo} ({p.ano})</Card.Title>
+                                    <Card.Title>{p.marca} {p.modelo} <span className="badge bg-secondary">{p.ano}</span></Card.Title>
+                                    <span className="price">${p.precioBase?.toLocaleString?.() || p.precioBase}</span>
                                     <Card.Text>
-                                        <strong>Precio:</strong> ${p.precioBase}<br />
-                                        <strong>Kilometraje:</strong> {p.kilometraje} km<br />
-                                        <strong>Condición:</strong> {p.condicion}<br />
-                                        <strong>Tipo:</strong> {p.tipo}<br />
-                                        <strong>Transmisión:</strong> {p.transmision}<br />
-                                        <strong>Motor:</strong> {p.motor}<br />
-                                        <strong>Color:</strong> {p.color}<br />
-                                        <strong>Puertas:</strong> {p.numPuertas}<br />
+                                        <span className="badge bg-info text-dark">{p.condicion}</span> <span className="badge bg-light text-dark">{p.tipo}</span>
+                                        <br />
+                                        <strong>Kilometraje:</strong> {p.kilometraje?.toLocaleString?.()} km<br />
+                                        <strong>Transmisión:</strong> {p.transmision} <strong>Motor:</strong> {p.motor}<br />
+                                        <strong>Color:</strong> {p.color} <strong>Puertas:</strong> {p.numPuertas}<br />
                                         <strong>VIN:</strong> {p.vin}<br />
-                                        <strong>Descripción:</strong> {p.descripcion}
+                                        <span style={{ color: '#666', fontSize: '0.97em' }}>{p.descripcion}</span>
                                     </Card.Text>
                                 </Card.Body>
                             </Card>
