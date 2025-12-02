@@ -68,47 +68,43 @@ export default function Sidebar() {
         </button>
       </div>
 
-      {/* MENÚ – se oculta completo cuando está colapsado */}
-      {!collapsed && (
-        <nav className="sidebar-nav">
-          {menu.map((item, i) => {
-            const Icon = item.icon;
-            const active = location.pathname === item.path;
+      {/* MENÚ */}
+      <nav className="sidebar-nav">
+        {menu.map((item, i) => {
+          const Icon = item.icon;
+          const active = location.pathname === item.path;
 
-            return (
-              <button
-                key={i}
-                type="button"
-                className={`sidebar-link d-flex align-items-center gap-2 ${active ? "sidebar-link--active" : ""
-                  }`}
-                onClick={() => navigate(item.path)}
-              >
-                <Icon size={18} />
-                <span>{item.label}</span>
-              </button>
-            );
-          })}
-        </nav>
-      )}
+          return (
+            <button
+              key={i}
+              type="button"
+              data-label={item.label}
+              className={`sidebar-link d-flex align-items-center gap-2 ${active ? "sidebar-link--active" : ""}`}
+              onClick={() => navigate(item.path)}
+            >
+              <Icon size={18} />
+              <span>{item.label}</span>
+            </button>
+          );
+        })}
+      </nav>
 
-      {/* FOOTER / USUARIO – también se oculta cuando está colapsado */}
-      {!collapsed && (
-        <div className="sidebar-footer mt-auto">
-          <div className="user-mini">
-            <div className="user-avatar">
-              {user?.nombre?.[0]?.toUpperCase() || "?"}
-            </div>
+      {/* FOOTER / USUARIO */}
+      <div className="sidebar-footer mt-auto">
+        <div className="user-mini">
+          <div className="user-avatar">
+            {user?.nombre?.[0]?.toUpperCase() || "?"}
+          </div>
 
-            <div className="user-info">
-              <span className="user-name">{user?.nombre}</span>
+          <div className="user-info">
+            <span className="user-name">{user?.nombre}</span>
 
-              <button className="btn-link-logout" onClick={handleLogout}>
-                <LogOut size={14} /> Salir
-              </button>
-            </div>
+            <button className="btn-link-logout" onClick={handleLogout}>
+              <LogOut size={14} /> Salir
+            </button>
           </div>
         </div>
-      )}
+      </div>
     </aside>
   );
 }
