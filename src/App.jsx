@@ -14,6 +14,8 @@ import useHeartbeat from "./utils/useHeartBeat";
 import Dashboard from "./pages/AdminModules/Dashboard/Dashboard";
 import Pricings from "./pages/AdminModules/Pricings/Pricings"
 import Clients from "./pages/AdminModules/Clients/Clients";
+import Products from "./pages/Products";
+import Suppliers from "./pages/AdminModules/Suppliers/Suppliers";
 import Sellers from "./pages/AdminModules/Sellers/Sellers";
 import SellerReview from "./pages/AdminModules/Sellers/SellerReview";
 
@@ -41,10 +43,12 @@ function App() {
           <Route element={<ProtectedAdminRoutes />}>
 
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/products" element={<Products />} />
             <Route path="/pricings" element={<Pricings />} />
             <Route path="/clientes" element={<Clients />} />
             <Route path="/vendedores" element={<Sellers />} />
             <Route path="/seller-reviews/:id" element={<SellerReview />} />
+            <Route path="/suppliers" element={<Suppliers />} />
           </Route>
 
           {/* SISTEMA INTERNO, uso del dashboard */}

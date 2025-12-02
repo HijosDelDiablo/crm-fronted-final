@@ -4,12 +4,14 @@ import "./dash.css";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import { logout } from "../../redux/slices/authSlice";
-import { House, Box, ShoppingBag, LogOut, Car, Menu } from "lucide-react";
+import { House, Box, ShoppingBag, LogOut, Car, Menu, Truck, Users } from "lucide-react";
 
 // Menú del Administrador
 const ADMIN_MENU = [
   { icon: House, label: "Dashboard", path: "/dashboard" },
   { icon: Box, label: "Inventario", path: "/products" },
+  { icon: Truck, label: "Proveedores", path: "/suppliers" },
+  { icon: Users, label: "Clientes", path: "/clientes" },
   { icon: ShoppingBag, label: "clientes", path: "/clientes" },
   { icon: Car, label: "Precio", path: "/Pricings" },
 
