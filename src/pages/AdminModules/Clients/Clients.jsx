@@ -31,11 +31,8 @@ const Clients = () => {
     const response = await getClients(navigate);
     if (sellerIdFromUrl) {
       // Filter using loose equality to handle potential type mismatches (string vs number/object)
-      console.log("sellerIdFromUrl", sellerIdFromUrl);
-      console.log("response", response);
       const filtered = response.filter(client => client.vendedorQueAtiende?._id === sellerIdFromUrl || client.vendedorQueAtiende?.id === sellerIdFromUrl);
 
-      console.log("filtered", filtered);
       if (filtered.length > 0) {
         setClients(filtered);
       } else {
