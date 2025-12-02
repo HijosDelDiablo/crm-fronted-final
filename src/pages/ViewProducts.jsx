@@ -43,14 +43,22 @@ export default function ViewProducts() {
     return (
         <DashboardLayout>
             <Container fluid className="py-4">
-                <div className="d-flex justify-content-between align-items-center mb-4">
-                    <h2 className="fw-bold text-dark mb-0">
-                        <Car className="me-2" size={28} />
-                        Catálogo de Vehículos
-                    </h2>
-                    <Badge bg="info" className="fs-6 px-3 py-2">
-                        {products.length} vehículos disponibles
-                    </Badge>
+                <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-5">
+                    <div>
+                        <h1 className="display-5 fw-bold text-dark mb-2">
+                            <Car className="me-3 text-primary" size={40} />
+                            Catálogo de Vehículos
+                        </h1>
+                        <p className="text-muted mb-0 fs-5">
+                            Descubre el vehículo perfecto para ti
+                        </p>
+                    </div>
+                    <div className="mt-3 mt-md-0">
+                        <Badge bg="primary" className="fs-6 px-4 py-2 shadow-sm">
+                            <Car size={16} className="me-2" />
+                            {products.length} vehículos disponibles
+                        </Badge>
+                    </div>
                 </div>
 
                 {products.length === 0 ? (
@@ -63,12 +71,13 @@ export default function ViewProducts() {
                     <Row>
                         {products.map((product) => (
                             <Col key={product._id} md={6} lg={4} className="mb-4">
-                                <Card className="product-card h-100 shadow-sm border-0">
+                                <Card className="product-card h-100">
                                     <div className="product-img-container">
                                         <img
                                             src={product.imageUrl || "https://via.placeholder.com/400x300?text=Vehículo"}
                                             alt={`${product.marca} ${product.modelo}`}
                                             className="product-img"
+                                            loading="lazy"
                                         />
                                         <Badge
                                             bg={product.condicion === "Nuevo" ? "success" : "warning"}
@@ -78,7 +87,7 @@ export default function ViewProducts() {
                                         </Badge>
                                     </div>
 
-                                    <Card.Body className="product-body d-flex flex-column">
+                                    <Card.Body className="product-body">
                                         <div className="mb-3">
                                             <h5 className="fw-bold mb-1">{product.marca} {product.modelo}</h5>
                                             <small className="text-muted d-block mb-2">
@@ -90,7 +99,7 @@ export default function ViewProducts() {
                                         <div className="product-details mb-3">
                                             <div className="detail-row">
                                                 <DollarSign size={14} />
-                                                <span className="fw-bold text-primary">
+                                                <span className="fw-bold text-primary fs-5">
                                                     ${product.precioBase?.toLocaleString()}
                                                 </span>
                                             </div>
