@@ -45,7 +45,7 @@ export default function Catalogo() {
     return matchSearch && matchCondicion;
   });
 
-    const handleCotizar = async () => {
+  const handleCotizar = async () => {
     if (enganche >= selectedAuto.precioBase)
       return toast.error("El enganche debe ser menor al precio");
 
@@ -59,7 +59,7 @@ export default function Catalogo() {
       const { data } = await api.post("/cotizacion", payload);
 
       if (modalType === "cotizar") {
-        toast.success("¡Cotización enviada! Revisa tu correo.", { duration: 5000 });
+        toast.success("¡Cotización creada.", { duration: 5000 });
         handleClose();
       }
 
@@ -94,7 +94,7 @@ export default function Catalogo() {
   };
 
 
-    const openModal = (auto, type) => {
+  const openModal = (auto, type) => {
     setSelectedAuto(auto);
     setModalType(type);
     setEnganche(auto.precioBase * 0.20);
@@ -287,7 +287,7 @@ export default function Catalogo() {
                     </p>
 
                     <p className="fw-bold text-primary">
-                      Mensualidad estimada: ${( (selectedAuto.precioBase - enganche) / plazo ).toLocaleString(undefined, { maximumFractionDigits: 0 }) } MXN
+                      Mensualidad estimada: ${((selectedAuto.precioBase - enganche) / plazo).toLocaleString(undefined, { maximumFractionDigits: 0 })} MXN
                     </p>
                   </div>
                 )}

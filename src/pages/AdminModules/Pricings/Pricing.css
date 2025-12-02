@@ -1,0 +1,169 @@
+.pricing-card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+    height: 100%;
+    background-color: #fff;
+}
+
+.pricing-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.pricing-card-img-container {
+    height: 200px;
+    overflow: hidden;
+    position: relative;
+}
+
+.pricing-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+/* For larger screens, we might want a horizontal layout if requested, 
+   but based on the "card" description and standard bootstrap cards, 
+   vertical is standard. However, the user asked for:
+   "foto del producto aparezca con bordes redondeados del lado izquierdo y del lado derecho la información"
+   This implies a horizontal card layout.
+*/
+
+.pricing-card-horizontal {
+    display: flex;
+    flex-direction: row;
+    height: auto;
+    min-height: 220px;
+}
+
+.pricing-card-horizontal .pricing-card-img-container {
+    width: 40%;
+    height: auto;
+    min-height: 100%;
+}
+
+.pricing-card-horizontal .pricing-card-img {
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 15px;
+    height: 100%;
+}
+
+.pricing-card-body {
+    padding: 1.25rem;
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.pricing-status-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.pricing-footer {
+    border-top: 1px solid #eee;
+    padding-top: 10px;
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pricing-user-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.pricing-user-img {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.pricing-user-details {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+
+.pricing-user-role {
+    font-size: 0.7rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.pricing-user-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #333;
+    text-decoration: none;
+}
+
+.pricing-user-name:hover {
+    text-decoration: underline;
+    color: #0d6efd;
+}
+
+/* Mobile Responsiveness for Footer */
+@media (max-width: 576px) {
+    .pricing-card-horizontal {
+        flex-direction: column;
+    }
+    
+    .pricing-card-horizontal .pricing-card-img-container {
+        width: 100%;
+        height: 200px;
+    }
+
+    .pricing-card-horizontal .pricing-card-img {
+        border-top-right-radius: 15px;
+        border-bottom-left-radius: 0;
+    }
+
+    .pricing-card-body {
+        width: 100%;
+    }
+
+    .pricing-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .pricing-user-info.seller {
+        align-self: flex-start; /* Or flex-end if we want them staggered */
+        flex-direction: row; /* Keep row even on mobile for better look, or column if strictly requested "one above other" */
+    }
+    
+    /* User specifically asked: "cuando tenga vista de móvil, aparezcan uno encima de otro" */
+    .pricing-footer {
+        display: block; /* Stack them */
+    }
+    
+    .pricing-user-info {
+        margin-bottom: 8px;
+    }
+    
+    .pricing-user-info.seller {
+        flex-direction: row; /* Keep image and text together */
+        justify-content: flex-start; /* Align left like client */
+    }
+}
