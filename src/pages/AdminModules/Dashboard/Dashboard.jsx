@@ -99,7 +99,7 @@ const Dashboard = () => {
 
     return (
         <>
-            <NavTop />
+            <NavbarTop />
             <div className="dashboard-container" ref={swapyRef}>
                 <div className="dashboard-header">
                     <h1>Dashboard</h1>
