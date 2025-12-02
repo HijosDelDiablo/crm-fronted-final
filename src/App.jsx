@@ -18,6 +18,7 @@ import Products from "./pages/Products";
 import Suppliers from "./pages/AdminModules/Suppliers/Suppliers";
 import Sellers from "./pages/AdminModules/Sellers/Sellers";
 import SellerReview from "./pages/AdminModules/Sellers/SellerReview";
+import ViewProducts from "./pages/ViewProducts";
 
 // import Login from "./pages/Login/Login"; // lo crearás después
 // import Dashboard from "./pages/Dashboard/Dashboard"; // más adelante
@@ -52,9 +53,8 @@ function App() {
           </Route>
 
           {/* SISTEMA INTERNO, uso del dashboard */}
-          {/* <Route path="panel" element={<PanelInicio />} /> */}
-          {/* <Route path="/dashboard" element={<Dashboard />} /> */}
           <Route path="/panel" element={<Home />} />
+          <Route path="/panel/carros" element={<ViewProducts />} />
           {/* ETC */}
         </Routes>
       </AuthContextProvider>
