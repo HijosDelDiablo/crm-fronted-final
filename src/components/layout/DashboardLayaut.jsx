@@ -3,6 +3,9 @@ import { Nav } from "react-bootstrap";
 import { Link, useLocation } from "react-router-dom";
 import logo from "../../assets/logos/logoAuto.jpg";
 import "./dash.css"; // opcional, si quieres estilos extra
+import { useState } from "react";
+import AIChatWidget from "../chat/AIChatWidget.jsx";
+import { MessageSquare } from "lucide-react";
 
 const MODULES = [
   {
@@ -29,10 +32,17 @@ const MODULES = [
     path: "/panel/reportes",
     icon: "bi bi-bar-chart",
   },
+  {
+    key: "chat-ia",
+    label: "Chat IA",
+    action: "chat",
+    icon: "bi bi-robot",
+  },
 ];
 
 export default function DashboardLayout({ children }) {
   const location = useLocation();
+  const [chatOpen, setChatOpen] = useState(false);
 
   return (
     <div className="d-flex dashboard-layout">
@@ -46,17 +56,28 @@ export default function DashboardLayout({ children }) {
         <Nav className="flex-column sidebar-nav">
           {MODULES.map((m) => (
             <Nav.Item key={m.key}>
-              <Nav.Link
-                as={Link}
-                to={m.path}
-                className={
-                  "sidebar-link" +
-                  (location.pathname === m.path ? " sidebar-link--active" : "")
-                }
-              >
-                {m.icon && <i className={m.icon + " me-2"} />}
-                {m.label}
-              </Nav.Link>
+              {m.action === "chat" ? (
+                <Nav.Link
+                  className="sidebar-link"
+                  onClick={() => setChatOpen(!chatOpen)}
+                  style={{ cursor: "pointer" }}
+                >
+                  {m.icon && <i className={m.icon + " me-2"} />}
+                  {m.label}
+                </Nav.Link>
+              ) : (
+                <Nav.Link
+                  as={Link}
+                  to={m.path}
+                  className={
+                    "sidebar-link" +
+                    (location.pathname === m.path ? " sidebar-link--active" : "")
+                  }
+                >
+                  {m.icon && <i className={m.icon + " me-2"} />}
+                  {m.label}
+                </Nav.Link>
+              )}
             </Nav.Item>
           ))}
         </Nav>
@@ -83,7 +104,14 @@ export default function DashboardLayout({ children }) {
 
       {/* CONTENIDO */}
       <main className="dashboard-main">
-        <div className="dashboard-main-inner">{children}</div>
+        <div className="dashboard-main-inner">
+          {children}
+          <AIChatWidget
+            externalIsOpen={chatOpen}
+            onExternalClose={() => setChatOpen(false)}
+            hideFloatButton={true}
+          />
+        </div>
       </main>
     </div>
   );
