@@ -166,7 +166,6 @@ export default function Suppliers() {
                                             <span><b>Email:</b> {s.email}</span>
                                             <span><b>RFC:</b> {s.rfc}</span>
                                             <span><b>Dirección:</b> {s.direccion}</span>
-                                            <span><b>Productos:</b> {s.productosSuministrados?.length || 0}</span>
                                         </div>
                                         <div className="supplier-card-desc">{s.notas}</div>
                                         <div className="supplier-card-actions">
