@@ -1,4 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Provider } from "react-redux";
+import { store } from "./redux/store";
 import { Toaster } from "react-hot-toast";
 import Landing from "./pages/Landing/Landing";
 import Auth from "./pages/Auth/Auth";
@@ -18,11 +20,11 @@ import Clients from "./pages/Clients/Clients";
 
 function App() {
 
- useHeartbeat();
+  useHeartbeat();
   return (
     <BrowserRouter>
       <AuthContextProvider>
-        
+
         <Routes>
           <Route path="*" element={<NotFound />} />
           {/* LANDING COMO PÁGINA INICIAL */}
@@ -35,10 +37,10 @@ function App() {
 
           {/* SISTEMA INTERNO */}
           <Route element={<ProtectedAdminRoutes />}>
-            
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/pricings" element={<Pricings />} />
-          <Route path="/clientes" element={<Clients />} />
+
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/pricings" element={<Pricings />} />
+            <Route path="/clientes" element={<Clients />} />
           </Route>
 
           {/* SISTEMA INTERNO, uso del dashboard */}
