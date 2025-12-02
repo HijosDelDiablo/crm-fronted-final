@@ -193,7 +193,7 @@ export default function Products() {
                             {formError && (
                                 <div className="bg-red-100 text-red-700 rounded px-3 py-2 mb-3 text-sm">{formError}</div>
                             )}
-                            <h3 className="product-form-label" style={{fontSize:'1.3rem',marginBottom:'1.2rem'}}>Datos del producto</h3>
+                            <h3 className="product-form-label" style={{ fontSize: '1.3rem', marginBottom: '1.2rem' }}>Datos del producto</h3>
                             <div className="product-form-grid">
                                 <Form.Group className="product-form-group">
                                     <Form.Label className="product-form-label">Marca</Form.Label>
