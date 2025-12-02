@@ -4,8 +4,9 @@ import "./dash.css";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import { logout } from "../../redux/slices/authSlice";
-import { House, Box, ShoppingBag, LogOut, Car, Menu, Truck, Users, UserCheck } from "lucide-react";
+import { House, Box, ShoppingBag, LogOut, Car, Menu, Truck, Users, UserCheck, MessageSquare } from "lucide-react";
 import logo from "../../assets/logos/logoAuto.jpg";
+import AIChatWidget from "../chat/AIChatWidget.jsx";
 
 // Menú del Administrador
 const ADMIN_MENU = [
@@ -15,6 +16,7 @@ const ADMIN_MENU = [
   { icon: Users, label: "Clientes", path: "/clientes" },
   { icon: UserCheck, label: "Vendedores", path: "/vendedores" },
   { icon: Car, label: "Precio", path: "/Pricings" },
+  { icon: MessageSquare, label: "Chat IA", action: "chat" },
 
   // ... otros
 ];
@@ -23,6 +25,7 @@ const ADMIN_MENU = [
 const CLIENT_MENU = [
   { icon: Car, label: "Catálogo", path: "/client/catalogo" },
   { icon: ShoppingBag, label: "Mis Compras", path: "/client/mis-compras" },
+  { icon: MessageSquare, label: "Chat IA", action: "chat" },
 ];
 
 export default function Sidebar() {
@@ -32,6 +35,7 @@ export default function Sidebar() {
   const location = useLocation();
 
   const [collapsed, setCollapsed] = useState(false);
+  const [chatOpen, setChatOpen] = useState(false);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -41,71 +45,84 @@ export default function Sidebar() {
   const menu = user?.rol === "CLIENTE" ? CLIENT_MENU : ADMIN_MENU;
 
   return (
-    <aside
-      className={`dashboard-sidebar d-flex flex-column ${collapsed ? "sidebar--collapsed" : ""
-        }`}
-    >
-      {/* HEADER */}
-      <div className="sidebar-header">
-        {/* Logo y título solo si NO está colapsado */}
-        {!collapsed && (
-          <div className="sidebar-brand">
-            <img
-              src={logo}
-              alt="logo"
-              className="sidebar-logo"
-            />
-            <span className="sidebar-title">CarAI CRM</span>
-          </div>
-        )}
+    <>
+      <aside
+        className={`dashboard-sidebar d-flex flex-column ${collapsed ? "sidebar--collapsed" : ""
+          }`}
+      >
+        {/* HEADER */}
+        <div className="sidebar-header">
+          {/* Logo y título solo si NO está colapsado */}
+          {!collapsed && (
+            <div className="sidebar-brand">
+              <img
+                src={logo}
+                alt="logo"
+                className="sidebar-logo"
+              />
+              <span className="sidebar-title">CarAI CRM</span>
+            </div>
+          )}
 
-        {/* Botón hamburguesa SIEMPRE visible */}
-        <button
-          type="button"
-          className="sidebar-toggle-btn"
-          onClick={() => setCollapsed((prev) => !prev)}
-        >
-          <Menu className="sidebar-toggle-icon" size={18} />
-        </button>
-      </div>
+          {/* Botón hamburguesa SIEMPRE visible */}
+          <button
+            type="button"
+            className="sidebar-toggle-btn"
+            onClick={() => setCollapsed((prev) => !prev)}
+          >
+            <Menu className="sidebar-toggle-icon" size={18} />
+          </button>
+        </div>
 
-      {/* MENÚ */}
-      <nav className="sidebar-nav">
-        {menu.map((item, i) => {
-          const Icon = item.icon;
-          const active = location.pathname === item.path;
+        {/* MENÚ */}
+        <nav className="sidebar-nav">
+          {menu.map((item, i) => {
+            const Icon = item.icon;
+            const active = location.pathname === item.path || (item.action === "chat" && chatOpen);
 
-          return (
-            <button
-              key={i}
-              type="button"
-              data-label={item.label}
-              className={`sidebar-link d-flex align-items-center gap-2 ${active ? "sidebar-link--active" : ""}`}
-              onClick={() => navigate(item.path)}
-            >
-              <Icon size={18} />
-              <span>{item.label}</span>
-            </button>
-          );
-        })}
-      </nav>
+            return (
+              <button
+                key={i}
+                type="button"
+                data-label={item.label}
+                className={`sidebar-link d-flex align-items-center gap-2 ${active ? "sidebar-link--active" : ""}`}
+                onClick={() => {
+                  if (item.action === "chat") {
+                    setChatOpen(true);
+                  } else {
+                    navigate(item.path);
+                  }
+                }}
+              >
+                <Icon size={18} />
+                <span>{item.label}</span>
+              </button>
+            );
+          })}
+        </nav>
 
-      {/* FOOTER / USUARIO */}
-      <div className="sidebar-footer mt-auto">
-        <div className="user-mini">
-          <div className="user-avatar">
-            {user?.nombre?.[0]?.toUpperCase() || "?"}
-          </div>
+        {/* FOOTER / USUARIO */}
+        <div className="sidebar-footer mt-auto">
+          <div className="user-mini">
+            <div className="user-avatar">
+              {user?.nombre?.[0]?.toUpperCase() || "?"}
+            </div>
 
-          <div className="user-info">
-            <span className="user-name">{user?.nombre}</span>
+            <div className="user-info">
+              <span className="user-name">{user?.nombre}</span>
 
-            <button className="btn-link-logout" onClick={handleLogout}>
-              <LogOut size={14} /> Salir
-            </button>
+              <button className="btn-link-logout" onClick={handleLogout}>
+                <LogOut size={14} /> Salir
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-    </aside>
+      </aside>
+      <AIChatWidget
+        externalIsOpen={chatOpen}
+        onExternalClose={() => setChatOpen(false)}
+        hideFloatButton={true}
+      />
+    </>
   );
 }

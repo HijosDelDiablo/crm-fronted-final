@@ -153,17 +153,35 @@ export default function Pricings() {
                     <div className="row">
                       {/* Car Details */}
                       <div className="col-md-6">
-                        <h5>Información del Coche</h5>
+                        <h5 className="pricing-modal-section-title">Información del Coche</h5>
                         {selectedItem.coche ? (
                           <div>
-                            <p><strong>Marca:</strong> {selectedItem.coche.marca}</p>
-                            <p><strong>Modelo:</strong> {selectedItem.coche.modelo}</p>
-                            <p><strong>Año:</strong> {selectedItem.coche.ano}</p>
-                            <p><strong>Condición:</strong> {selectedItem.coche.condicion}</p>
-                            <p><strong>Transmisión:</strong> {selectedItem.coche.transmision}</p>
-                            <p><strong>Precio:</strong> {formatCurrency(selectedItem.precioCoche)}</p>
+                            <div className="pricing-detail-row">
+                              <span className="pricing-detail-label">Marca:</span>
+                              <span className="pricing-detail-value">{selectedItem.coche.marca}</span>
+                            </div>
+                            <div className="pricing-detail-row">
+                              <span className="pricing-detail-label">Modelo:</span>
+                              <span className="pricing-detail-value">{selectedItem.coche.modelo}</span>
+                            </div>
+                            <div className="pricing-detail-row">
+                              <span className="pricing-detail-label">Año:</span>
+                              <span className="pricing-detail-value">{selectedItem.coche.ano}</span>
+                            </div>
+                            <div className="pricing-detail-row">
+                              <span className="pricing-detail-label">Condición:</span>
+                              <span className="pricing-detail-value">{selectedItem.coche.condicion}</span>
+                            </div>
+                            <div className="pricing-detail-row">
+                              <span className="pricing-detail-label">Transmisión:</span>
+                              <span className="pricing-detail-value">{selectedItem.coche.transmision}</span>
+                            </div>
+                            <div className="pricing-detail-row">
+                              <span className="pricing-detail-label">Precio:</span>
+                              <span className="pricing-detail-value">{formatCurrency(selectedItem.precioCoche)}</span>
+                            </div>
                             {selectedItem.coche.imageUrl && (
-                              <img src={selectedItem.coche.imageUrl} alt="Coche" className="img-fluid mt-2" />
+                              <img src={selectedItem.coche.imageUrl} alt="Coche" className="pricing-modal-img mt-3" />
                             )}
                           </div>
                         ) : (
@@ -173,21 +191,33 @@ export default function Pricings() {
 
                       {/* Client Details */}
                       <div className="col-md-6">
-                        <h5>Información del Cliente</h5>
+                        <h5 className="pricing-modal-section-title">Información del Cliente</h5>
                         {selectedItem.cliente ? (
                           <div>
-                            <p><strong>Nombre:</strong> {selectedItem.cliente.nombre}</p>
-                            <p><strong>Email:</strong> {selectedItem.cliente.email || 'N/A'}</p>
-                            <p><strong>Teléfono:</strong> {selectedItem.cliente.telefono || 'N/A'}</p>
+                            <div className="pricing-detail-row">
+                              <span className="pricing-detail-label">Nombre:</span>
+                              <span className="pricing-detail-value">{selectedItem.cliente.nombre}</span>
+                            </div>
+                            <div className="pricing-detail-row">
+                              <span className="pricing-detail-label">Email:</span>
+                              <span className="pricing-detail-value">{selectedItem.cliente.email || 'N/A'}</span>
+                            </div>
+                            <div className="pricing-detail-row">
+                              <span className="pricing-detail-label">Teléfono:</span>
+                              <span className="pricing-detail-value">{selectedItem.cliente.telefono || 'N/A'}</span>
+                            </div>
                           </div>
                         ) : (
                           <p className="text-muted">Información del cliente no disponible</p>
                         )}
 
-                        <h5 className="mt-3">Información del Vendedor</h5>
+                        <h5 className="pricing-modal-section-title">Información del Vendedor</h5>
                         {selectedItem.vendedor ? (
                           <div>
-                            <p><strong>Nombre:</strong> {selectedItem.vendedor.nombre}</p>
+                            <div className="pricing-detail-row">
+                              <span className="pricing-detail-label">Nombre:</span>
+                              <span className="pricing-detail-value">{selectedItem.vendedor.nombre}</span>
+                            </div>
                           </div>
                         ) : (
                           <p className="text-muted">Vendedor no asignado</p>
@@ -197,13 +227,31 @@ export default function Pricings() {
 
                     <div className="row mt-3">
                       <div className="col-12">
-                        <h5>Detalles de la Cotización</h5>
-                        <p><strong>ID:</strong> {selectedItem._id}</p>
-                        <p><strong>Status:</strong> {selectedItem.status}</p>
-                        <p><strong>Enganche:</strong> {formatCurrency(selectedItem.enganche)}</p>
-                        <p><strong>Plazo (meses):</strong> {selectedItem.plazoMeses}</p>
-                        <p><strong>Fecha de Creación:</strong> {formatDate(selectedItem.fechaCreacion)}</p>
-                        <p><strong>Notas del Vendedor:</strong> {selectedItem.notasVendedor || 'Sin notas'}</p>
+                        <h5 className="pricing-modal-section-title">Detalles de la Cotización</h5>
+                        <div className="pricing-detail-row">
+                          <span className="pricing-detail-label">ID:</span>
+                          <span className="pricing-detail-value">{selectedItem._id}</span>
+                        </div>
+                        <div className="pricing-detail-row">
+                          <span className="pricing-detail-label">Status:</span>
+                          <span className="pricing-detail-value">{selectedItem.status}</span>
+                        </div>
+                        <div className="pricing-detail-row">
+                          <span className="pricing-detail-label">Enganche:</span>
+                          <span className="pricing-detail-value">{formatCurrency(selectedItem.enganche)}</span>
+                        </div>
+                        <div className="pricing-detail-row">
+                          <span className="pricing-detail-label">Plazo (meses):</span>
+                          <span className="pricing-detail-value">{selectedItem.plazoMeses}</span>
+                        </div>
+                        <div className="pricing-detail-row">
+                          <span className="pricing-detail-label">Fecha de Creación:</span>
+                          <span className="pricing-detail-value">{formatDate(selectedItem.fechaCreacion)}</span>
+                        </div>
+                        <div className="pricing-detail-row">
+                          <span className="pricing-detail-label">Notas del Vendedor:</span>
+                          <span className="pricing-detail-value">{selectedItem.notasVendedor || 'Sin notas'}</span>
+                        </div>
                       </div>
                     </div>
 
@@ -211,7 +259,7 @@ export default function Pricings() {
                     {(selectedItem.status === "Pendiente" || selectedItem.status === "En revisión") && !selectedItem.vendedor && (
                       <div className="row mt-3">
                         <div className="col-12">
-                          <h5>Asignar Vendedor</h5>
+                          <h5 className="pricing-modal-section-title">Asignar Vendedor</h5>
                           <div className="d-flex flex-wrap gap-2">
                             {sellers.slice(0, showAllSellers ? sellers.length : 3).map((seller) => (
                               <Button

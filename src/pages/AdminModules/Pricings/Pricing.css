@@ -1,15 +1,18 @@
 .pricing-card {
-    border: none;
+    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+    border: 1px solid rgba(59, 130, 246, 0.5);
     border-radius: 15px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     overflow: hidden;
     height: 100%;
+    color: #ffffff;
 }
 
 .pricing-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
 }
 
 .pricing-card-img-container {
@@ -168,4 +171,21 @@
         justify-content: flex-start;
         /* Align left like client */
     }
+}
+
+/* Dark theme text overrides for pricing cards */
+.pricing-card .card-title {
+    color: #ffffff;
+}
+
+.pricing-card .text-muted {
+    color: #bbb !important;
+}
+
+.pricing-card .text-secondary {
+    color: #d1d5db !important;
+}
+
+.pricing-card .pricing-user-name {
+    color: #e0e0e0;
 }
