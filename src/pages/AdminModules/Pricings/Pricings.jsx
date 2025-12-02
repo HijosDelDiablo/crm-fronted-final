@@ -88,14 +88,16 @@ export default function Pricings() {
 
   useEffect(() => {
     if (pricingIdFromUrl && pricingsData.length > 0) {
-      const found = pricingsData.find((p) => p._id === pricingIdFromUrl);
-      if (found) handleShow(found);
+      const foundPricing = pricingsData.find(p => p._id === pricingIdFromUrl);
+
+      if (foundPricing) {
+        handleShow(foundPricing); // Reutilizamos tu función handleShow para abrir el modal y cargar la data
+      }
     }
 
-    if (clientIdFromUrl && clientIdFromUrl !== "undefined") {
-      const filtered = pricingsData.filter(
-        (p) => p.cliente?._id === clientIdFromUrl
-      );
+    if (clientIdFromUrl && clientIdFromUrl !== "undefined" && pricingsData.length > 0) {
+      //Show pricings of client
+      const filtered = pricingsData.filter(p => p.cliente?._id === clientIdFromUrl);
 
       if (filtered.length > 0) {
         setPricingsOfClient(filtered);

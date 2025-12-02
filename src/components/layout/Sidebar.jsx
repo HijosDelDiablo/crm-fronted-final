@@ -4,13 +4,16 @@ import "./dash.css";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import { logout } from "../../redux/slices/authSlice";
-import { House, Box, ShoppingBag, LogOut, Car, Menu } from "lucide-react";
+import { House, Box, ShoppingBag, LogOut, Car, Menu, Truck, Users, UserCheck } from "lucide-react";
+import logo from "../../assets/logos/logoAuto.jpg";
 
 // Menú del Administrador
 const ADMIN_MENU = [
   { icon: House, label: "Dashboard", path: "/dashboard" },
   { icon: Box, label: "Inventario", path: "/products" },
-  { icon: ShoppingBag, label: "clientes", path: "/clientes" },
+  { icon: Truck, label: "Proveedores", path: "/suppliers" },
+  { icon: Users, label: "Clientes", path: "/clientes" },
+  { icon: UserCheck, label: "Vendedores", path: "/vendedores" },
   { icon: Car, label: "Precio", path: "/Pricings" },
 
   // ... otros
@@ -39,9 +42,8 @@ export default function Sidebar() {
 
   return (
     <aside
-      className={`dashboard-sidebar d-flex flex-column ${
-        collapsed ? "sidebar--collapsed" : ""
-      }`}
+      className={`dashboard-sidebar d-flex flex-column ${collapsed ? "sidebar--collapsed" : ""
+        }`}
     >
       {/* HEADER */}
       <div className="sidebar-header">
@@ -49,7 +51,7 @@ export default function Sidebar() {
         {!collapsed && (
           <div className="sidebar-brand">
             <img
-              src="../../assets/logos/logoAuto.jpg"
+              src={logo}
               alt="logo"
               className="sidebar-logo"
             />
@@ -67,48 +69,43 @@ export default function Sidebar() {
         </button>
       </div>
 
-      {/* MENÚ – se oculta completo cuando está colapsado */}
-      {!collapsed && (
-        <nav className="sidebar-nav">
-          {menu.map((item, i) => {
-            const Icon = item.icon;
-            const active = location.pathname === item.path;
+      {/* MENÚ */}
+      <nav className="sidebar-nav">
+        {menu.map((item, i) => {
+          const Icon = item.icon;
+          const active = location.pathname === item.path;
 
-            return (
-              <button
-                key={i}
-                type="button"
-                className={`sidebar-link d-flex align-items-center gap-2 ${
-                  active ? "sidebar-link--active" : ""
-                }`}
-                onClick={() => navigate(item.path)}
-              >
-                <Icon size={18} />
-                <span>{item.label}</span>
-              </button>
-            );
-          })}
-        </nav>
-      )}
+          return (
+            <button
+              key={i}
+              type="button"
+              data-label={item.label}
+              className={`sidebar-link d-flex align-items-center gap-2 ${active ? "sidebar-link--active" : ""}`}
+              onClick={() => navigate(item.path)}
+            >
+              <Icon size={18} />
+              <span>{item.label}</span>
+            </button>
+          );
+        })}
+      </nav>
 
-      {/* FOOTER / USUARIO – también se oculta cuando está colapsado */}
-      {!collapsed && (
-        <div className="sidebar-footer mt-auto">
-          <div className="user-mini">
-            <div className="user-avatar">
-              {user?.nombre?.[0]?.toUpperCase() || "?"}
-            </div>
+      {/* FOOTER / USUARIO */}
+      <div className="sidebar-footer mt-auto">
+        <div className="user-mini">
+          <div className="user-avatar">
+            {user?.nombre?.[0]?.toUpperCase() || "?"}
+          </div>
 
-            <div className="user-info">
-              <span className="user-name">{user?.nombre}</span>
+          <div className="user-info">
+            <span className="user-name">{user?.nombre}</span>
 
-              <button className="btn-link-logout" onClick={handleLogout}>
-                <LogOut size={14} /> Salir
-              </button>
-            </div>
+            <button className="btn-link-logout" onClick={handleLogout}>
+              <LogOut size={14} /> Salir
+            </button>
           </div>
         </div>
-      )}
+      </div>
     </aside>
   );
 }
