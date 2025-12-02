@@ -46,7 +46,7 @@ export default function Sidebar() {
         {!collapsed && (
           <div className="sidebar-brand">
             <img
-              src="https://cdn-icons-png.flaticon.com/512/3209/3209265.png"
+              src="../../assets/logos/logoAuto.jpg"
               alt="logo"
               className="sidebar-logo"
             />
