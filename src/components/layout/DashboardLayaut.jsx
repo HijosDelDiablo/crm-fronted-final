@@ -21,16 +21,10 @@ const MODULES = [
     icon: "bi bi-car-front",
   },
   {
-    key: "ventas",
-    label: "Ventas",
-    path: "/panel/ventas",
-    icon: "bi bi-graph-up",
-  },
-  {
-    key: "reportes",
-    label: "Reportes",
-    path: "/panel/reportes",
-    icon: "bi bi-bar-chart",
+    key: "mis-compras",
+    label: "Mis Compras",
+    path: "/panel/mis-compras",
+    icon: "bi bi-bag",
   },
   {
     key: "chat-ia",
