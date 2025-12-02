@@ -16,6 +16,11 @@ import Pricings from "./pages/AdminModules/Pricings/Pricings"
 import Clients from "./pages/AdminModules/Clients/Clients";
 import Products from "./pages/Products";
 import Suppliers from "./pages/AdminModules/Suppliers/Suppliers";
+import Sellers from "./pages/AdminModules/Sellers/Sellers";
+import SellerReview from "./pages/AdminModules/Sellers/SellerReview";
+import ViewProducts from "./pages/ViewProducts";
+import ViewPurchases from "./pages/ViewPurchases";
+import DashboardHome from "./pages/DashboardHome";
 
 // import Login from "./pages/Login/Login"; // lo crearás después
 // import Dashboard from "./pages/Dashboard/Dashboard"; // más adelante
@@ -44,13 +49,15 @@ function App() {
             <Route path="/products" element={<Products />} />
             <Route path="/pricings" element={<Pricings />} />
             <Route path="/clientes" element={<Clients />} />
+            <Route path="/vendedores" element={<Sellers />} />
+            <Route path="/seller-reviews/:id" element={<SellerReview />} />
             <Route path="/suppliers" element={<Suppliers />} />
           </Route>
 
           {/* SISTEMA INTERNO, uso del dashboard */}
-          {/* <Route path="panel" element={<PanelInicio />} /> */}
-          {/* <Route path="/dashboard" element={<Dashboard />} /> */}
-          <Route path="/panel" element={<Home />} />
+          <Route path="/panel" element={<DashboardHome />} />
+          <Route path="/panel/carros" element={<ViewProducts />} />
+          <Route path="/panel/mis-compras" element={<ViewPurchases />} />
           {/* ETC */}
         </Routes>
       </AuthContextProvider>

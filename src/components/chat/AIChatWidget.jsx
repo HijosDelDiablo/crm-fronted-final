@@ -13,9 +13,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import api from "../../services/api";
 import "./AIChat.css";
 
-export default function AIChatWidget() {
+export default function AIChatWidget({ externalIsOpen, onExternalClose, hideFloatButton = false }) {
   const { user } = useSelector((state) => state.auth);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(externalIsOpen || false);
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -24,6 +24,12 @@ export default function AIChatWidget() {
   const [activeView, setActiveView] = useState("chat");
   const [showExportModal, setShowExportModal] = useState(false);
   const [exportData, setExportData] = useState(null);
+
+  useEffect(() => {
+    if (externalIsOpen !== undefined) {
+      setIsOpen(externalIsOpen);
+    }
+  }, [externalIsOpen]);
 
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
@@ -502,21 +508,23 @@ export default function AIChatWidget() {
 
   return (
     <>
-      <motion.button
-        className="ai-float-btn"
-        onClick={() => setIsOpen(!isOpen)}
-        whileHover={{ scale: 1.1, rotate: 5 }}
-        whileTap={{ scale: 0.9 }}
-        animate={{
-          scale: isOpen ? 0.9 : 1,
-          rotate: isOpen ? 90 : 0
-        }}
-      >
-        {isOpen ? <X size={24} /> : <Bot size={28} />}
-        {!isOpen && messages.some(msg => msg.role === "assistant" && msg.type !== 'text') && (
-          <span className="notification-badge"></span>
-        )}
-      </motion.button>
+      {!hideFloatButton && (
+        <motion.button
+          className="ai-float-btn"
+          onClick={() => setIsOpen(!isOpen)}
+          whileHover={{ scale: 1.1, rotate: 5 }}
+          whileTap={{ scale: 0.9 }}
+          animate={{
+            scale: isOpen ? 0.9 : 1,
+            rotate: isOpen ? 90 : 0
+          }}
+        >
+          {isOpen ? <X size={24} /> : <Bot size={28} />}
+          {!isOpen && messages.some(msg => msg.role === "assistant" && msg.type !== 'text') && (
+            <span className="notification-badge"></span>
+          )}
+        </motion.button>
+      )}
 
       <AnimatePresence>
         {isOpen && (
@@ -560,7 +568,7 @@ export default function AIChatWidget() {
                     </Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
-                <button onClick={() => setIsOpen(false)} className="btn-icon-ghost">
+                <button onClick={() => { setIsOpen(false); onExternalClose && onExternalClose(); }} className="btn-icon-ghost">
                   <X size={18} />
                 </button>
               </div>
