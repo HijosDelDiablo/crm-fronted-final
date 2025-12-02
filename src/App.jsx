@@ -14,6 +14,8 @@ import useHeartbeat from "./utils/useHeartBeat";
 import Dashboard from "./pages/AdminModules/Dashboard/Dashboard";
 import Pricings from "./pages/AdminModules/Pricings/Pricings"
 import Clients from "./pages/AdminModules/Clients/Clients";
+import Sellers from "./pages/AdminModules/Sellers/Sellers";
+import SellerReview from "./pages/AdminModules/Sellers/SellerReview";
 
 // import Login from "./pages/Login/Login"; // lo crearás después
 // import Dashboard from "./pages/Dashboard/Dashboard"; // más adelante
@@ -41,6 +43,8 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/pricings" element={<Pricings />} />
             <Route path="/clientes" element={<Clients />} />
+            <Route path="/vendedores" element={<Sellers />} />
+            <Route path="/seller-reviews/:id" element={<SellerReview />} />
           </Route>
 
           {/* SISTEMA INTERNO, uso del dashboard */}
