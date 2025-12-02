@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Container, Row, Col, Card, Button, Spinner, Form, Modal } from "react-bootstrap";
 import toast from "react-hot-toast";
 import api from "../services/api";
@@ -24,6 +24,8 @@ export default function Products() {
     });
     const [image, setImage] = useState(null);
     const [uploading, setUploading] = useState(false);
+    const [formError, setFormError] = useState("");
+    const marcaInputRef = useRef(null);
 
     useEffect(() => {
         fetchProducts();
@@ -61,8 +63,18 @@ export default function Products() {
 
     const handleCreate = async (e) => {
         e.preventDefault();
+        setFormError("");
+        setUploading(true);
         try {
-            const { data } = await api.post("/products", form);
+            // Castear campos numéricos
+            const payload = {
+                ...form,
+                ano: form.ano ? Number(form.ano) : undefined,
+                precioBase: form.precioBase ? Number(form.precioBase) : undefined,
+                kilometraje: form.kilometraje ? Number(form.kilometraje) : undefined,
+                numPuertas: form.numPuertas ? Number(form.numPuertas) : undefined,
+            };
+            const { data } = await api.post("/products", payload);
             if (image) {
                 const formData = new FormData();
                 formData.append("file", image);
@@ -90,9 +102,20 @@ export default function Products() {
             setImage(null);
             fetchProducts();
         } catch (err) {
-            toast.error("Error al crear producto");
+            const msg = err.response?.data?.message || err.message;
+            setFormError(msg);
+            toast.error("Error al crear producto: " + msg);
+        } finally {
+            setUploading(false);
         }
     };
+
+    // UX: enfocar primer input al abrir modal
+    useEffect(() => {
+        if (showModal && marcaInputRef.current) {
+            setTimeout(() => marcaInputRef.current.focus(), 200);
+        }
+    }, [showModal]);
 
     return (
         <Container className="py-4">
@@ -143,9 +166,12 @@ export default function Products() {
                 </Modal.Header>
                 <Form onSubmit={handleCreate}>
                     <Modal.Body>
+                        {formError && (
+                            <div className="alert alert-danger py-2 mb-2">{formError}</div>
+                        )}
                         <Form.Group className="mb-2">
                             <Form.Label>Marca</Form.Label>
-                            <Form.Control name="marca" value={form.marca} onChange={handleChange} required />
+                            <Form.Control name="marca" value={form.marca} onChange={handleChange} required ref={marcaInputRef} autoFocus />
                         </Form.Group>
                         <Form.Group className="mb-2">
                             <Form.Label>Modelo</Form.Label>
@@ -207,8 +233,12 @@ export default function Products() {
                         <Button variant="secondary" onClick={() => setShowModal(false)}>
                             Cancelar
                         </Button>
-                        <Button type="submit" disabled={uploading}>
-                            {uploading ? "Subiendo..." : "Crear"}
+                        <Button type="submit" disabled={uploading} style={{ minWidth: 110 }}>
+                            {uploading ? (
+                                <>
+                                    <Spinner size="sm" animation="border" className="me-2" /> Subiendo...
+                                </>
+                            ) : "Crear"}
                         </Button>
                     </Modal.Footer>
                 </Form>
