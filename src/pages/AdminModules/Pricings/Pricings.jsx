@@ -148,12 +148,94 @@ export default function Pricings() {
               </Modal.Header>
 
               <Modal.Body>
-                {/* …tu modal se mantiene EXACTO como ya lo tenías… */}
-                {/* No modifiqué nada del modal */}
                 {selectedItem && (
                   <div className="container-fluid">
-                    {/* TODA la parte del modal sigue intacta */}
-                    {/* No la repito aquí por espacio */}
+                    <div className="row">
+                      {/* Car Details */}
+                      <div className="col-md-6">
+                        <h5>Información del Coche</h5>
+                        {selectedItem.coche ? (
+                          <div>
+                            <p><strong>Marca:</strong> {selectedItem.coche.marca}</p>
+                            <p><strong>Modelo:</strong> {selectedItem.coche.modelo}</p>
+                            <p><strong>Año:</strong> {selectedItem.coche.ano}</p>
+                            <p><strong>Condición:</strong> {selectedItem.coche.condicion}</p>
+                            <p><strong>Transmisión:</strong> {selectedItem.coche.transmision}</p>
+                            <p><strong>Precio:</strong> {formatCurrency(selectedItem.precioCoche)}</p>
+                            {selectedItem.coche.imageUrl && (
+                              <img src={selectedItem.coche.imageUrl} alt="Coche" className="img-fluid mt-2" />
+                            )}
+                          </div>
+                        ) : (
+                          <p className="text-muted">Información del coche no disponible</p>
+                        )}
+                      </div>
+
+                      {/* Client Details */}
+                      <div className="col-md-6">
+                        <h5>Información del Cliente</h5>
+                        {selectedItem.cliente ? (
+                          <div>
+                            <p><strong>Nombre:</strong> {selectedItem.cliente.nombre}</p>
+                            <p><strong>Email:</strong> {selectedItem.cliente.email || 'N/A'}</p>
+                            <p><strong>Teléfono:</strong> {selectedItem.cliente.telefono || 'N/A'}</p>
+                          </div>
+                        ) : (
+                          <p className="text-muted">Información del cliente no disponible</p>
+                        )}
+
+                        <h5 className="mt-3">Información del Vendedor</h5>
+                        {selectedItem.vendedor ? (
+                          <div>
+                            <p><strong>Nombre:</strong> {selectedItem.vendedor.nombre}</p>
+                          </div>
+                        ) : (
+                          <p className="text-muted">Vendedor no asignado</p>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="row mt-3">
+                      <div className="col-12">
+                        <h5>Detalles de la Cotización</h5>
+                        <p><strong>ID:</strong> {selectedItem._id}</p>
+                        <p><strong>Status:</strong> {selectedItem.status}</p>
+                        <p><strong>Enganche:</strong> {formatCurrency(selectedItem.enganche)}</p>
+                        <p><strong>Plazo (meses):</strong> {selectedItem.plazoMeses}</p>
+                        <p><strong>Fecha de Creación:</strong> {formatDate(selectedItem.fechaCreacion)}</p>
+                        <p><strong>Notas del Vendedor:</strong> {selectedItem.notasVendedor || 'Sin notas'}</p>
+                      </div>
+                    </div>
+
+                    {/* Assign Seller Section */}
+                    {(selectedItem.status === "Pendiente" || selectedItem.status === "En revisión") && !selectedItem.vendedor && (
+                      <div className="row mt-3">
+                        <div className="col-12">
+                          <h5>Asignar Vendedor</h5>
+                          <div className="d-flex flex-wrap gap-2">
+                            {sellers.slice(0, showAllSellers ? sellers.length : 3).map((seller) => (
+                              <Button
+                                key={seller._id}
+                                variant="outline-primary"
+                                size="sm"
+                                onClick={() => handleAssignSeller(seller)}
+                              >
+                                {seller.nombre}
+                              </Button>
+                            ))}
+                            {sellers.length > 3 && (
+                              <Button
+                                variant="outline-secondary"
+                                size="sm"
+                                onClick={() => setShowAllSellers(!showAllSellers)}
+                              >
+                                {showAllSellers ? "Mostrar menos" : "Mostrar más"}
+                              </Button>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
               </Modal.Body>
