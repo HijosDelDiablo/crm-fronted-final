@@ -3,6 +3,7 @@ import { Spinner, Form, Modal } from "react-bootstrap";
 import toast from "react-hot-toast";
 import api from "../services/api";
 import "./products.css";
+import "./products-form.css";
 import Sidebar from "../components/layout/Sidebar";
 
 export default function Products() {
@@ -138,8 +139,7 @@ export default function Products() {
                     <div className="products-header">
                         <h2 className="products-title">Productos</h2>
                         <button
-                            className="btn btn-primary"
-                            style={{ fontWeight: 600, fontSize: '1.1rem', padding: '0.7em 2em', borderRadius: '0.7em', boxShadow: '0 2px 8px 0 rgba(13,110,253,0.08)' }}
+                            className="products-create-btn"
                             onClick={() => setShowModal(true)}
                         >
                             Crear producto
@@ -187,99 +187,97 @@ export default function Products() {
                     )}
 
                     <Modal show={showModal} onHide={() => setShowModal(false)}>
-                        <Modal.Header closeButton className="!bg-blue-600 !text-white">
+                        <Modal.Header closeButton className="products-modal-header">
                             <Modal.Title>Crear producto</Modal.Title>
                         </Modal.Header>
                         <Form onSubmit={handleCreate}>
-                            <Modal.Body className="bg-gradient-to-br from-blue-50 to-gray-50 rounded-b-2xl p-6">
+                            <Modal.Body className="products-modal-body">
                                 {formError && (
-                                    <div className="bg-red-100 text-red-700 rounded px-3 py-2 mb-3 text-sm shadow">{formError}</div>
+                                    <div className="products-form-error">{formError}</div>
                                 )}
                                 <div className="mb-6 flex flex-col gap-2">
-                                    <h3 className="text-2xl font-extrabold text-blue-700 mb-1 tracking-tight">Datos del producto</h3>
-                                    <p className="text-gray-500 text-sm">Completa la información para crear un nuevo producto. Los campos marcados con <span className='text-red-500'>*</span> son obligatorios.</p>
+                                    <h3 className="products-form-title">Datos del producto</h3>
+                                    <p className="products-form-subtitle">Completa la información para crear un nuevo producto. Los campos marcados con <span className='text-red-500'>*</span> son obligatorios.</p>
                                 </div>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="product-form-grid">
                                     {/* Columna 1 */}
                                     <div className="flex flex-col gap-4">
-                                        <Form.Group className="flex flex-col gap-1">
-                                            <Form.Label className="font-semibold text-gray-700">Marca <span className="text-red-500">*</span></Form.Label>
-                                            <Form.Control name="marca" value={form.marca} onChange={handleChange} required ref={marcaInputRef} autoFocus className="rounded-lg border-2 border-blue-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 text-base py-2 shadow-sm transition-all" />
+                                        <Form.Group className="product-form-group">
+                                            <Form.Label className="product-form-label">Marca <span className="text-red-500">*</span></Form.Label>
+                                            <Form.Control name="marca" value={form.marca} onChange={handleChange} required ref={marcaInputRef} autoFocus className="product-form-input" />
                                         </Form.Group>
-                                        <Form.Group className="flex flex-col gap-1">
-                                            <Form.Label className="font-semibold text-gray-700">Modelo <span className="text-red-500">*</span></Form.Label>
-                                            <Form.Control name="modelo" value={form.modelo} onChange={handleChange} required className="rounded-lg border-2 border-blue-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 text-base py-2 shadow-sm transition-all" />
+                                        <Form.Group className="product-form-group">
+                                            <Form.Label className="product-form-label">Modelo <span className="text-red-500">*</span></Form.Label>
+                                            <Form.Control name="modelo" value={form.modelo} onChange={handleChange} required className="product-form-input" />
                                         </Form.Group>
-                                        <Form.Group className="flex flex-col gap-1">
-                                            <Form.Label className="font-semibold text-gray-700">Año <span className="text-red-500">*</span></Form.Label>
-                                            <Form.Control name="ano" value={form.ano} onChange={handleChange} required type="number" className="rounded-lg border-2 border-blue-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 text-base py-2 shadow-sm transition-all" />
+                                        <Form.Group className="product-form-group">
+                                            <Form.Label className="product-form-label">Año <span className="text-red-500">*</span></Form.Label>
+                                            <Form.Control name="ano" value={form.ano} onChange={handleChange} required type="number" className="product-form-input" />
                                         </Form.Group>
-                                        <Form.Group className="flex flex-col gap-1">
-                                            <Form.Label className="font-semibold text-gray-700">Precio Base <span className="text-red-500">*</span></Form.Label>
-                                            <Form.Control name="precioBase" value={form.precioBase} onChange={handleChange} required type="number" className="rounded-lg border-2 border-blue-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 text-base py-2 shadow-sm transition-all" />
+                                        <Form.Group className="product-form-group">
+                                            <Form.Label className="product-form-label">Precio Base <span className="text-red-500">*</span></Form.Label>
+                                            <Form.Control name="precioBase" value={form.precioBase} onChange={handleChange} required type="number" className="product-form-input" />
                                         </Form.Group>
-                                        <Form.Group className="flex flex-col gap-1">
-                                            <Form.Label className="font-semibold text-gray-700">Kilometraje <span className="text-red-500">*</span></Form.Label>
-                                            <Form.Control name="kilometraje" value={form.kilometraje} onChange={handleChange} required type="number" className="rounded-lg border-2 border-blue-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 text-base py-2 shadow-sm transition-all" />
+                                        <Form.Group className="product-form-group">
+                                            <Form.Label className="product-form-label">Kilometraje <span className="text-red-500">*</span></Form.Label>
+                                            <Form.Control name="kilometraje" value={form.kilometraje} onChange={handleChange} required type="number" className="product-form-input" />
                                         </Form.Group>
-                                        <Form.Group className="flex flex-col gap-1">
-                                            <Form.Label className="font-semibold text-gray-700">Condición</Form.Label>
-                                            <Form.Select name="condicion" value={form.condicion} onChange={handleChange} className="rounded-lg border-2 border-blue-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 text-base py-2 shadow-sm transition-all">
+                                        <Form.Group className="product-form-group">
+                                            <Form.Label className="product-form-label">Condición</Form.Label>
+                                            <Form.Select name="condicion" value={form.condicion} onChange={handleChange} className="product-form-input">
                                                 <option>Nuevo</option>
                                                 <option>Usado</option>
                                             </Form.Select>
                                         </Form.Group>
-                                        <Form.Group className="flex flex-col gap-1">
-                                            <Form.Label className="font-semibold text-gray-700">Tipo</Form.Label>
-                                            <Form.Control name="tipo" value={form.tipo} onChange={handleChange} className="rounded-lg border-2 border-blue-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 text-base py-2 shadow-sm transition-all" />
+                                        <Form.Group className="product-form-group">
+                                            <Form.Label className="product-form-label">Tipo</Form.Label>
+                                            <Form.Control name="tipo" value={form.tipo} onChange={handleChange} className="product-form-input" />
                                         </Form.Group>
                                     </div>
                                     {/* Columna 2 */}
                                     <div className="flex flex-col gap-4">
-                                        <Form.Group className="flex flex-col gap-1">
-                                            <Form.Label className="font-semibold text-gray-700">Transmisión</Form.Label>
-                                            <Form.Control name="transmision" value={form.transmision} onChange={handleChange} className="rounded-lg border-2 border-blue-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 text-base py-2 shadow-sm transition-all" />
+                                        <Form.Group className="product-form-group">
+                                            <Form.Label className="product-form-label">Transmisión</Form.Label>
+                                            <Form.Control name="transmision" value={form.transmision} onChange={handleChange} className="product-form-input" />
                                         </Form.Group>
-                                        <Form.Group className="flex flex-col gap-1">
-                                            <Form.Label className="font-semibold text-gray-700">Motor</Form.Label>
-                                            <Form.Control name="motor" value={form.motor} onChange={handleChange} className="rounded-lg border-2 border-blue-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 text-base py-2 shadow-sm transition-all" />
+                                        <Form.Group className="product-form-group">
+                                            <Form.Label className="product-form-label">Motor</Form.Label>
+                                            <Form.Control name="motor" value={form.motor} onChange={handleChange} className="product-form-input" />
                                         </Form.Group>
-                                        <Form.Group className="flex flex-col gap-1">
-                                            <Form.Label className="font-semibold text-gray-700">Color</Form.Label>
-                                            <Form.Control name="color" value={form.color} onChange={handleChange} className="rounded-lg border-2 border-blue-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 text-base py-2 shadow-sm transition-all" />
+                                        <Form.Group className="product-form-group">
+                                            <Form.Label className="product-form-label">Color</Form.Label>
+                                            <Form.Control name="color" value={form.color} onChange={handleChange} className="product-form-input" />
                                         </Form.Group>
-                                        <Form.Group className="flex flex-col gap-1">
-                                            <Form.Label className="font-semibold text-gray-700">Número de puertas</Form.Label>
-                                            <Form.Control name="numPuertas" value={form.numPuertas} onChange={handleChange} type="number" className="rounded-lg border-2 border-blue-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 text-base py-2 shadow-sm transition-all" />
+                                        <Form.Group className="product-form-group">
+                                            <Form.Label className="product-form-label">Número de puertas</Form.Label>
+                                            <Form.Control name="numPuertas" value={form.numPuertas} onChange={handleChange} type="number" className="product-form-input" />
                                         </Form.Group>
-                                        <Form.Group className="flex flex-col gap-1">
-                                            <Form.Label className="font-semibold text-gray-700">VIN</Form.Label>
-                                            <Form.Control name="vin" value={form.vin} onChange={handleChange} className="rounded-lg border-2 border-blue-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 text-base py-2 shadow-sm transition-all" />
+                                        <Form.Group className="product-form-group">
+                                            <Form.Label className="product-form-label">VIN</Form.Label>
+                                            <Form.Control name="vin" value={form.vin} onChange={handleChange} className="product-form-input" />
                                         </Form.Group>
-                                        <Form.Group className="flex flex-col gap-1">
-                                            <Form.Label className="font-semibold text-gray-700">Descripción</Form.Label>
-                                            <Form.Control name="descripcion" value={form.descripcion} onChange={handleChange} as="textarea" className="rounded-lg border-2 border-blue-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 text-base py-2 min-h-[48px] shadow-sm transition-all" />
+                                        <Form.Group className="product-form-group">
+                                            <Form.Label className="product-form-label">Descripción</Form.Label>
+                                            <Form.Control name="descripcion" value={form.descripcion} onChange={handleChange} as="textarea" className="product-form-textarea" />
                                         </Form.Group>
-                                        <Form.Group className="flex flex-col gap-1">
-                                            <Form.Label className="font-semibold text-gray-700">Imagen</Form.Label>
-                                            <Form.Control type="file" accept="image/*" onChange={handleImageChange} className="rounded-lg border-2 border-blue-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 text-base py-2 bg-white shadow-sm transition-all" />
+                                        <Form.Group className="product-form-group">
+                                            <Form.Label className="product-form-label">Imagen</Form.Label>
+                                            <Form.Control type="file" accept="image/*" onChange={handleImageChange} className="product-form-file" />
                                         </Form.Group>
                                     </div>
                                 </div>
                             </Modal.Body>
-                            <Modal.Footer>
-                                <div className="flex justify-end gap-2 mt-4">
-                                    <button type="button" className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold" onClick={() => setShowModal(false)}>
-                                        Cancelar
-                                    </button>
-                                    <button type="submit" disabled={uploading} className="px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold flex items-center min-w-[110px] justify-center disabled:opacity-60">
-                                        {uploading ? (
-                                            <>
-                                                <Spinner size="sm" animation="border" className="me-2" /> Subiendo...
-                                            </>
-                                        ) : "Crear"}
-                                    </button>
-                                </div>
+                            <Modal.Footer className="products-modal-footer">
+                                <button type="button" className="product-form-cancel" onClick={() => setShowModal(false)}>
+                                    Cancelar
+                                </button>
+                                <button type="submit" disabled={uploading} className="product-form-submit">
+                                    {uploading ? (
+                                        <>
+                                            <Spinner size="sm" animation="border" className="me-2" /> Subiendo...
+                                        </>
+                                    ) : "Crear"}
+                                </button>
                             </Modal.Footer>
                         </Form>
                     </Modal>
