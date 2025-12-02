@@ -36,9 +36,8 @@ export default function Sidebar() {
 
   return (
     <aside
-      className={`dashboard-sidebar d-flex flex-column ${
-        collapsed ? "sidebar--collapsed" : ""
-      }`}
+      className={`dashboard-sidebar d-flex flex-column ${collapsed ? "sidebar--collapsed" : ""
+        }`}
     >
       {/* HEADER */}
       <div className="sidebar-header">
@@ -75,9 +74,8 @@ export default function Sidebar() {
               <button
                 key={i}
                 type="button"
-                className={`sidebar-link d-flex align-items-center gap-2 ${
-                  active ? "sidebar-link--active" : ""
-                }`}
+                className={`sidebar-link d-flex align-items-center gap-2 ${active ? "sidebar-link--active" : ""
+                  }`}
                 onClick={() => navigate(item.path)}
               >
                 <Icon size={18} />

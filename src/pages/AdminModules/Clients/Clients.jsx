@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Modal, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import CardClient from './CardClient';
-import { useNavigate } from 'react-router-dom';
 import { getClients } from '../../../api/clients.api';
 import NavbarTop from '../../../components/layout/Navbar';
 import { getSellersWithNumClients, setSellerToClient } from '../../../api/sellers.api';
-import { notifySuccess } from '../../../components/shared/Alerts';
+import { notifyError, notifySuccess } from '../../../components/shared/Alerts';
 
 const Clients = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const sellerIdFromUrl = searchParams.get('idSeller');
   const [selectedClient, setSelectedClient] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [clients, setClients] = useState([]);
@@ -28,7 +29,19 @@ const Clients = () => {
 
   const getClientsData = async () => {
     const response = await getClients(navigate);
-    setClients(response);
+    if (sellerIdFromUrl) {
+      // Filter using loose equality to handle potential type mismatches (string vs number/object)
+      const filtered = response.filter(client => client.vendedorQueAtiende?._id === sellerIdFromUrl || client.vendedorQueAtiende?.id === sellerIdFromUrl);
+
+      if (filtered.length > 0) {
+        setClients(filtered);
+      } else {
+        notifyError('No se encontraron clientes para este vendedor.\n Mostrando todos los clientes.');
+        setClients(response);
+      }
+    } else {
+      setClients(response);
+    }
   };
 
   const getSellersData = async () => {
