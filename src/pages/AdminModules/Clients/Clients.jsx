@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import CardClient from './CardClient';
 import { useNavigate } from 'react-router-dom';
 import { getClients } from '../../../api/clients.api';
-import NavbarTop from '../../../components/layout/Navbar';
+import Sidebar from '../../../components/layout/Sidebar';
 import { getSellersWithNumClients, setSellerToClient } from '../../../api/sellers.api';
 import { notifySuccess } from '../../../components/shared/Alerts';
 
@@ -97,17 +97,18 @@ const Clients = () => {
   };
 
   return (
-    <>
-      <NavbarTop />
-      <Container className="mt-4">
-        <h1 className="mb-4">Clientes</h1>
-        <Row xs={1} md={2} lg={3} className="g-4">
-          {clients.map((client) => (
-            <Col key={client._id?.$oid || client._id}>
-              <CardClient client={client} onClick={handleCardClick} />
-            </Col>
-          ))}
-        </Row>
+    <div className="dashboard-layout">
+      <Sidebar />
+      <div className="dashboard-container">
+        <Container className="mt-4">
+          <h1 className="mb-4">Clientes</h1>
+          <Row xs={1} md={2} lg={3} className="g-4">
+            {clients.map((client) => (
+              <Col key={client._id?.$oid || client._id}>
+                <CardClient client={client} onClick={handleCardClick} />
+              </Col>
+            ))}
+          </Row>
 
         {/* Client Details Modal */}
         <Modal show={showModal} onHide={handleClose} size="lg" centered>
@@ -231,7 +232,8 @@ const Clients = () => {
           </Modal.Footer>
         </Modal>
       </Container>
-    </>
+      </div>
+    </div>
   );
 };
 
