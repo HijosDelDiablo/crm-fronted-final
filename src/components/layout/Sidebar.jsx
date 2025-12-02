@@ -10,6 +10,9 @@ import { House, Box, ShoppingBag, LogOut, Car, Menu } from "lucide-react";
 const ADMIN_MENU = [
   { icon: House, label: "Dashboard", path: "/dashboard" },
   { icon: Box, label: "Inventario", path: "/products" },
+  { icon: ShoppingBag, label: "clientes", path: "/clientes" },
+  { icon: Car, label: "Precio", path: "/Pricings" },
+
   // ... otros
 ];
 
