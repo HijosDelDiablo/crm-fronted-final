@@ -20,6 +20,7 @@ import Sellers from "./pages/AdminModules/Sellers/Sellers";
 import SellerReview from "./pages/AdminModules/Sellers/SellerReview";
 import ViewProducts from "./pages/ViewProducts";
 import ViewPurchases from "./pages/ViewPurchases";
+import DashboardHome from "./pages/DashboardHome";
 
 // import Login from "./pages/Login/Login"; // lo crearás después
 // import Dashboard from "./pages/Dashboard/Dashboard"; // más adelante
@@ -54,7 +55,7 @@ function App() {
           </Route>
 
           {/* SISTEMA INTERNO, uso del dashboard */}
-          <Route path="/panel" element={<Home />} />
+          <Route path="/panel" element={<DashboardHome />} />
           <Route path="/panel/carros" element={<ViewProducts />} />
           <Route path="/panel/mis-compras" element={<ViewPurchases />} />
           {/* ETC */}
