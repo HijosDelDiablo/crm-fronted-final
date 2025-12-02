@@ -1,19 +1,19 @@
-/* products-form.css: Estilos mejorados para el formulario de productos */
+/* suppliers-form.css: Estilos mejorados para el formulario de proveedores */
 
-.products-modal-header {
+.suppliers-modal-header {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     border-bottom: none;
     border-radius: 0.5rem 0.5rem 0 0;
 }
 
-.products-modal-body {
+.suppliers-modal-body {
     background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
     padding: 2rem;
     border-radius: 0 0 0.5rem 0.5rem;
 }
 
-.products-form-title {
+.suppliers-form-title {
     font-size: 1.5rem;
     font-weight: 700;
     color: #4c51bf;
@@ -21,39 +21,38 @@
     letter-spacing: -0.025em;
 }
 
-.products-form-subtitle {
+.suppliers-form-subtitle {
     color: #718096;
     font-size: 0.875rem;
     margin-bottom: 1.5rem;
 }
 
-.product-form-grid {
+.suppliers-form-grid {
     display: grid;
     grid-template-columns: 1fr;
     gap: 1.5rem;
 }
 
 @media (min-width: 768px) {
-    .product-form-grid {
+    .suppliers-form-grid {
         grid-template-columns: 1fr 1fr;
     }
 }
 
-.product-form-group {
+.suppliers-form-group {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
 }
 
-.product-form-label {
+.suppliers-form-label {
     font-weight: 600;
     color: #2d3748;
     font-size: 0.9rem;
 }
 
-.product-form-input,
-.product-form-textarea,
-.product-form-file {
+.suppliers-form-input,
+.suppliers-form-textarea {
     border: 2px solid #e2e8f0;
     border-radius: 0.75rem;
     padding: 0.75rem 1rem;
@@ -63,26 +62,20 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.product-form-input:focus,
-.product-form-textarea:focus,
-.product-form-file:focus {
+.suppliers-form-input:focus,
+.suppliers-form-textarea:focus {
     border-color: #667eea;
     outline: none;
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1), 0 1px 3px rgba(0, 0, 0, 0.1);
     transform: translateY(-1px);
 }
 
-.product-form-textarea {
+.suppliers-form-textarea {
     min-height: 80px;
     resize: vertical;
 }
 
-.product-form-file {
-    background: #f8fafc;
-    padding: 0.4em 0.5em;
-}
-
-.products-form-error {
+.suppliers-form-error {
     background: #fed7d7;
     color: #c53030;
     border-radius: 0.5rem;
@@ -92,7 +85,7 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.products-modal-footer {
+.suppliers-modal-footer {
     background: #f7fafc;
     border-top: 1px solid #e2e8f0;
     padding: 1.5rem 2rem;
@@ -102,7 +95,7 @@
     border-radius: 0 0 0.5rem 0.5rem;
 }
 
-.product-form-cancel {
+.suppliers-btn-cancel {
     padding: 0.75rem 1.5rem;
     border-radius: 0.5rem;
     background: #e2e8f0;
@@ -113,13 +106,13 @@
     transition: all 0.2s ease;
 }
 
-.product-form-cancel:hover {
+.suppliers-btn-cancel:hover {
     background: #cbd5e0;
     transform: translateY(-1px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.product-form-submit {
+.suppliers-btn-submit {
     padding: 0.75rem 2rem;
     border-radius: 0.5rem;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -134,13 +127,13 @@
     transition: all 0.2s ease;
 }
 
-.product-form-submit:disabled {
+.suppliers-btn-submit:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.suppliers-btn-submit:disabled {
     opacity: 0.6;
     cursor: not-allowed;
     transform: none;
-}
-
-.product-form-submit:hover:not(:disabled) {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
