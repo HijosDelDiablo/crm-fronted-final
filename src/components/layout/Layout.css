@@ -1,0 +1,13 @@
+/* Layout.css - estilos mínimos para el layout global. Personaliza según tu diseño. */
+
+.layout-container {
+    display: flex;
+    min-height: 100vh;
+    background: #f8fafc;
+}
+
+.page-content {
+    flex: 1;
+    padding: 2rem 2.5vw;
+    min-width: 0;
+}
