@@ -5,11 +5,11 @@ const Pricing = ({ pricing, onClick }) => {
   if (!pricing) return null;
   const { coche, vendedor, cliente } = pricing;
 
-  // Validate essential data exists (allow missing seller)
-  if (!coche || !cliente) {
-    console.warn('Incomplete pricing data:', pricing);
-    return null;
-  }
+  // Allow rendering even if coche or cliente is null, show placeholders
+  // if (!coche || !cliente) {
+  //   console.warn('Incomplete pricing data:', pricing);
+  //   return null;
+  // }
 
   // Format date
   const formatDate = (dateObj) => {
@@ -22,8 +22,8 @@ const Pricing = ({ pricing, onClick }) => {
       {/* Product Image Section */}
       <div className="pricing-card-img-container">
         <img
-          src={coche.imageUrl}
-          alt={`${coche.marca} ${coche.modelo}`}
+          src={coche ? coche.imageUrl : "https://via.placeholder.com/300x200?text=Coche+No+Disponible"}
+          alt={coche ? `${coche.marca} ${coche.modelo}` : "Coche no disponible"}
           className="pricing-card-img"
         />
         <span className={`pricing-status-badge ${pricing.status === 'Aprobada' ? 'bg-success' : pricing.status === 'Rechazada' ? 'bg-danger' : 'bg-warning'}`}>
@@ -35,18 +35,22 @@ const Pricing = ({ pricing, onClick }) => {
       <div className="pricing-card-body">
         <div>
           <h5 className="card-title mb-1">
-            <a href={`/cars/${coche._id?.$oid}`} onClick={(e) => e.stopPropagation()} className="text-decoration-none text-dark fw-bold">
-              {coche.marca} {coche.modelo}
-            </a>
+            {coche ? (
+              <a href={`/cars/${coche._id?.$oid}`} onClick={(e) => e.stopPropagation()} className="text-decoration-none text-dark fw-bold">
+                {coche.marca} {coche.modelo}
+              </a>
+            ) : (
+              <span className="text-muted fw-bold">Coche no disponible</span>
+            )}
           </h5>
-          <p className="text-muted small mb-2">{coche.ano}</p>
+          <p className="text-muted small mb-2">{coche ? coche.ano : 'N/A'}</p>
 
           <div className="row g-1 small text-secondary">
             <div className="col-6">
-              <span className="fw-bold">Condición:</span> {coche.condicion}
+              <span className="fw-bold">Condición:</span> {coche ? coche.condicion : 'N/A'}
             </div>
             <div className="col-6">
-              <span className="fw-bold">Transmisión:</span> {coche.transmision}
+              <span className="fw-bold">Transmisión:</span> {coche ? coche.transmision : 'N/A'}
             </div>
             <div className="col-12 mt-1">
               <span className="fw-bold">Fecha:</span> {formatDate(pricing.fechaCreacion)}
@@ -59,15 +63,19 @@ const Pricing = ({ pricing, onClick }) => {
           {/* Client (Left) */}
           <div className="pricing-user-info">
             <img
-              src={cliente.fotoPerfil}
-              alt={cliente.nombre}
+              src={cliente ? cliente.fotoPerfil : "https://ui-avatars.com/api/?name=NA&background=random"}
+              alt={cliente ? cliente.nombre : "Cliente no disponible"}
               className="pricing-user-img"
             />
             <div className="pricing-user-details">
               <span className="pricing-user-role">Cliente</span>
-              <a href={`/clientes/${cliente.id}`} className="pricing-user-name" onClick={(e) => e.stopPropagation()}>
-                {cliente.nombre}
-              </a>
+              {cliente ? (
+                <a href={`/clientes/${cliente.id}`} className="pricing-user-name" onClick={(e) => e.stopPropagation()}>
+                  {cliente.nombre}
+                </a>
+              ) : (
+                <span className="pricing-user-name text-muted fst-italic">Cliente no disponible</span>
+              )}
             </div>
           </div>
 

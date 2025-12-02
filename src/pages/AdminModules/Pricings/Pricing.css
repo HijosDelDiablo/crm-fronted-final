@@ -1,16 +1,15 @@
 .pricing-card {
     border: none;
     border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     overflow: hidden;
     height: 100%;
-    background-color: #fff;
 }
 
 .pricing-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
 }
 
 .pricing-card-img-container {
@@ -70,11 +69,11 @@
     font-size: 0.8rem;
     font-weight: bold;
     color: white;
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0.8);
 }
 
 .pricing-footer {
-    border-top: 1px solid #eee;
+    border-top: 1px solid #333;
     padding-top: 10px;
     margin-top: 10px;
     display: flex;
@@ -94,7 +93,7 @@
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid #fff;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .pricing-user-details {
@@ -105,7 +104,7 @@
 
 .pricing-user-role {
     font-size: 0.7rem;
-    color: #888;
+    color: #aaa;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
@@ -113,13 +112,11 @@
 .pricing-user-name {
     font-size: 0.85rem;
     font-weight: 600;
-    color: #333;
     text-decoration: none;
 }
 
-.pricing-user-name:hover {
-    text-decoration: underline;
-    color: #0d6efd;
+.pricing-card .card-title a:hover {
+    color: #4f46e5 !important;
 }
 
 /* Mobile Responsiveness for Footer */
@@ -127,7 +124,7 @@
     .pricing-card-horizontal {
         flex-direction: column;
     }
-    
+
     .pricing-card-horizontal .pricing-card-img-container {
         width: 100%;
         height: 200px;
@@ -149,21 +146,26 @@
     }
 
     .pricing-user-info.seller {
-        align-self: flex-start; /* Or flex-end if we want them staggered */
-        flex-direction: row; /* Keep row even on mobile for better look, or column if strictly requested "one above other" */
+        align-self: flex-start;
+        /* Or flex-end if we want them staggered */
+        flex-direction: row;
+        /* Keep row even on mobile for better look, or column if strictly requested "one above other" */
     }
-    
+
     /* User specifically asked: "cuando tenga vista de móvil, aparezcan uno encima de otro" */
     .pricing-footer {
-        display: block; /* Stack them */
+        display: block;
+        /* Stack them */
     }
-    
+
     .pricing-user-info {
         margin-bottom: 8px;
     }
-    
+
     .pricing-user-info.seller {
-        flex-direction: row; /* Keep image and text together */
-        justify-content: flex-start; /* Align left like client */
+        flex-direction: row;
+        /* Keep image and text together */
+        justify-content: flex-start;
+        /* Align left like client */
     }
 }
