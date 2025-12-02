@@ -1,12 +1,12 @@
 .pricings-container {
     padding: 2rem 0;
-    background-color: #f8f9fa;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
     min-height: 100vh;
 }
 
 .pricings-title {
     font-weight: 700;
-    color: #2c3e50;
+    color: #ffffff;
     margin-bottom: 2rem;
     text-align: center;
     position: relative;
