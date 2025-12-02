@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import { logout } from "../../redux/slices/authSlice";
 import { House, Box, ShoppingBag, LogOut, Car, Menu, Truck, Users, UserCheck } from "lucide-react";
+import logo from "../../assets/logos/logoAuto.jpg";
 
 // Menú del Administrador
 const ADMIN_MENU = [
@@ -50,7 +51,7 @@ export default function Sidebar() {
         {!collapsed && (
           <div className="sidebar-brand">
             <img
-              src="../../assets/logos/logoAuto.jpg"
+              src={logo}
               alt="logo"
               className="sidebar-logo"
             />
