@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './../../styles/Auth.css';
 import ButtonPrimary from '../../components/shared/ButtonPrimary';
+import { Button } from 'react-bootstrap';
 import { loginFetch, registerFetch } from '../../api/auth';
 import { notifyError, notifySuccess } from '../../components/shared/Alerts';
 import { validateField } from './validations';
