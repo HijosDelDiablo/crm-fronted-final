@@ -195,9 +195,11 @@ const Clients = () => {
                                     />
                                     <span className="fw-medium">{seller.nombre}</span>
                                   </div>
-                                  <span className="badge bg-light text-dark border">
-                                    {seller.cantidadClientes || 0} clientes
-                                  </span>
+                                  {(seller.cantidadClientes || 0) > 0 && (
+                                    <span className="badge bg-light text-dark border">
+                                      {seller.cantidadClientes || 0}
+                                    </span>
+                                  )}
                                 </button>
                               ))}
                             </div>
@@ -221,7 +223,7 @@ const Clients = () => {
               <Button variant="secondary" onClick={handleClose}>
                 Cerrar
               </Button>
-              <Button variant="primary" onClick={() => navigate(`/pricings?idClient=${selectedClient?._id?.$oid || selectedClient?._id}`)}>
+              <Button variant="primary" onClick={() => navigate(`/pricings?idClient=${selectedClient?._id?.$oid || selectedClient?._id}`)} className="btn-nav-ghost">
                 Ver Cotizaciones
               </Button>
             </Modal.Footer>

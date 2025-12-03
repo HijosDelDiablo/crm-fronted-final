@@ -217,7 +217,7 @@ export default function Products() {
                                         setSelectedProduct(p);
                                         setShowStockModal(true);
                                     }}
-                                    style={{ cursor: 'pointer' }}
+                                    style={{ cursor: 'pointer', backgroundColor: '#0f172a' }}
                                 >
                                     {p.imageUrl && (
                                         <img src={p.imageUrl} alt={p.modelo} className="product-card-img" />

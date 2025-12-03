@@ -1,28 +1,30 @@
 /* products-form.css: Estilos mejorados para el formulario de productos */
 
 .products-modal-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #0f172a;
     color: white;
-    border-bottom: none;
+    border-bottom: 1px solid #475569;
     border-radius: 0.5rem 0.5rem 0 0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .products-modal-body {
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    background: #0f172a;
     padding: 2rem;
     border-radius: 0 0 0.5rem 0.5rem;
+    color: #e2e8f0;
 }
 
 .products-form-title {
     font-size: 1.5rem;
     font-weight: 700;
-    color: #4c51bf;
+    color: #60a5fa;
     margin-bottom: 0.5rem;
     letter-spacing: -0.025em;
 }
 
 .products-form-subtitle {
-    color: #718096;
+    color: #94a3b8;
     font-size: 0.875rem;
     margin-bottom: 1.5rem;
 }
@@ -47,28 +49,29 @@
 
 .product-form-label {
     font-weight: 600;
-    color: #2d3748;
+    color: #e2e8f0;
     font-size: 0.9rem;
 }
 
 .product-form-input,
 .product-form-textarea,
 .product-form-file {
-    border: 2px solid #e2e8f0;
+    border: 2px solid #475569;
     border-radius: 0.75rem;
     padding: 0.75rem 1rem;
     font-size: 1rem;
     transition: all 0.3s ease;
-    background: white;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    background: #1e293b;
+    color: #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .product-form-input:focus,
 .product-form-textarea:focus,
 .product-form-file:focus {
-    border-color: #667eea;
+    border-color: #60a5fa;
     outline: none;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1), 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2), 0 1px 3px rgba(0, 0, 0, 0.3);
     transform: translateY(-1px);
 }
 
@@ -78,35 +81,36 @@
 }
 
 .product-form-file {
-    background: #f8fafc;
+    background: #1e293b;
     padding: 0.4em 0.5em;
 }
 
 .products-form-error {
-    background: #fed7d7;
-    color: #c53030;
+    background: #dc2626;
+    color: #fecaca;
     border-radius: 0.5rem;
     padding: 0.75rem;
     margin-bottom: 1rem;
     font-size: 0.875rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .products-modal-footer {
-    background: #f7fafc;
-    border-top: 1px solid #e2e8f0;
+    background: #1e293b;
+    border-top: 1px solid #475569;
     padding: 1.5rem 2rem;
     display: flex;
     justify-content: flex-end;
     gap: 1rem;
     border-radius: 0 0 0.5rem 0.5rem;
+    box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .product-form-cancel {
     padding: 0.75rem 1.5rem;
     border-radius: 0.5rem;
-    background: #e2e8f0;
-    color: #4a5568;
+    background: #475569;
+    color: #e2e8f0;
     font-weight: 600;
     border: none;
     cursor: pointer;
@@ -114,15 +118,15 @@
 }
 
 .product-form-cancel:hover {
-    background: #cbd5e0;
+    background: #64748b;
     transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .product-form-submit {
     padding: 0.75rem 2rem;
     border-radius: 0.5rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
     color: white;
     font-weight: 600;
     border: none;
@@ -132,6 +136,7 @@
     align-items: center;
     justify-content: center;
     transition: all 0.2s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .product-form-submit:disabled {
@@ -142,5 +147,5 @@
 
 .product-form-submit:hover:not(:disabled) {
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 8px 25px rgba(15, 23, 42, 0.4);
 }
