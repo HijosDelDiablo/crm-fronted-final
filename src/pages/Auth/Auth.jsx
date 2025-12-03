@@ -255,33 +255,13 @@ const Auth = () => {
             </div>
           )}
 
-          {view === 'login' && (
-            <div className="form-options">
-              <label className="checkbox-label">
-                <input
-                  type="checkbox"
-                  name="rememberMe"
-                  checked={formData.rememberMe}
-                  onChange={handleChange}
-                />
-                <span>Recuérdame</span>
-              </label>
-              <button
-                type="button"
-                className="forgot-password"
-                onClick={() => switchView('recovery')}
-              >
-                ¿Olvidaste tu contraseña?
-              </button>
-            </div>
-          )}
-          <Button variant="primary" type="submit" disabled={isLoading} >
+          <button className="btn-nav-ghost" type="submit" disabled={isLoading}>
             {isLoading ? 'Cargando...' : (
               view === 'login' ? 'Entrar' :
                 view === 'register' ? 'Registrarse' :
                   'Enviar link'
             )}
-          </Button>
+          </button>
 
 
         </form>
