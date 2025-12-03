@@ -87,9 +87,9 @@ const MisCotizaciones = () => {
     return (
         <DashboardLayout>
             <Container className="mt-4">
-                <h2>Mis Cotizaciones Aprobadas</h2>
+                <h2>Mis Cotizaciones</h2>
                 {cotizaciones.length === 0 ? (
-                    <Alert variant="info">No tienes cotizaciones aprobadas.</Alert>
+                    <Alert variant="info">No tienes cotizaciones registradas.</Alert>
                 ) : (
                     <Row>
                         {cotizaciones.map((cotizacion) => (
@@ -108,21 +108,24 @@ const MisCotizaciones = () => {
                                             <StatusBadge status={cotizacion.estado} />
                                         </div>
                                         <p className="mb-1">
-                                            <strong>Plazo:</strong> {cotizacion.plazo} meses
+                                            <strong>Enganche:</strong> ${cotizacion.enganche?.toLocaleString('es-ES')}
                                         </p>
                                         <p className="mb-1">
-                                            <strong>Pago Mensual:</strong> ${cotizacion.pagoMensual?.toLocaleString('es-ES')}
+                                            <strong>Plazo:</strong> {cotizacion.plazoMeses} meses
                                         </p>
                                         <p className="mb-1">
-                                            <strong>Total Pagado:</strong> ${cotizacion.totalPagado?.toLocaleString('es-ES')}
+                                            <strong>Fecha:</strong> {new Date(cotizacion.createdAt).toLocaleDateString('es-ES')}
                                         </p>
-                                        <Button
-                                            variant="success"
-                                            size="sm"
-                                            onClick={() => handleIniciarCompra(cotizacion)}
-                                        >
-                                            Iniciar Proceso de Compra
-                                        </Button>
+                                        {cotizacion.estado === 'APROBADA' && (
+                                            <Button
+                                                variant="success"
+                                                size="sm"
+                                                onClick={() => handleIniciarCompra(cotizacion)}
+                                                className="w-100"
+                                            >
+                                                Iniciar Proceso de Compra
+                                            </Button>
+                                        )}
                                     </Card.Body>
                                 </Card>
                             </Col>
