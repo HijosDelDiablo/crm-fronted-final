@@ -70,19 +70,11 @@ export default function TopCarsSection() {
                       <span className="stat-value">{car.stats.rating}⭐</span>
                     </div>
                   </div>
-
-                  <Button className="btn-topcar">Ver detalles</Button>
                 </div>
               </div>
             </Col>
           ))}
         </Row>
-
-        <div className="text-center mt-4">
-          <Button className="btn-hero" href="/catalogo">
-            Ver catálogo completo
-          </Button>
-        </div>
       </Container>
     </section>
   );
