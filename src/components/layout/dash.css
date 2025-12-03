@@ -345,3 +345,19 @@
   border-color: #64748b;
   color: white;
 }
+
+/* ===== ADMIN CARDS ===== */
+
+.admin-card {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  background: var(--background-card);
+  color: var(--text-main);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.admin-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-strong);
+  border-color: var(--primary);
+}

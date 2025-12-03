@@ -8,7 +8,7 @@ const PaymentTable = ({ payments }) => {
     console.log('🔍 PaymentTable - longitud de payments:', payments?.length);
 
     return (
-        <Table striped bordered hover responsive>
+        <Table striped bordered hover responsive className="table-dark">
             <thead>
                 <tr>
                     <th>Fecha</th>
