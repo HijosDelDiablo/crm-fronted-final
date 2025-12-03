@@ -5,7 +5,11 @@ import logo from "../../assets/logos/logoAuto.jpg";
 import "./dash.css"; // opcional, si quieres estilos extra
 import { useState } from "react";
 import AIChatWidget from "../chat/AIChatWidget.jsx";
-import { MessageSquare } from "lucide-react";
+import { MessageSquare, Sun, Moon } from "lucide-react";
+import { useTheme } from "../../context/ThemeContext";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../../redux/slices/authSlice";
+import { useNavigate } from "react-router-dom";
 
 const MODULES = [
   {
@@ -37,14 +41,25 @@ const MODULES = [
 export default function DashboardLayout({ children }) {
   const location = useLocation();
   const [chatOpen, setChatOpen] = useState(false);
+  const { theme, toggleTheme } = useTheme();
+  const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/login");
+  };
 
   return (
     <div className="d-flex dashboard-layout">
       {/* SIDEBAR */}
       <aside className="dashboard-sidebar">
         <div className="sidebar-header">
-          <img src={logo} alt="Autobots IA" className="sidebar-logo" />
-          <span className="sidebar-title">Autobots IA</span>
+          <Link to="/" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+            <img src={logo} alt="Autobots IA" className="sidebar-logo" />
+            <span className="sidebar-title">Autobots IA</span>
+          </Link>
         </div>
 
         <Nav className="flex-column sidebar-nav">
@@ -77,17 +92,33 @@ export default function DashboardLayout({ children }) {
         </Nav>
 
         <div className="sidebar-footer">
+          {/* Theme Toggle */}
+          <div className="px-3 mb-3">
+            <button
+              className="btn-theme-toggle w-100 d-flex align-items-center justify-content-center gap-2 p-2 rounded-3"
+              onClick={toggleTheme}
+              style={{
+                background: "var(--background-soft)",
+                border: "1px solid var(--border-color)",
+                color: "var(--text-main)",
+                transition: "all 0.2s"
+              }}
+            >
+              {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+              <span>{theme === "dark" ? "Modo Claro" : "Modo Oscuro"}</span>
+            </button>
+          </div>
+
           <div className="user-mini">
-            <div className="user-avatar">A</div>
+            <div className="user-avatar">
+              {user?.nombre?.[0]?.toUpperCase() || "U"}
+            </div>
             <div className="user-info">
-              <div className="user-name">Usuario Demo</div>
+              <div className="user-name">{user?.nombre || "Usuario"}</div>
               <button
                 type="button"
                 className="btn-link-logout"
-                onClick={() => {
-                  // aquí luego limpias el token y navegas al login
-                  window.location.href = "/login";
-                }}
+                onClick={handleLogout}
               >
                 Cerrar sesión
               </button>

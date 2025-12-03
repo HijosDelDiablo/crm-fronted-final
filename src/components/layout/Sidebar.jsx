@@ -2,7 +2,7 @@
 import { useState } from "react";
 import "./dash.css";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { logout } from "../../redux/slices/authSlice";
 import { House, Box, ShoppingBag, LogOut, Car, Menu, Truck, Users, UserCheck, MessageSquare, Sun, Moon } from "lucide-react";
 import { useTheme } from "../../context/ThemeContext";
@@ -56,14 +56,14 @@ export default function Sidebar() {
         <div className="sidebar-header">
           {/* Logo y título solo si NO está colapsado */}
           {!collapsed && (
-            <div className="sidebar-brand">
+            <Link to="/" className="sidebar-brand" style={{ textDecoration: 'none', color: 'inherit' }}>
               <img
                 src={logo}
                 alt="logo"
                 className="sidebar-logo"
               />
               <span className="sidebar-title">CarAI CRM</span>
-            </div>
+            </Link>
           )}
 
           {/* Botón hamburguesa SIEMPRE visible */}
