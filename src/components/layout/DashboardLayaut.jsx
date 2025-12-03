@@ -5,7 +5,10 @@ import logo from "../../assets/logos/logoAuto.jpg";
 import "./dash.css"; // opcional, si quieres estilos extra
 import { useState } from "react";
 import AIChatWidget from "../chat/AIChatWidget.jsx";
-import { MessageSquare } from "lucide-react";
+import { MessageSquare, LogOut, Menu } from "lucide-react";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../../redux/slices/authSlice";
+import { useNavigate } from "react-router-dom";
 
 const MODULES = [
   {
@@ -49,14 +52,37 @@ const MODULES = [
 export default function DashboardLayout({ children }) {
   const location = useLocation();
   const [chatOpen, setChatOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
+  const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/login");
+  };
 
   return (
     <div className="d-flex dashboard-layout">
       {/* SIDEBAR */}
-      <aside className="dashboard-sidebar">
+      <aside className={`dashboard-sidebar d-flex flex-column ${collapsed ? "sidebar--collapsed" : ""}`}>
         <div className="sidebar-header">
-          <img src={logo} alt="Autobots IA" className="sidebar-logo" />
-          <span className="sidebar-title">Autobots IA</span>
+          {/* Logo y título solo si NO está colapsado */}
+          {!collapsed && (
+            <div className="sidebar-brand">
+              <img src={logo} alt="Autobots IA" className="sidebar-logo" />
+              <span className="sidebar-title">Autobots IA</span>
+            </div>
+          )}
+
+          {/* Botón hamburguesa SIEMPRE visible */}
+          <button
+            type="button"
+            className="sidebar-toggle-btn"
+            onClick={() => setCollapsed((prev) => !prev)}
+          >
+            <Menu className="sidebar-toggle-icon" size={18} />
+          </button>
         </div>
 
         <Nav className="flex-column sidebar-nav">
@@ -90,18 +116,15 @@ export default function DashboardLayout({ children }) {
 
         <div className="sidebar-footer">
           <div className="user-mini">
-            <div className="user-avatar">A</div>
+            <div className="user-avatar">
+              {user?.nombre?.[0]?.toUpperCase() || "?"}
+            </div>
+
             <div className="user-info">
-              <div className="user-name">Usuario Demo</div>
-              <button
-                type="button"
-                className="btn-link-logout"
-                onClick={() => {
-                  // aquí luego limpias el token y navegas al login
-                  window.location.href = "/login";
-                }}
-              >
-                Cerrar sesión
+              <span className="user-name">{user?.nombre || "Usuario"}</span>
+
+              <button className="btn-link-logout" onClick={handleLogout}>
+                <LogOut size={14} /> {!collapsed && "Salir"}
               </button>
             </div>
           </div>

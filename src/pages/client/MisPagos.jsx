@@ -3,6 +3,7 @@ import { Container, Table, Alert, Spinner, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { getMisPagos } from '../../api/pagos.api';
 import StatusBadge from '../../components/shared/StatusBadge';
+import DashboardLayout from '../../components/layout/DashboardLayaut';
 
 const MisPagos = () => {
     const [pagos, setPagos] = useState([]);
@@ -15,9 +16,10 @@ const MisPagos = () => {
         const fetchPagos = async () => {
             try {
                 const data = await getMisPagos(navigate);
-                setPagos(data);
+                setPagos(Array.isArray(data) ? data : []);
             } catch (err) {
                 setError('Error al cargar los pagos');
+                setPagos([]);
             } finally {
                 setLoading(false);
             }
@@ -26,11 +28,11 @@ const MisPagos = () => {
         fetchPagos();
     }, [navigate]);
 
-    const sortedPagos = [...pagos].sort((a, b) => {
+    const sortedPagos = Array.isArray(pagos) ? [...pagos].sort((a, b) => {
         const dateA = new Date(a.fecha);
         const dateB = new Date(b.fecha);
         return sortOrder === 'desc' ? dateB - dateA : dateA - dateB;
-    });
+    }) : [];
 
     const toggleSort = () => {
         setSortOrder(sortOrder === 'desc' ? 'asc' : 'desc');
@@ -38,55 +40,61 @@ const MisPagos = () => {
 
     if (loading) {
         return (
-            <Container className="d-flex justify-content-center mt-5">
-                <Spinner animation="border" />
-            </Container>
+            <DashboardLayout>
+                <Container className="d-flex justify-content-center mt-5">
+                    <Spinner animation="border" />
+                </Container>
+            </DashboardLayout>
         );
     }
 
     if (error) {
         return (
-            <Container className="mt-4">
-                <Alert variant="danger">{error}</Alert>
-            </Container>
+            <DashboardLayout>
+                <Container className="mt-4">
+                    <Alert variant="danger">{error}</Alert>
+                </Container>
+            </DashboardLayout>
         );
     }
 
     return (
-        <Container className="mt-4">
-            <h2>Mis Pagos</h2>
-            {pagos.length === 0 ? (
-                <Alert variant="info">No tienes pagos registrados.</Alert>
-            ) : (
-                <Table striped bordered hover responsive>
-                    <thead>
-                        <tr>
-                            <th>Compra</th>
-                            <th>Monto</th>
-                            <th>Método de Pago</th>
-                            <th>
-                                Fecha{' '}
-                                <Button variant="link" size="sm" onClick={toggleSort}>
-                                    {sortOrder === 'desc' ? '↓' : '↑'}
-                                </Button>
-                            </th>
-                            <th>Estado</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {sortedPagos.map((pago) => (
-                            <tr key={pago._id}>
-                                <td>{pago.compraId || 'N/A'}</td>
-                                <td>${pago.monto?.toLocaleString('es-ES')}</td>
-                                <td>{pago.metodoPago}</td>
-                                <td>{new Date(pago.fecha).toLocaleDateString('es-ES')}</td>
-                                <td><StatusBadge status={pago.estado} /></td>
+        <DashboardLayout>
+            <Container className="mt-4">
+                <h2>Mis Pagos</h2>
+                {pagos.length === 0 ? (
+                    <Alert variant="info">No tienes pagos registrados.</Alert>
+                ) : (
+                    <Table striped bordered hover responsive>
+                        <thead>
+                            <tr>
+                                <th>Compra</th>
+                                <th>Monto</th>
+                                <th>Método de Pago</th>
+                                <th>
+                                    Fecha{' '}
+                                    <Button variant="link" size="sm" onClick={toggleSort}>
+                                        {sortOrder === 'desc' ? '↓' : '↑'}
+                                    </Button>
+                                </th>
+                                <th>Estado</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </Table>
-            )}
-        </Container>
+                        </thead>
+                        <tbody>
+                            {sortedPagos.map((pago) => (
+                                <tr key={pago._id}>
+                                    <td>{pago.compraId || 'N/A'}</td>
+                                    <td>${pago.monto?.toLocaleString('es-ES')}</td>
+                                    <td>{pago.metodoPago}</td>
+                                    <td>{new Date(pago.fecha).toLocaleDateString('es-ES')}</td>
+                                    <td><StatusBadge status={pago.estado} /></td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </Table>
+                )}
+            </Container>
+        </DashboardLayout>
     );
 };
 
