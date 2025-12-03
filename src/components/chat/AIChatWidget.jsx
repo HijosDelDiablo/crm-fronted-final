@@ -6,7 +6,7 @@ import {
   Calendar, DollarSign, Users, BarChart3,
   Car, Phone, Mail, MapPin, Clock, AlertCircle,
   Download, Filter, TrendingUp, Star, Shield,
-  MessageSquare, FileText, Settings, HelpCircle
+  MessageSquare, FileText, Settings, HelpCircle, User
 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { motion, AnimatePresence } from "framer-motion";
@@ -69,35 +69,86 @@ export default function AIChatWidget({ externalIsOpen, onExternalClose, hideFloa
   };
 
   const loadSuggestionsForRole = (role) => {
-    const commonSuggestions = [
-      { icon: <Car size={16} />, text: "Ver vehículos disponibles", query: "Muéstrame los autos disponibles" },
-      { icon: <HelpCircle size={16} />, text: "Cómo funciona el financiamiento", query: "Explícame cómo funciona el financiamiento" },
-      { icon: <Phone size={16} />, text: "Contactar con soporte", query: "Necesito contactar a soporte" },
-    ];
-
     if (role === "CLIENTE") {
       setSuggestions([
-        ...commonSuggestions,
+        { icon: <Car size={16} />, text: "Ver autos disponibles", query: "Muéstrame los autos disponibles" },
+        { icon: <Car size={16} />, text: "Buscar autos específicos", query: "Busca autos Mazda" },
+        { icon: <DollarSign size={16} />, text: "Calcular financiamiento", query: "Calcula financiamiento para $300,000 con 20% de enganche a 48 meses" },
+        { icon: <HelpCircle size={16} />, text: "Cómo funciona el financiamiento", query: "Explícame cómo funciona el financiamiento" },
         { icon: <Calendar size={16} />, text: "Agendar prueba de manejo", query: "Quiero agendar una prueba de manejo" },
-        { icon: <DollarSign size={16} />, text: "Calcular financiamiento", query: "Calcula un financiamiento para un auto de $300,000" },
-        { icon: <MessageSquare size={16} />, text: "Ver mis mensajes", query: "Tengo mensajes pendientes?" },
+        { icon: <MapPin size={16} />, text: "Información de contacto", query: "Dónde están ubicados" },
+        { icon: <Star size={16} />, text: "Mejores vendedores", query: "Quiénes son los mejores vendedores" },
+        { icon: <Phone size={16} />, text: "Contactar con soporte", query: "Necesito contactar a soporte" },
+        { icon: <MessageSquare size={16} />, text: "Ver mis cotizaciones", query: "Estado de mis cotizaciones" },
+        { icon: <User size={16} />, text: "Ver mi perfil", query: "Quién soy" },
       ]);
     } else if (role === "VENDEDOR") {
       setSuggestions([
-        ...commonSuggestions,
-        { icon: <Users size={16} />, text: "Mis clientes", query: "Muéstrame mis clientes" },
-        { icon: <BarChart3 size={16} />, text: "Mi rendimiento", query: "Cómo va mi rendimiento este mes?" },
-        { icon: <FileText size={16} />, text: "Cotizaciones pendientes", query: "Tengo cotizaciones pendientes?" },
-        { icon: <Calendar size={16} />, text: "Mis tareas de hoy", query: "Qué tengo pendiente para hoy?" },
+        // All CLIENTE suggestions
+        { icon: <Car size={16} />, text: "Ver autos disponibles", query: "Muéstrame los autos disponibles" },
+        { icon: <Car size={16} />, text: "Buscar autos específicos", query: "Busca autos Mazda" },
+        { icon: <DollarSign size={16} />, text: "Calcular financiamiento", query: "Calcula financiamiento para $300,000 con 20% de enganche a 48 meses" },
+        { icon: <HelpCircle size={16} />, text: "Cómo funciona el financiamiento", query: "Explícame cómo funciona el financiamiento" },
+        { icon: <Calendar size={16} />, text: "Agendar prueba de manejo", query: "Quiero agendar una prueba de manejo" },
+        { icon: <MapPin size={16} />, text: "Información de contacto", query: "Dónde están ubicados" },
+        { icon: <Star size={16} />, text: "Mejores vendedores", query: "Quiénes son los mejores vendedores" },
+        { icon: <Phone size={16} />, text: "Contactar con soporte", query: "Necesito contactar a soporte" },
+        { icon: <MessageSquare size={16} />, text: "Ver mis cotizaciones", query: "Estado de mis cotizaciones" },
+        { icon: <User size={16} />, text: "Ver mi perfil", query: "Quién soy" },
+        // VENDEDOR specific
+        { icon: <HelpCircle size={16} />, text: "Qué puede hacer un cliente", query: "Qué puede hacer un cliente" },
+        { icon: <Users size={16} />, text: "Cliente con más compras", query: "Cliente con más compras" },
+        { icon: <Car size={16} />, text: "Autos con más stock", query: "Autos con más stock" },
+        { icon: <BarChart3 size={16} />, text: "Resumen de autos", query: "Resumen de autos" },
+        { icon: <BarChart3 size={16} />, text: "Resumen de clientes", query: "Resumen de clientes" },
+        { icon: <Calendar size={16} />, text: "Mis tareas pendientes", query: "Mis tareas" },
+        { icon: <FileText size={16} />, text: "Cotizaciones pendientes", query: "Cotizaciones pendientes" },
+        { icon: <Users size={16} />, text: "Mis clientes", query: "Mis clientes" },
+        { icon: <BarChart3 size={16} />, text: "Reportes de ventas", query: "Ventas de este mes" },
+        { icon: <DollarSign size={16} />, text: "Gastos del mes", query: "Gastos del mes" },
+        { icon: <TrendingUp size={16} />, text: "Mi rendimiento", query: "Mi rendimiento" },
+        { icon: <BarChart3 size={16} />, text: "Análisis de inventario", query: "Análisis de inventario" },
       ]);
     } else if (role === "ADMIN") {
       setSuggestions([
-        ...commonSuggestions,
-        { icon: <TrendingUp size={16} />, text: "Reporte de ventas", query: "Dame el reporte de ventas del mes" },
-        { icon: <Users size={16} />, text: "Rendimiento del equipo", query: "Cómo va el rendimiento del equipo?" },
-        { icon: <DollarSign size={16} />, text: "Análisis de gastos", query: "Muéstrame los gastos del mes" },
-        { icon: <BarChart3 size={16} />, text: "Análisis de inventario", query: "Necesito análisis del inventario" },
-        { icon: <Shield size={16} />, text: "Configuración del sistema", query: "Opciones de configuración del CRM" },
+        // All VENDEDOR suggestions (which include CLIENTE)
+        { icon: <Car size={16} />, text: "Ver autos disponibles", query: "Muéstrame los autos disponibles" },
+        { icon: <Car size={16} />, text: "Buscar autos específicos", query: "Busca autos Mazda" },
+        { icon: <DollarSign size={16} />, text: "Calcular financiamiento", query: "Calcula financiamiento para $300,000 con 20% de enganche a 48 meses" },
+        { icon: <HelpCircle size={16} />, text: "Cómo funciona el financiamiento", query: "Explícame cómo funciona el financiamiento" },
+        { icon: <Calendar size={16} />, text: "Agendar prueba de manejo", query: "Quiero agendar una prueba de manejo" },
+        { icon: <MapPin size={16} />, text: "Información de contacto", query: "Dónde están ubicados" },
+        { icon: <Star size={16} />, text: "Mejores vendedores", query: "Quiénes son los mejores vendedores" },
+        { icon: <Phone size={16} />, text: "Contactar con soporte", query: "Necesito contactar a soporte" },
+        { icon: <MessageSquare size={16} />, text: "Ver mis cotizaciones", query: "Estado de mis cotizaciones" },
+        { icon: <User size={16} />, text: "Ver mi perfil", query: "Quién soy" },
+        { icon: <HelpCircle size={16} />, text: "Qué puede hacer un cliente", query: "Qué puede hacer un cliente" },
+        { icon: <Users size={16} />, text: "Cliente con más compras", query: "Cliente con más compras" },
+        { icon: <Car size={16} />, text: "Autos con más stock", query: "Autos con más stock" },
+        { icon: <BarChart3 size={16} />, text: "Resumen de autos", query: "Resumen de autos" },
+        { icon: <BarChart3 size={16} />, text: "Resumen de clientes", query: "Resumen de clientes" },
+        { icon: <Calendar size={16} />, text: "Mis tareas pendientes", query: "Mis tareas" },
+        { icon: <FileText size={16} />, text: "Cotizaciones pendientes", query: "Cotizaciones pendientes" },
+        { icon: <Users size={16} />, text: "Mis clientes", query: "Mis clientes" },
+        { icon: <BarChart3 size={16} />, text: "Reportes de ventas", query: "Ventas de este mes" },
+        { icon: <DollarSign size={16} />, text: "Gastos del mes", query: "Gastos del mes" },
+        { icon: <TrendingUp size={16} />, text: "Mi rendimiento", query: "Mi rendimiento" },
+        { icon: <BarChart3 size={16} />, text: "Análisis de inventario", query: "Análisis de inventario" },
+        // ADMIN specific
+        { icon: <Users size={16} />, text: "Resumen de empleados", query: "Resumen de empleados" },
+        { icon: <TrendingUp size={16} />, text: "Rendimiento del equipo", query: "Rendimiento del equipo" },
+        { icon: <FileText size={16} />, text: "Cotizaciones pendientes globales", query: "Todas las cotizaciones pendientes" },
+        { icon: <Users size={16} />, text: "Base completa de clientes", query: "Lista de todos los clientes" },
+        { icon: <BarChart3 size={16} />, text: "Reportes de ventas globales", query: "Ventas totales de la empresa" },
+        { icon: <DollarSign size={16} />, text: "Gastos administrativos", query: "Todos los gastos" },
+        { icon: <BarChart3 size={16} />, text: "Análisis de inventario completo", query: "Análisis global de inventario" },
+      ]);
+    } else {
+      // Default suggestions for unknown roles
+      setSuggestions([
+        { icon: <Car size={16} />, text: "Ver vehículos disponibles", query: "Muéstrame los autos disponibles" },
+        { icon: <HelpCircle size={16} />, text: "Cómo funciona el financiamiento", query: "Explícame cómo funciona el financiamiento" },
+        { icon: <Phone size={16} />, text: "Contactar con soporte", query: "Necesito contactar a soporte" },
       ]);
     }
   };
@@ -117,6 +168,543 @@ export default function AIChatWidget({ externalIsOpen, onExternalClose, hideFloa
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const classifyIntentByRole = (text, role) => {
+    const lowerText = text.toLowerCase().trim();
+
+    // Common intents for all roles
+    const commonPatterns = {
+      show_available_cars: /(muéstrame|mueestrame|ver|mostrar)\s+(los\s+)?autos?\s+(disponibles?|inventario|qué\s+tienes?|que\s+tienes?)/i,
+      search_cars: /(busca|buscar|encuéntrame|encuentrame|busqueda|buscar)\s+autos?\s+(.+)/i,
+      financing_calc: /(calcula|calcular)\s+financiamiento\s+(.+)/i,
+      financing_explain: /(cómo\s+funciona|como\s+funciona|explica|explícame|explicame)\s+(el\s+)?financiamiento/i,
+      schedule_test_drive: /(agendar|agendar\s+una?|quiero|reservar)\s+(prueba\s+de\s+)?manejo/i,
+      contact_info: /(dónde\s+está|donde\s+esta|ubicación|ubicacion|teléfono|telefono|horarios?|contacto|información\s+de\s+contacto|informacion\s+de\s+contacto)/i,
+      top_sellers: /(mejores?\s+)?vendedores?\s+(top|mejores?)/i,
+      contact_support: /(contactar|necesito|ayuda|soporte|problema)/i,
+      view_profile: /(quién\s+soy|quien\s+soy|mi\s+perfil|mis\s+datos)/i,
+      view_messages: /(estado\s+de\s+mis\s+cotizaciones|mensajes?\s+pendientes?|cotizaciones?\s+pendientes?)/i
+    };
+
+    // Role-specific patterns
+    const rolePatterns = {
+      CLIENTE: {
+        ...commonPatterns
+      },
+      VENDEDOR: {
+        ...commonPatterns,
+        client_capabilities: /(qué\s+puede\s+hacer|que\s+puede\s+hacer)\s+un\s+cliente/i,
+        top_client: /(cliente\s+con\s+más\s+compras|cliente\s+con\s+mas\s+compras|top\s+cliente)/i,
+        cars_most_stock: /(autos?\s+con\s+más\s+stock|autos?\s+con\s+mas\s+stock|inventario\s+más\s+grande|inventario\s+mas\s+grande)/i,
+        summary_cars: /(resumen\s+de\s+autos|estadísticas\s+de\s+autos|estadisticas\s+de\s+autos)/i,
+        summary_clients: /(resumen\s+de\s+clientes|estadísticas\s+de\s+clientes|estadisticas\s+de\s+clientes)/i,
+        my_tasks: /(mis\s+tareas|pendientes|agenda|tareas\s+pendientes)/i,
+        pending_quotes: /(cotizaciones?\s+pendientes|por\s+aprobar)/i,
+        my_clients: /(mis\s+clientes|prospectos?\s+asignados?)/i,
+        sales_report: /(ventas\s+de\s+este\s+mes|reporte\s+de\s+(ventas|ganancias))/i,
+        expenses: /(gastos\s+del\s+mes|luz|agua|etc)/i,
+        my_performance: /(mi\s+rendimiento|desempeño\s+personal|desempeno\s+personal)/i,
+        inventory_analysis: /(análisis\s+de\s+inventario|analisis\s+de\s+inventario|stock\s+lento)/i
+      },
+      ADMIN: {
+        ...rolePatterns.VENDEDOR,
+        summary_employees: /(resumen\s+de\s+empleados|estadísticas\s+de\s+empleados|estadisticas\s+de\s+empleados)/i,
+        team_performance: /(rendimiento\s+del\s+equipo|equipo\s+de\s+ventas)/i,
+        all_pending_quotes: /(todas\s+las\s+cotizaciones?\s+pendientes)/i,
+        all_clients: /(lista\s+de\s+todos\s+los\s+clientes|base\s+completa\s+de\s+clientes)/i,
+        global_sales_report: /(ventas\s+totales\s+de\s+la\s+empresa)/i,
+        admin_expenses: /(todos\s+los\s+gastos|gastos\s+administrativos)/i,
+        global_inventory_analysis: /(análisis\s+global\s+de\s+inventario|analisis\s+global\s+de\s+inventario)/i
+      }
+    };
+
+    const patterns = rolePatterns[role] || commonPatterns;
+
+    for (const [intent, regex] of Object.entries(patterns)) {
+      const match = lowerText.match(regex);
+      if (match) {
+        return { intent, params: match.slice(1) };
+      }
+    }
+
+    return { intent: "unknown" };
+  };
+
+  const processIntent = async (intentData, role) => {
+    const { intent, params } = intentData;
+
+    switch (intent) {
+      case "show_available_cars":
+        try {
+          const { data } = await api.get("/products/all");
+          const availableCars = data.filter(car => car.stock > 0);
+          return {
+            content: `Aquí tienes los autos disponibles en nuestro inventario (${availableCars.length} vehículos):`,
+            type: "products_grid",
+            data: availableCars,
+            metadata: { totalCount: availableCars.length, viewType: 'available' }
+          };
+        } catch (error) {
+          return {
+            content: "Lo siento, no pude obtener la información de los autos disponibles en este momento.",
+            type: "text"
+          };
+        }
+
+      case "search_cars":
+        const searchTerm = params[1] || params[0];
+        try {
+          const { data } = await api.get("/products/all");
+          const filteredCars = data.filter(car =>
+            car.marca?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            car.modelo?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            car.tipo?.toLowerCase().includes(searchTerm.toLowerCase())
+          );
+          return {
+            content: `Encontré ${filteredCars.length} autos que coinciden con "${searchTerm}":`,
+            type: "products_grid",
+            data: filteredCars,
+            metadata: { totalCount: filteredCars.length, searchTerm }
+          };
+        } catch (error) {
+          return {
+            content: "Lo siento, no pude realizar la búsqueda en este momento.",
+            type: "text"
+          };
+        }
+
+      case "financing_calc":
+        // Simple financing calculation - in real app, this might be more complex
+        const calcText = params[1] || params[0];
+        const priceMatch = calcText.match(/\$?(\d{1,3}(?:,\d{3})*|\d+)/);
+        const engancheMatch = calcText.match(/(\d+)%?\s+de\s+enganche/);
+        const mesesMatch = calcText.match(/(\d+)\s+meses/);
+
+        if (priceMatch && engancheMatch && mesesMatch) {
+          const precio = parseInt(priceMatch[1].replace(/,/g, ''));
+          const enganchePct = parseInt(engancheMatch[1]);
+          const meses = parseInt(mesesMatch[1]);
+
+          const enganche = precio * (enganchePct / 100);
+          const financiado = precio - enganche;
+          const mensualidad = financiado / meses;
+
+          return {
+            content: `Cálculo de financiamiento:\n\n💰 Precio total: $${precio.toLocaleString()}\n📉 Enganche (${enganchePct}%): $${enganche.toLocaleString()}\n💳 Monto a financiar: $${financiado.toLocaleString()}\n📅 Plazo: ${meses} meses\n💵 Pago mensual aproximado: $${Math.round(mensualidad).toLocaleString()}\n\n*Este es un cálculo aproximado. Consulta con un asesor para detalles exactos.*`,
+            type: "text"
+          };
+        } else {
+          return {
+            content: "Para calcular el financiamiento necesito: precio del auto, porcentaje de enganche y plazo en meses. Ejemplo: 'Calcula financiamiento para $300,000 con 20% de enganche a 48 meses'",
+            type: "text"
+          };
+        }
+
+      case "financing_explain":
+        return {
+          content: `**¿Cómo funciona el financiamiento en Autobots?**\n\n🏦 **Proceso simple:**\n• Elige tu auto ideal\n• Define el enganche (mínimo 20%)\n• Selecciona el plazo (hasta 72 meses)\n• Obtén aprobación inmediata\n\n💡 **Beneficios:**\n• Tasas competitivas desde 12%\n• Sin comisiones ocultas\n• Pago mensual fijo\n• Posibilidad de prepago sin penalización\n\n📞 **¿Necesitas más detalles?** Contacta a un asesor o llama al 477 123 4567`,
+          type: "text"
+        };
+
+      case "schedule_test_drive":
+        return {
+          content: `¡Excelente! Para agendar una prueba de manejo:\n\n📅 **Pasos a seguir:**\n1. Elige el auto que te interesa\n2. Selecciona fecha y hora disponible\n3. Proporciona tus datos básicos\n4. Recibe confirmación inmediata\n\n🚗 **Disponibilidad:** Lunes a sábado, 9:00 AM - 6:00 PM\n\n📱 **¿Quieres proceder?** Dime qué auto te interesa y te ayudo con el proceso.\n\nO contacta directamente: soporte@autobots.mx | 477 123 4567`,
+          type: "text"
+        };
+
+      case "contact_info":
+        return {
+          content: `**Información de contacto - Autobots Concesionaria**\n\n📍 **Ubicación:**\nAv. Tecnológico #123, León, Guanajuato\n\n📞 **Teléfonos:**\n• Ventas: 477 123 4567\n• Soporte: 477 123 4568\n• WhatsApp: 477 999 8888\n\n🕒 **Horarios:**\n• Lunes a viernes: 9:00 AM - 7:00 PM\n• Sábado: 9:00 AM - 5:00 PM\n• Domingo: Cerrado\n\n📧 **Email:** info@autobots.mx\n\n🌐 **Redes sociales:** @autobots_mx`,
+          type: "text"
+        };
+
+      case "top_sellers":
+        try {
+          const { data } = await api.get("/dashboard/top-vendedores");
+          return {
+            content: `**Top Vendedores del mes:**\n\n${data.map((seller, index) => `${index + 1}. ${seller.nombre} - ${seller.ventas} ventas ($${seller.total.toLocaleString()})`).join('\n')}`,
+            type: "text"
+          };
+        } catch (error) {
+          return {
+            content: "No pude obtener la información de los mejores vendedores en este momento.",
+            type: "text"
+          };
+        }
+
+      case "contact_support":
+        return {
+          content: `**¿Necesitas ayuda?**\n\n📧 **Email:** soporte@autobots.mx\n📞 **Teléfono:** 477 123 4567\n💬 **Chat en línea:** Disponible 24/7\n\n*Respuesta garantizada en menos de 24 horas*`,
+          type: "text"
+        };
+
+      case "view_profile":
+        return {
+          content: `**Tu perfil:**\n\n👤 **Nombre:** ${user?.nombre || 'N/A'}\n📧 **Email:** ${user?.email || 'N/A'}\n🏷️ **Rol:** ${user?.rol || 'N/A'}\n📅 **Miembro desde:** ${user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}`,
+          type: "text"
+        };
+
+      case "view_messages":
+        try {
+          const endpoint = role === 'CLIENTE' ? '/cotizaciones/mis-cotizaciones' : '/cotizaciones/pendientes';
+          const { data } = await api.get(endpoint);
+          const pending = data.filter(c => c.estado === 'pendiente');
+          return {
+            content: `Tienes ${pending.length} cotizaciones pendientes:\n\n${pending.map(c => `• ${c.coche?.marca} ${c.coche?.modelo} - $${c.montoTotal?.toLocaleString()} (${c.estado})`).join('\n')}`,
+            type: "text"
+          };
+        } catch (error) {
+          return {
+            content: "No pude obtener tus cotizaciones en este momento.",
+            type: "text"
+          };
+        }
+
+      // VENDEDOR specific intents
+      case "client_capabilities":
+        return {
+          content: `**Un cliente puede hacer lo siguiente:**\n\n• Ver autos disponibles\n• Buscar autos específicos\n• Calcular financiamiento\n• Agendar prueba de manejo\n• Ver información de contacto\n• Consultar mejores vendedores\n• Contactar soporte\n• Ver su perfil y cotizaciones`,
+          type: "text"
+        };
+
+      case "top_client":
+        try {
+          const { data } = await api.get("/dashboard/top-clientes");
+          if (data.length > 0) {
+            const topClient = data[0];
+            return {
+              content: `**Cliente con más compras:**\n\n👤 ${topClient.nombre}\n💰 Total comprado: $${topClient.totalComprado?.toLocaleString()}\n🛒 Compras realizadas: ${topClient.totalCompras}`,
+              type: "text"
+            };
+          } else {
+            return {
+              content: "No hay información de clientes disponible.",
+              type: "text"
+            };
+          }
+        } catch (error) {
+          return {
+            content: "No pude obtener la información del top cliente.",
+            type: "text"
+          };
+        }
+
+      case "cars_most_stock":
+        try {
+          const { data } = await api.get("/products/all");
+          const sortedByStock = data.sort((a, b) => b.stock - a.stock).slice(0, 10);
+          return {
+            content: `**Autos con más stock:**\n\n${sortedByStock.map((car, index) => `${index + 1}. ${car.marca} ${car.modelo} - ${car.stock} unidades`).join('\n')}`,
+            type: "text"
+          };
+        } catch (error) {
+          return {
+            content: "No pude obtener la información del inventario.",
+            type: "text"
+          };
+        }
+
+      case "summary_cars":
+        try {
+          const { data } = await api.get("/products/all");
+          const totalCars = data.length;
+          const availableCars = data.filter(c => c.stock > 0).length;
+          const totalValue = data.reduce((sum, c) => sum + (c.precioBase * c.stock), 0);
+          return {
+            content: `**Resumen de autos:**\n\n🚗 Total de autos: ${totalCars}\n✅ Disponibles: ${availableCars}\n❌ Agotados: ${totalCars - availableCars}\n💰 Valor total inventario: $${totalValue.toLocaleString()}`,
+            type: "text"
+          };
+        } catch (error) {
+          return {
+            content: "No pude obtener el resumen de autos.",
+            type: "text"
+          };
+        }
+
+      case "summary_clients":
+        try {
+          const { data } = await api.get("/clients/all");
+          const totalClients = data.length;
+          const activeClients = data.filter(c => c.activo).length;
+          return {
+            content: `**Resumen de clientes:**\n\n👥 Total de clientes: ${totalClients}\n✅ Activos: ${activeClients}\n⏸️ Inactivos: ${totalClients - activeClients}`,
+            type: "text"
+          };
+        } catch (error) {
+          return {
+            content: "No pude obtener el resumen de clientes.",
+            type: "text"
+          };
+        }
+
+      case "my_tasks":
+        try {
+          const { data } = await api.get(`/tasks/user/${user?._id}`);
+          const pendingTasks = data.filter(t => t.estado !== 'completada');
+          return {
+            content: `Tienes ${pendingTasks.length} tareas pendientes:\n\n${pendingTasks.map(t => `• ${t.titulo} - Vence: ${new Date(t.fechaVencimiento).toLocaleDateString()}`).join('\n')}`,
+            type: "tasks_list_detailed",
+            data: pendingTasks,
+            metadata: { totalCount: pendingTasks.length }
+          };
+        } catch (error) {
+          return {
+            content: "No pude obtener tus tareas pendientes.",
+            type: "text"
+          };
+        }
+
+      case "pending_quotes":
+        try {
+          const { data } = await api.get("/cotizaciones/pendientes");
+          return {
+            content: `Hay ${data.length} cotizaciones pendientes de aprobación:\n\n${data.map(c => `• ${c.cliente?.nombre} - ${c.coche?.marca} ${c.coche?.modelo} - $${c.montoTotal?.toLocaleString()}`).join('\n')}`,
+            type: "text"
+          };
+        } catch (error) {
+          return {
+            content: "No pude obtener las cotizaciones pendientes.",
+            type: "text"
+          };
+        }
+
+      case "my_clients":
+        try {
+          const { data } = await api.get(`/clients/vendedor/${user?._id}`);
+          return {
+            content: `Tus clientes asignados (${data.length}):\n\n${data.map(c => `• ${c.nombre} - ${c.email} - ${c.estado}`).join('\n')}`,
+            type: "text"
+          };
+        } catch (error) {
+          return {
+            content: "No pude obtener la lista de tus clientes.",
+            type: "text"
+          };
+        }
+
+      case "sales_report":
+        try {
+          const startDate = new Date();
+          startDate.setMonth(startDate.getMonth() - 1);
+          const endDate = new Date();
+          const { data } = await api.get(`/dashboard/reporte-ventas?startDate=${startDate.toISOString().split('T')[0]}&endDate=${endDate.toISOString().split('T')[0]}`);
+          return {
+            content: `**Tu reporte de ventas del mes:**\n\n💰 Ventas totales: $${data.totalSales?.toLocaleString()}\n🛒 Unidades vendidas: ${data.salesCount}\n📊 Ticket promedio: $${Math.round(data.averageTicket || 0).toLocaleString()}`,
+            type: "kpi_dashboard_vendor",
+            data: data,
+            metadata: { growthPercentage: 0 }
+          };
+        } catch (error) {
+          return {
+            content: "No pude obtener tu reporte de ventas.",
+            type: "text"
+          };
+        }
+
+      case "expenses":
+        try {
+          const { data } = await api.get("/gastos/mes-actual");
+          const totalGastos = data.reduce((sum, g) => sum + g.monto, 0);
+          return {
+            content: `**Gastos del mes:** $${totalGastos.toLocaleString()}\n\n${data.map(g => `• ${g.descripcion}: $${g.monto.toLocaleString()}`).join('\n')}`,
+            type: "text"
+          };
+        } catch (error) {
+          return {
+            content: "No pude obtener los gastos del mes.",
+            type: "text"
+          };
+        }
+
+      case "my_performance":
+        try {
+          const { data } = await api.get(`/vendedores/performance/${user?._id}`);
+          return {
+            content: `**Tu rendimiento este mes:**\n\n🎯 Meta de ventas: $${data.metaVentas?.toLocaleString()}\n💰 Ventas realizadas: $${data.ventasRealizadas?.toLocaleString()}\n📈 Porcentaje cumplido: ${data.porcentajeCumplido}%\n🏆 Posición en ranking: ${data.posicionRanking}`,
+            type: "text"
+          };
+        } catch (error) {
+          return {
+            content: "No pude obtener tu rendimiento.",
+            type: "text"
+          };
+        }
+
+      case "inventory_analysis":
+        try {
+          const { data } = await api.get("/products/all");
+          const slowMoving = data.filter(c => c.stock > 5 && c.ultimaVenta && (new Date() - new Date(c.ultimaVenta)) > 30 * 24 * 60 * 60 * 1000);
+          return {
+            content: `**Análisis de inventario:**\n\n📦 Autos con stock lento (${slowMoving.length}):\n${slowMoving.slice(0, 5).map(c => `• ${c.marca} ${c.modelo} - ${c.stock} unidades`).join('\n')}`,
+            type: "products_grid_admin",
+            data: slowMoving,
+            metadata: { totalCount: slowMoving.length, viewType: 'slow_moving' }
+          };
+        } catch (error) {
+          return {
+            content: "No pude realizar el análisis de inventario.",
+            type: "text"
+          };
+        }
+
+      // ADMIN specific intents
+      case "summary_employees":
+        if (role !== 'ADMIN') {
+          return {
+            content: "No tienes permisos para acceder a esta información.",
+            type: "text"
+          };
+        }
+        try {
+          const { data } = await api.get("/empleados/all");
+          const vendedores = data.filter(e => e.rol === 'VENDEDOR');
+          const admins = data.filter(e => e.rol === 'ADMIN');
+          return {
+            content: `**Resumen de empleados:**\n\n👥 Total empleados: ${data.length}\n💼 Vendedores: ${vendedores.length}\n👑 Administradores: ${admins.length}`,
+            type: "text"
+          };
+        } catch (error) {
+          return {
+            content: "No pude obtener el resumen de empleados.",
+            type: "text"
+          };
+        }
+
+      case "team_performance":
+        if (role !== 'ADMIN') {
+          return {
+            content: "No tienes permisos para acceder a esta información.",
+            type: "text"
+          };
+        }
+        try {
+          const { data } = await api.get("/vendedores/performance-all");
+          return {
+            content: `**Rendimiento del equipo:**\n\n${data.map((v, index) => `${index + 1}. ${v.nombre} - ${v.porcentajeCumplido}% meta`).join('\n')}`,
+            type: "text"
+          };
+        } catch (error) {
+          return {
+            content: "No pude obtener el rendimiento del equipo.",
+            type: "text"
+          };
+        }
+
+      case "all_pending_quotes":
+        if (role !== 'ADMIN') {
+          return {
+            content: "No tienes permisos para acceder a esta información.",
+            type: "text"
+          };
+        }
+        try {
+          const { data } = await api.get("/cotizaciones/pendientes");
+          return {
+            content: `Todas las cotizaciones pendientes (${data.length}):\n\n${data.map(c => `• ${c.cliente?.nombre} - ${c.coche?.marca} ${c.coche?.modelo} - $${c.montoTotal?.toLocaleString()}`).join('\n')}`,
+            type: "text"
+          };
+        } catch (error) {
+          return {
+            content: "No pude obtener todas las cotizaciones pendientes.",
+            type: "text"
+          };
+        }
+
+      case "all_clients":
+        if (role !== 'ADMIN') {
+          return {
+            content: "No tienes permisos para acceder a esta información.",
+            type: "text"
+          };
+        }
+        try {
+          const { data } = await api.get("/clients/all");
+          return {
+            content: `Base completa de clientes (${data.length}):\n\n${data.slice(0, 10).map(c => `• ${c.nombre} - ${c.email} - ${c.estado}`).join('\n')}${data.length > 10 ? '\n\n...y más clientes' : ''}`,
+            type: "text"
+          };
+        } catch (error) {
+          return {
+            content: "No pude obtener la base de clientes.",
+            type: "text"
+          };
+        }
+
+      case "global_sales_report":
+        if (role !== 'ADMIN') {
+          return {
+            content: "No tienes permisos para acceder a esta información.",
+            type: "text"
+          };
+        }
+        try {
+          const startDate = new Date();
+          startDate.setMonth(startDate.getMonth() - 1);
+          const endDate = new Date();
+          const { data } = await api.get(`/dashboard/reporte-ventas-global?startDate=${startDate.toISOString().split('T')[0]}&endDate=${endDate.toISOString().split('T')[0]}`);
+          return {
+            content: `**Ventas totales de la empresa:**\n\n💰 Total: $${data.totalSales?.toLocaleString()}\n🛒 Unidades: ${data.salesCount}\n📊 Crecimiento: ${data.growthPercentage}%`,
+            type: "kpi_dashboard_admin",
+            data: data,
+            metadata: { growthPercentage: data.growthPercentage || 0 }
+          };
+        } catch (error) {
+          return {
+            content: "No pude obtener el reporte global de ventas.",
+            type: "text"
+          };
+        }
+
+      case "admin_expenses":
+        if (role !== 'ADMIN') {
+          return {
+            content: "No tienes permisos para acceder a esta información.",
+            type: "text"
+          };
+        }
+        try {
+          const { data } = await api.get("/gastos/all");
+          const totalGastos = data.reduce((sum, g) => sum + g.monto, 0);
+          return {
+            content: `**Todos los gastos:** $${totalGastos.toLocaleString()}\n\n${data.map(g => `• ${g.descripcion}: $${g.monto.toLocaleString()}`).join('\n')}`,
+            type: "text"
+          };
+        } catch (error) {
+          return {
+            content: "No pude obtener todos los gastos.",
+            type: "text"
+          };
+        }
+
+      case "global_inventory_analysis":
+        if (role !== 'ADMIN') {
+          return {
+            content: "No tienes permisos para acceder a esta información.",
+            type: "text"
+          };
+        }
+        try {
+          const { data } = await api.get("/products/all");
+          const totalValue = data.reduce((sum, c) => sum + (c.precioBase * c.stock), 0);
+          const lowStock = data.filter(c => c.stock <= 2);
+          return {
+            content: `**Análisis global de inventario:**\n\n💰 Valor total: $${totalValue.toLocaleString()}\n⚠️ Autos con stock bajo: ${lowStock.length}\n📊 Total referencias: ${data.length}`,
+            type: "text"
+          };
+        } catch (error) {
+          return {
+            content: "No pude realizar el análisis global de inventario.",
+            type: "text"
+          };
+        }
+
+      default:
+        return {
+          content: "De momento no puedo responder esa pregunta. Contacta con: soporte@autobots.mx o llama al 477 123 4567",
+          type: "text"
+        };
+    }
+  };
+
   const handleSend = async (textOverride = null) => {
     const text = textOverride || input;
     if (!text.trim()) return;
@@ -134,22 +722,24 @@ export default function AIChatWidget({ externalIsOpen, onExternalClose, hideFloa
     setLoading(true);
 
     try {
-      const { data } = await api.post("/iamodel/query", { prompt: text });
+      const intentData = classifyIntentByRole(text, user?.rol);
+      const responseData = await processIntent(intentData, user?.rol);
 
       const botResponse = {
         role: "assistant",
-        content: data.message,
-        type: data.type,
-        data: data.data,
-        metadata: data.metadata,
+        content: responseData.content,
+        type: responseData.type,
+        data: responseData.data,
+        metadata: responseData.metadata,
         timestamp: new Date().toISOString()
       };
 
       setMessages(prev => [...prev, botResponse]);
     } catch (error) {
+      console.error('Error processing intent:', error);
       setMessages(prev => [...prev, {
         role: "assistant",
-        content: "Tuve un problema de conexión. Por favor, intenta de nuevo en un momento.",
+        content: "Tuve un problema procesando tu solicitud. Por favor, intenta de nuevo en un momento.",
         type: "text",
         timestamp: new Date().toISOString()
       }]);
