@@ -36,7 +36,7 @@ const Pricing = ({ pricing, onClick }) => {
         <div>
           <h5 className="card-title mb-1">
             {coche ? (
-              <a href={`/cars/${coche._id?.$oid}`} onClick={(e) => e.stopPropagation()} className="text-decoration-none text-dark fw-bold">
+              <a href={`/cars/${coche._id?.$oid}`} onClick={(e) => e.stopPropagation()} className="text-decoration-none fw-bold">
                 {coche.marca} {coche.modelo}
               </a>
             ) : (

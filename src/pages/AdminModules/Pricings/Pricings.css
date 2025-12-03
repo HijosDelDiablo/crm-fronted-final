@@ -9,18 +9,8 @@
     font-weight: 700;
     color: var(--text-main);
     margin-bottom: 2rem;
-    text-align: center;
+    text-align: left;
     position: relative;
-}
-
-.pricings-title::after {
-    content: '';
-    display: block;
-    width: 60px;
-    height: 4px;
-    background: var(--primary);
-    margin: 10px auto 0;
-    border-radius: 2px;
 }
 
 /* Modal Styles */

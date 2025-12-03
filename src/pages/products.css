@@ -237,3 +237,7 @@
     color: var(--text-main);
     font-weight: 600;
 }
+
+.text-muted {
+    color: var(--text-muted) !important;
+}
