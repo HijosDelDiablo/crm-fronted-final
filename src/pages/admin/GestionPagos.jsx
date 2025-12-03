@@ -5,6 +5,7 @@ import { getCompraById } from '../../api/compras.api';
 import { getPagosPorCompra } from '../../api/pagos.api';
 import PaymentTable from '../../components/shared/PaymentTable';
 import StatusBadge from '../../components/shared/StatusBadge';
+import Sidebar from '../../components/layout/Sidebar';
 
 const GestionPagos = () => {
     const [compraId, setCompraId] = useState('');
@@ -41,15 +42,19 @@ const GestionPagos = () => {
     };
 
     return (
-        <Container className="mt-4">
-            <h2>Gestión de Pagos</h2>
+        <div className="dashboard-layout">
+            <Sidebar />
+            <div className="dashboard-container">
+                <Container className="mt-4">
+                    <h2>Gestión de Pagos</h2>
 
-            <Card className="mb-4">
-                <Card.Body>
-                    <Form.Group className="mb-3">
-                        <Form.Label>ID de la Compra</Form.Label>
+                    <Card className="mb-4 admin-card">
+                        <Card.Body>
+                            <Form.Group className="mb-3">
+                                <Form.Label>ID de la Compra</Form.Label>
                         <Form.Control
                             type="text"
+                            className="admin-input"
                             value={compraId}
                             onChange={(e) => setCompraId(e.target.value)}
                             placeholder="Ingrese el ID de la compra"
@@ -64,7 +69,7 @@ const GestionPagos = () => {
             {error && <Alert variant="danger">{error}</Alert>}
 
             {compra && (
-                <Card className="mb-4">
+                <Card className="mb-4 admin-card">
                     <Card.Header>
                         <h5>Detalle de la Compra</h5>
                     </Card.Header>
@@ -87,7 +92,7 @@ const GestionPagos = () => {
             )}
 
             {pagos.length > 0 && (
-                <Card>
+                <Card className="admin-card">
                     <Card.Header>
                         <h5>Historial de Pagos</h5>
                     </Card.Header>
@@ -101,6 +106,8 @@ const GestionPagos = () => {
                 <Alert variant="info">Esta compra no tiene pagos registrados.</Alert>
             )}
         </Container>
+        </div>
+    </div>
     );
 };
 
