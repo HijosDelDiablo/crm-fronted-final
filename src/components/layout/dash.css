@@ -321,3 +321,27 @@
 .seller-card .text-muted {
   color: var(--text-muted) !important;
 }
+
+/* ===== NAV TABS DARK BLUE ===== */
+
+.nav-tabs .nav-link {
+  background: #0f172a;
+  color: white;
+  border: 1px solid #475569;
+  border-radius: 0.375rem 0.375rem 0 0;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.nav-tabs .nav-link:hover {
+  background: #1e293b;
+  border-color: #64748b;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.nav-tabs .nav-link.active {
+  background: #1e293b;
+  border-color: #64748b;
+  color: white;
+}
