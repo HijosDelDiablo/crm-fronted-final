@@ -6,7 +6,7 @@ import "./Pricings.css";
 // 👉 Usamos la Sidebar igual que en Dashboard
 import Sidebar from "../../../components/layout/Sidebar";
 
-import { getPricings } from "../../../api/pricings.api";
+import { getCotizacionesAll } from "../../../api/pricings.api";
 import {
   getSellersWithNumClients,
   setSellerToClient,
@@ -78,8 +78,12 @@ export default function Pricings() {
   };
 
   const getPricingsData = async () => {
-    const response = await getPricings(navigate);
-    if (response) setPricings(response);
+    const response = await getCotizacionesAll(navigate);
+    if (response) {
+      setPricings(response);
+    } else {
+      notifyError('Error al cargar las cotizaciones. Verifica la conexión con el servidor.');
+    }
   };
 
   useEffect(() => {
