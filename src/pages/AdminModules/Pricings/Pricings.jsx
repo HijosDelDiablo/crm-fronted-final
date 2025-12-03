@@ -125,7 +125,7 @@ export default function Pricings() {
       <div className="dashboard-container">
         <div className="pricings-container">
           <div className="container">
-            <h1 className="pricings-title">Cotizaciones Recientes</h1>
+            <h1 className="pricings-title">Cotizaciones</h1>
 
             <div className="row g-4">
               {(pricingsOfClient.length > 0

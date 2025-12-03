@@ -45,7 +45,7 @@ export default function ViewProducts() {
             <Container fluid className="py-4">
                 <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-5">
                     <div>
-                        <h1 className="display-5 fw-bold text-dark mb-2">
+                        <h1 className="display-5 fw-bold mb-2" style={{ color: 'var(--text-main)' }}>
                             <Car className="me-3 text-primary" size={40} />
                             Catálogo de Vehículos
                         </h1>

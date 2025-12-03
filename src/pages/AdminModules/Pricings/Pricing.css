@@ -1,5 +1,5 @@
 .pricing-card {
-    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+    background: var(--background-card);
     border: 1px solid rgba(59, 130, 246, 0.5);
     border-radius: 15px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
@@ -11,8 +11,20 @@
 
 .pricing-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
-    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+    box-shadow: var(--shadow-strong);
+    border-color: var(--primary);
+}
+
+.pricing-card .card-title {
+  color: var(--text-main);
+}
+
+.pricing-card .card-text {
+  color: var(--text-secondary);
+}
+
+.pricing-card .text-muted {
+  color: var(--text-muted) !important;
 }
 
 .pricing-card-img-container {
@@ -116,6 +128,7 @@
     font-size: 0.85rem;
     font-weight: 600;
     text-decoration: none;
+    color: var(--text-main);
 }
 
 .pricing-card .card-title a:hover {

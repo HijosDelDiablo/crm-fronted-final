@@ -4,7 +4,7 @@ import { Card } from "react-bootstrap";
 const CardClient = ({ client, onClick }) => {
   return (
     <Card
-      className="h-100 shadow-sm client-card"
+      className="h-100 shadow-sm seller-card"
       style={{ cursor: "pointer", transition: "transform 0.2s" }}
       onClick={() => onClick(client)}
       onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.02)")}

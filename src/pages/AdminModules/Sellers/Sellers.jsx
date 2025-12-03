@@ -62,7 +62,7 @@ const Sellers = () => {
             <Sidebar />
             <div className="dashboard-container">
                 <Container className="mt-4">
-                    <h1 className="mb-4">Vendedores</h1>
+                    <h1 className="pricings-title">Vendedores</h1>
                     <Row xs={1} md={2} lg={3} className="g-4">
                         {sellers.map(seller => (
                             <Col key={seller._id}>

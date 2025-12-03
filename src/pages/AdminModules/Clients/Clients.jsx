@@ -114,7 +114,7 @@ const Clients = () => {
       <Sidebar />
       <div className="dashboard-container">
         <Container className="mt-4">
-          <h1 className="mb-4">Clientes</h1>
+          <h1 className="pricings-title">Clientes</h1>
           <Row xs={1} md={2} lg={3} className="g-4">
             {clients.map((client) => (
               <Col key={client._id?.$oid || client._id}>

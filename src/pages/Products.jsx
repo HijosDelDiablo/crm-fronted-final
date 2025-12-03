@@ -151,7 +151,7 @@ export default function Products() {
             <div className="dashboard-container">
                 <div className="products-container">
                     <div className="products-header">
-                        <h2 className="products-title">Productos</h2>
+                        <h2 className="pricings-title">Productos</h2>
                         <button
                             className="products-create-btn"
                             onClick={() => setShowModal(true)}
