@@ -6,6 +6,7 @@ import { getCotizacionesAprobadasCliente } from '../../api/pricings.api';
 import { iniciarProcesoCompra } from '../../api/compras.api';
 import StatusBadge from '../../components/shared/StatusBadge';
 import DashboardLayout from '../../components/layout/DashboardLayaut';
+import './MisCotizaciones.css';
 
 const MisCotizaciones = () => {
     const [cotizaciones, setCotizaciones] = useState([]);
@@ -23,26 +24,51 @@ const MisCotizaciones = () => {
 
     useEffect(() => {
         const fetchCotizaciones = async () => {
-            if (!user?._id) return;
+            console.log('🔍 MisCotizaciones - Iniciando carga de cotizaciones');
+            console.log('🔍 MisCotizaciones - Usuario actual:', user);
+
+            if (!user?._id) {
+                console.log('🔍 MisCotizaciones - No hay usuario ID, cancelando carga');
+                return;
+            }
 
             try {
+                console.log('🔍 MisCotizaciones - Llamando API getCotizacionesAprobadasCliente');
                 const data = await getCotizacionesAprobadasCliente(user._id, navigate);
-                setCotizaciones(data);
+                console.log('🔍 MisCotizaciones - Datos recibidos:', data);
+
+                // Asegurar que sea un array
+                const cotizacionesArray = Array.isArray(data) ? data : [data];
+                console.log('🔍 MisCotizaciones - Número de cotizaciones:', cotizacionesArray.length);
+
+                setCotizaciones(cotizacionesArray);
             } catch (err) {
+                console.error('❌ MisCotizaciones - Error al cargar cotizaciones:', err);
                 setError('Error al cargar las cotizaciones');
             } finally {
                 setLoading(false);
+                console.log('🔍 MisCotizaciones - Carga completada');
             }
         };
 
         fetchCotizaciones();
-    }, [user, navigate]); const handleIniciarCompra = (cotizacion) => {
+    }, [user, navigate]);
+
+    const handleIniciarCompra = (cotizacion) => {
+        console.log('🔍 MisCotizaciones - Iniciando compra para cotización:', cotizacion);
         setSelectedCotizacion(cotizacion);
         setShowModal(true);
     };
 
     const handleSubmitCompra = async () => {
-        if (!selectedCotizacion) return;
+        if (!selectedCotizacion) {
+            console.log('❌ MisCotizaciones - No hay cotización seleccionada');
+            return;
+        }
+
+        console.log('🔍 MisCotizaciones - Enviando formulario de compra');
+        console.log('🔍 MisCotizaciones - Cotización seleccionada:', selectedCotizacion);
+        console.log('🔍 MisCotizaciones - Datos del formulario:', formData);
 
         try {
             const payload = {
@@ -54,12 +80,18 @@ const MisCotizaciones = () => {
                 }
             };
 
+            console.log('🔍 MisCotizaciones - Payload a enviar:', payload);
+
             await iniciarProcesoCompra(payload, navigate);
+
+            console.log('✅ MisCotizaciones - Proceso de compra iniciado exitosamente');
             alert('Proceso de compra iniciado exitosamente');
+
             setShowModal(false);
             setFormData({ ingresos: '', gastos: '', otrosDatos: '' });
             // Opcional: recargar cotizaciones o navegar a compras
         } catch (err) {
+            console.error('❌ MisCotizaciones - Error al iniciar proceso de compra:', err);
             alert('Error al iniciar el proceso de compra');
         }
     };
@@ -84,44 +116,98 @@ const MisCotizaciones = () => {
         );
     }
 
+    if (loading) {
+        return (
+            <DashboardLayout>
+                <Container className="cotizaciones-container">
+                    <div className="loading-container">
+                        <Spinner animation="border" className="loading-spinner" />
+                        <p>Cargando tus cotizaciones...</p>
+                    </div>
+                </Container>
+            </DashboardLayout>
+        );
+    }
+
+    if (error) {
+        return (
+            <DashboardLayout>
+                <Container className="cotizaciones-container">
+                    <div className="error-container">
+                        <div className="error-icon">⚠️</div>
+                        <Alert variant="danger">{error}</Alert>
+                    </div>
+                </Container>
+            </DashboardLayout>
+        );
+    }
+
     return (
         <DashboardLayout>
-            <Container className="mt-4">
-                <h2>Mis Cotizaciones</h2>
+            <Container className="cotizaciones-container">
+                <div className="cotizaciones-header">
+                    <h2>Mis Cotizaciones</h2>
+                    <p className="cotizaciones-subtitle">
+                        Gestiona todas tus solicitudes de cotización de vehículos
+                    </p>
+                </div>
+
                 {cotizaciones.length === 0 ? (
-                    <Alert variant="info">No tienes cotizaciones registradas.</Alert>
+                    <div className="empty-state">
+                        <div className="empty-state-icon">📋</div>
+                        <h3 className="empty-state-title">No tienes cotizaciones</h3>
+                        <p className="empty-state-message">
+                            Visita nuestro catálogo para crear tu primera cotización
+                        </p>
+                    </div>
                 ) : (
                     <Row>
                         {cotizaciones.map((cotizacion) => (
-                            <Col md={6} lg={4} key={cotizacion._id}>
-                                <Card className="mb-3 shadow-sm">
-                                    <Card.Body>
-                                        <div className="d-flex justify-content-between align-items-start mb-2">
-                                            <div>
-                                                <h6 className="mb-1">
-                                                    {cotizacion.coche?.marca} {cotizacion.coche?.modelo}
-                                                </h6>
-                                                <small className="text-muted">
-                                                    ID: {cotizacion._id}
-                                                </small>
+                            <Col md={6} lg={4} key={cotizacion._id} className="mb-4">
+                                <Card className="cotizacion-card">
+                                    <Card.Header className="cotizacion-card-header">
+                                        <div className="cotizacion-info">
+                                            <div className="cotizacion-title">
+                                                {cotizacion.coche?.marca} {cotizacion.coche?.modelo}
                                             </div>
-                                            <StatusBadge status={cotizacion.estado} />
+                                            <div className="cotizacion-id">
+                                                ID: {cotizacion._id}
+                                            </div>
                                         </div>
-                                        <p className="mb-1">
-                                            <strong>Enganche:</strong> ${cotizacion.enganche?.toLocaleString('es-ES')}
-                                        </p>
-                                        <p className="mb-1">
-                                            <strong>Plazo:</strong> {cotizacion.plazoMeses} meses
-                                        </p>
-                                        <p className="mb-1">
-                                            <strong>Fecha:</strong> {new Date(cotizacion.createdAt).toLocaleDateString('es-ES')}
-                                        </p>
-                                        {cotizacion.estado === 'APROBADA' && (
+                                    </Card.Header>
+
+                                    <Card.Body className="cotizacion-card-body">
+                                        <div className="status-badge-container">
+                                            <StatusBadge status={cotizacion.status} />
+                                        </div>
+
+                                        <div className="cotizacion-details">
+                                            <div className="cotizacion-detail">
+                                                <span className="cotizacion-label">Enganche:</span>
+                                                <span className="cotizacion-value">
+                                                    ${cotizacion.enganche?.toLocaleString('es-ES')}
+                                                </span>
+                                            </div>
+                                            <div className="cotizacion-detail">
+                                                <span className="cotizacion-label">Plazo:</span>
+                                                <span className="cotizacion-value">
+                                                    {cotizacion.plazoMeses} meses
+                                                </span>
+                                            </div>
+                                            <div className="cotizacion-detail">
+                                                <span className="cotizacion-label">Fecha:</span>
+                                                <span className="cotizacion-value">
+                                                    {new Date(cotizacion.createdAt).toLocaleDateString('es-ES')}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        {cotizacion.status?.toLowerCase() === 'aprobada' && (
                                             <Button
                                                 variant="success"
                                                 size="sm"
                                                 onClick={() => handleIniciarCompra(cotizacion)}
-                                                className="w-100"
+                                                className="btn-iniciar-compra"
                                             >
                                                 Iniciar Proceso de Compra
                                             </Button>
@@ -133,11 +219,26 @@ const MisCotizaciones = () => {
                     </Row>
                 )}
 
-                <Modal show={showModal} onHide={() => setShowModal(false)}>
+                <Modal show={showModal} onHide={() => setShowModal(false)} centered>
                     <Modal.Header closeButton>
                         <Modal.Title>Iniciar Proceso de Compra</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
+                        {selectedCotizacion && (
+                            <div className="mb-3 p-3 bg-light rounded">
+                                <h6 className="mb-2">Cotización Seleccionada:</h6>
+                                <p className="mb-1">
+                                    <strong>Vehículo:</strong> {selectedCotizacion.coche?.marca} {selectedCotizacion.coche?.modelo}
+                                </p>
+                                <p className="mb-1">
+                                    <strong>Enganche:</strong> ${selectedCotizacion.enganche?.toLocaleString('es-ES')}
+                                </p>
+                                <p className="mb-0">
+                                    <strong>Plazo:</strong> {selectedCotizacion.plazoMeses} meses
+                                </p>
+                            </div>
+                        )}
+
                         <Form>
                             <Form.Group className="mb-3">
                                 <Form.Label>Ingresos Mensuales</Form.Label>
@@ -146,6 +247,7 @@ const MisCotizaciones = () => {
                                     value={formData.ingresos}
                                     onChange={(e) => setFormData({ ...formData, ingresos: e.target.value })}
                                     placeholder="Ingrese sus ingresos mensuales"
+                                    required
                                 />
                             </Form.Group>
                             <Form.Group className="mb-3">
@@ -155,6 +257,7 @@ const MisCotizaciones = () => {
                                     value={formData.gastos}
                                     onChange={(e) => setFormData({ ...formData, gastos: e.target.value })}
                                     placeholder="Ingrese sus gastos mensuales"
+                                    required
                                 />
                             </Form.Group>
                             <Form.Group className="mb-3">
@@ -170,10 +273,18 @@ const MisCotizaciones = () => {
                         </Form>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="secondary" onClick={() => setShowModal(false)}>
+                        <Button
+                            variant="secondary"
+                            onClick={() => setShowModal(false)}
+                            className="btn-modal-cancel"
+                        >
                             Cancelar
                         </Button>
-                        <Button variant="primary" onClick={handleSubmitCompra}>
+                        <Button
+                            variant="primary"
+                            onClick={handleSubmitCompra}
+                            className="btn-modal-confirm"
+                        >
                             Iniciar Compra
                         </Button>
                     </Modal.Footer>

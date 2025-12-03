@@ -1,0 +1,233 @@
+/* MisCotizaciones.css */
+.cotizaciones-container {
+    padding: 2rem 0;
+}
+
+.cotizaciones-header {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.cotizaciones-header h2 {
+    color: var(--text-main, #333);
+    font-weight: 700;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.cotizaciones-subtitle {
+    color: var(--text-muted, #666);
+    font-size: 1.1rem;
+}
+
+.cotizacion-card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    overflow: hidden;
+    height: 100%;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+}
+
+.cotizacion-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.cotizacion-card-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1.5rem;
+    border-bottom: none;
+}
+
+.cotizacion-card-body {
+    padding: 1.5rem;
+}
+
+.cotizacion-info {
+    margin-bottom: 1rem;
+}
+
+.cotizacion-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-main, #333);
+    margin-bottom: 0.5rem;
+}
+
+.cotizacion-id {
+    font-size: 0.85rem;
+    color: var(--text-muted, #666);
+    font-family: 'Courier New', monospace;
+}
+
+.cotizacion-details {
+    margin-bottom: 1.5rem;
+}
+
+.cotizacion-detail {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.cotizacion-detail:last-child {
+    border-bottom: none;
+}
+
+.cotizacion-label {
+    font-weight: 600;
+    color: var(--text-main, #333);
+    font-size: 0.9rem;
+}
+
+.cotizacion-value {
+    color: var(--primary-color, #007bff);
+    font-weight: 500;
+}
+
+.cotizacion-status {
+    margin-bottom: 1rem;
+}
+
+.btn-iniciar-compra {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    border: none;
+    border-radius: 25px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.btn-iniciar-compra:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+    background: linear-gradient(135deg, #218838 0%, #1aa085 100%);
+}
+
+.btn-iniciar-compra:active {
+    transform: translateY(0);
+}
+
+.status-badge-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1rem;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: var(--text-muted, #666);
+}
+
+.empty-state-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.empty-state-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-main, #333);
+}
+
+.empty-state-message {
+    font-size: 1.1rem;
+}
+
+/* Modal Styles */
+.modal-content {
+    border-radius: 15px;
+    border: none;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-bottom: none;
+    border-radius: 15px 15px 0 0;
+    padding: 1.5rem;
+}
+
+.modal-title {
+    font-weight: 600;
+    font-size: 1.3rem;
+}
+
+.modal-body {
+    padding: 2rem;
+}
+
+.modal-footer {
+    border-top: none;
+    padding: 1.5rem 2rem;
+    gap: 1rem;
+}
+
+.btn-modal-cancel {
+    border-radius: 25px;
+    padding: 0.5rem 2rem;
+    font-weight: 500;
+}
+
+.btn-modal-confirm {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    border: none;
+    border-radius: 25px;
+    padding: 0.5rem 2rem;
+    font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .cotizaciones-header h2 {
+        font-size: 2rem;
+    }
+
+    .cotizacion-card {
+        margin-bottom: 1rem;
+    }
+
+    .cotizacion-card-body {
+        padding: 1rem;
+    }
+}
+
+/* Loading state */
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    color: var(--text-muted, #666);
+}
+
+.loading-spinner {
+    width: 3rem;
+    height: 3rem;
+    margin-bottom: 1rem;
+}
+
+/* Error state */
+.error-container {
+    text-align: center;
+    padding: 2rem;
+}
+
+.error-icon {
+    font-size: 3rem;
+    color: #dc3545;
+    margin-bottom: 1rem;
+}
