@@ -162,11 +162,30 @@ main {
   font-size: 1rem;
   font-weight: 600;
   margin-bottom: 0.2rem;
+  color: #1e293b;
 }
 
 .solutions-card-desc {
   font-size: 0.9rem;
-  color: var(--text-secondary);
+  color: #475569;
+  margin-bottom: 0.8rem;
+}
+
+.solutions-card-btn {
+  border-radius: 999px;
+  padding: 0.5rem 1.2rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  background: var(--primary);
+  color: #ffffff;
+  border: none;
+  transition: transform 0.14s ease, box-shadow 0.14s ease, background 0.14s ease;
+}
+
+.solutions-card-btn:hover {
+  background: #0063cc;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 25px rgba(0, 122, 255, 0.4);
 }
 
 /* Mockup derecha */

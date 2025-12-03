@@ -140,7 +140,7 @@
   gap: 0.9rem;
 }
 
-.hero-stats-grid > div {
+.hero-stats-grid>div {
   padding: 0.7rem 0.9rem;
   border-radius: 14px;
   background: rgba(15, 23, 42, 0.6);

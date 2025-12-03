@@ -13,7 +13,7 @@ export default function Hero() {
     const video = videoRef.current;
     if (!video) return;
     // Remove pause on end to allow looping
-    return () => {};
+    return () => { };
   }, []);
 
   return (
