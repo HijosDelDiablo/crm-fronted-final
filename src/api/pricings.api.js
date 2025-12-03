@@ -1,4 +1,4 @@
-import { fetchApiGet } from "../utils/api-fetch-factory.util";
+import { fetchApiGet, fetchApiPost } from "../utils/api-fetch-factory.util";
 
 export const getPricings = async (navigate) => {
     const response = await fetchApiGet('/cotizacion/all', navigate, 'Error al obtener las cotizaciones');
@@ -17,12 +17,19 @@ export const getCotizacionesAprobadas = async (navigate) => {
 };
 
 export const getCotizacionesAprobadasCliente = async (clienteId, navigate) => {
-    const response = await fetchApiGet(`/cotizacion/aprobadas/${clienteId}`, navigate, 'Error al obtener cotizaciones aprobadas del cliente');
-    return response;
+    const response = await fetchApiGet(`/cotizacion/mis-cotizaciones`, navigate, 'Error al obtener cotizaciones del cliente');
+    return response || [];
 };
 
 export const getCotizacionesAll = async (navigate) => {
     // Esta es la misma que getPricings, pero la mantenemos por consistencia
     const response = await fetchApiGet('/cotizacion/all', navigate, 'Error al obtener todas las cotizaciones');
+    return response;
+};
+
+// === FUNCIONES PARA CREAR COTIZACIÓN ===
+export const crearCotizacion = async (payload, navigate) => {
+    // payload: { cocheId, enganche, plazoMeses }
+    const response = await fetchApiPost('/cotizacion', payload, navigate, 'Error al crear cotización');
     return response;
 };

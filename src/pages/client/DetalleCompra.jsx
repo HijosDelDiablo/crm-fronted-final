@@ -63,7 +63,18 @@ const DetalleCompra = () => {
         );
     }
 
-    const { coche, cotizacion, estado, saldoPendiente, fechaCreacion } = compra;
+    const getTimelineSteps = () => {
+        const steps = [
+            { label: 'Cotización Aprobada', status: 'completed' },
+            { label: 'Solicitud Enviada', status: 'completed' },
+            { label: 'En Revisión', status: estado === 'En revisión' || estado === 'Aprobada' || estado === 'Completada' ? 'completed' : estado === 'Pendiente' ? 'current' : 'pending' },
+            { label: 'Aprobada', status: estado === 'Aprobada' || estado === 'Completada' ? 'completed' : 'pending' },
+            { label: 'Completada', status: estado === 'Completada' ? 'completed' : 'pending' }
+        ];
+        return steps;
+    };
+
+    const timelineSteps = getTimelineSteps();
 
     return (
         <DashboardLayout>
@@ -123,6 +134,27 @@ const DetalleCompra = () => {
                         </Card>
                     </Col>
                 </Row>
+
+                {/* Línea de Tiempo del Proceso */}
+                <Card className="mb-4">
+                    <Card.Header>
+                        <h5>Estado del Proceso</h5>
+                    </Card.Header>
+                    <Card.Body>
+                        <div className="d-flex flex-column gap-2">
+                            {timelineSteps.map((step, index) => (
+                                <div key={index} className="d-flex align-items-center">
+                                    <div className={`badge ${step.status === 'completed' ? 'bg-success' : step.status === 'current' ? 'bg-primary' : 'bg-secondary'} me-3`}>
+                                        {index + 1}
+                                    </div>
+                                    <span className={step.status === 'completed' ? 'text-success' : step.status === 'current' ? 'fw-bold' : 'text-muted'}>
+                                        {step.label}
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
+                    </Card.Body>
+                </Card>
 
                 <Card className="mt-4">
                     <Card.Header>
