@@ -37,6 +37,11 @@ export const getComprasPorVendedor = async (vendedorId, navigate) => {
     return response;
 };
 
+export const getAllCompras = async (navigate) => {
+    const response = await fetchApiGet('/compra/all', navigate, 'Error al obtener todas las compras');
+    return response;
+};
+
 // === FUNCIONES PARA FLUJOS ESPECIALES ===
 export const iniciarProcesoCompra = async (payload, navigate) => {
     const response = await fetchApiPost('/compra', payload, navigate, 'Error al iniciar proceso de compra');
