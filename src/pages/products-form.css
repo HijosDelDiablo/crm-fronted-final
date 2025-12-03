@@ -3,7 +3,7 @@
 .products-modal-header {
     background: #0f172a;
     color: white;
-    border-bottom: none;
+    border-bottom: 1px solid #475569;
     border-radius: 0.5rem 0.5rem 0 0;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
