@@ -52,62 +52,62 @@ const GestionPagos = () => {
                         <Card.Body>
                             <Form.Group className="mb-3">
                                 <Form.Label>ID de la Compra</Form.Label>
-                        <Form.Control
-                            type="text"
-                            className="admin-input"
-                            value={compraId}
-                            onChange={(e) => setCompraId(e.target.value)}
-                            placeholder="Ingrese el ID de la compra"
-                        />
-                    </Form.Group>
-                    <Button onClick={handleSearch} disabled={loading}>
-                        {loading ? <Spinner animation="border" size="sm" /> : 'Buscar'}
-                    </Button>
-                </Card.Body>
-            </Card>
+                                <Form.Control
+                                    type="text"
+                                    className="admin-input"
+                                    value={compraId}
+                                    onChange={(e) => setCompraId(e.target.value)}
+                                    placeholder="Ingrese el ID de la compra"
+                                />
+                            </Form.Group>
+                            <Button onClick={handleSearch} disabled={loading}>
+                                {loading ? <Spinner animation="border" size="sm" /> : 'Buscar'}
+                            </Button>
+                        </Card.Body>
+                    </Card>
 
-            {error && <Alert variant="danger">{error}</Alert>}
+                    {error && <Alert variant="danger">{error}</Alert>}
 
-            {compra && (
-                <Card className="mb-4 admin-card">
-                    <Card.Header>
-                        <h5>Detalle de la Compra</h5>
-                    </Card.Header>
-                    <Card.Body>
-                        <Row>
-                            <Col md={6}>
-                                <p><strong>ID:</strong> {compra._id}</p>
-                                <p><strong>Cliente:</strong> {compra.cliente?.nombre}</p>
-                                <p><strong>Vendedor:</strong> {compra.vendedor?.nombre || 'N/A'}</p>
-                                <p><strong>Estado:</strong> <StatusBadge status={compra.estado} /></p>
-                            </Col>
-                            <Col md={6}>
-                                <p><strong>Coche:</strong> {compra.coche?.marca} {compra.coche?.modelo}</p>
-                                <p><strong>Saldo Pendiente:</strong> ${compra.saldoPendiente}</p>
-                                <p><strong>Fecha:</strong> {new Date(compra.fechaCreacion).toLocaleDateString('es-ES')}</p>
-                            </Col>
-                        </Row>
-                    </Card.Body>
-                </Card>
-            )}
+                    {compra && (
+                        <Card className="mb-4 admin-card">
+                            <Card.Header>
+                                <h5>Detalle de la Compra</h5>
+                            </Card.Header>
+                            <Card.Body>
+                                <Row>
+                                    <Col md={6}>
+                                        <p><strong>ID:</strong> {compra._id}</p>
+                                        <p><strong>Cliente:</strong> {compra.cliente?.nombre}</p>
+                                        <p><strong>Vendedor:</strong> {compra.vendedor?.nombre || 'N/A'}</p>
+                                        <p><strong>Estado:</strong> <StatusBadge status={compra.estado} /></p>
+                                    </Col>
+                                    <Col md={6}>
+                                        <p><strong>Coche:</strong> {compra.coche?.marca} {compra.coche?.modelo}</p>
+                                        <p><strong>Saldo Pendiente:</strong> ${compra.saldoPendiente}</p>
+                                        <p><strong>Fecha:</strong> {new Date(compra.fechaCreacion).toLocaleDateString('es-ES')}</p>
+                                    </Col>
+                                </Row>
+                            </Card.Body>
+                        </Card>
+                    )}
 
-            {pagos.length > 0 && (
-                <Card className="admin-card">
-                    <Card.Header>
-                        <h5>Historial de Pagos</h5>
-                    </Card.Header>
-                    <Card.Body>
-                        <PaymentTable payments={pagos} />
-                    </Card.Body>
-                </Card>
-            )}
+                    {pagos.length > 0 && (
+                        <Card className="admin-card">
+                            <Card.Header>
+                                <h5>Historial de Pagos</h5>
+                            </Card.Header>
+                            <Card.Body>
+                                <PaymentTable payments={pagos} />
+                            </Card.Body>
+                        </Card>
+                    )}
 
-            {compra && pagos.length === 0 && !loading && (
-                <Alert variant="info">Esta compra no tiene pagos registrados.</Alert>
-            )}
-        </Container>
+                    {compra && pagos.length === 0 && !loading && (
+                        <Alert variant="info">Esta compra no tiene pagos registrados.</Alert>
+                    )}
+                </Container>
+            </div>
         </div>
-    </div>
     );
 };
 
