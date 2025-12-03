@@ -6,10 +6,8 @@ const Seller = ({ seller, onClick }) => {
     return (
         <Card
             className="h-100 shadow-sm seller-card"
-            style={{ cursor: 'pointer', transition: 'transform 0.2s' }}
+            style={{ cursor: 'pointer' }}
             onClick={() => onClick(seller)}
-            onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
-            onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
         >
             <Card.Img
                 variant="top"

@@ -1,11 +1,14 @@
 import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useTheme } from "../../context/ThemeContext";
+import { Sun, Moon } from "lucide-react";
 import logo from '../../assets/logos/logoAuto.jpg';
 
 
 export default function NavbarTop() {
+  const { theme, toggleTheme } = useTheme();
   return (
-   <Navbar expand="lg" className="main-navbar" fixed="top">
+    <Navbar expand="lg" className="main-navbar" fixed="top">
       <Container>
         {/* Logo */}
         <Navbar.Brand
@@ -40,8 +43,16 @@ export default function NavbarTop() {
             </NavLink>
           </Nav>
 
-          {/* Botones */}{/*
           <div className="d-flex align-items-center gap-2 mt-3 mt-lg-0 ms-lg-4">
+            <Button
+              variant="link"
+              onClick={toggleTheme}
+              className="text-decoration-none p-2"
+              style={{ color: "var(--text-main)" }}
+            >
+              {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
+            </Button>
+            {/*
             <Button
               variant="outline-primary"
               className="btn-nav-ghost"
@@ -55,7 +66,8 @@ export default function NavbarTop() {
             >
               Cerrar sesión
             </Button>
-          </div>*/}
+            */}
+          </div>
         </Navbar.Collapse>
       </Container>
     </Navbar>

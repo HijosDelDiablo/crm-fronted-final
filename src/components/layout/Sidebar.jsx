@@ -4,7 +4,8 @@ import "./dash.css";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import { logout } from "../../redux/slices/authSlice";
-import { House, Box, ShoppingBag, LogOut, Car, Menu, Truck, Users, UserCheck, MessageSquare } from "lucide-react";
+import { House, Box, ShoppingBag, LogOut, Car, Menu, Truck, Users, UserCheck, MessageSquare, Sun, Moon } from "lucide-react";
+import { useTheme } from "../../context/ThemeContext";
 import logo from "../../assets/logos/logoAuto.jpg";
 import AIChatWidget from "../chat/AIChatWidget.jsx";
 
@@ -15,7 +16,7 @@ const ADMIN_MENU = [
   { icon: Truck, label: "Proveedores", path: "/suppliers" },
   { icon: Users, label: "Clientes", path: "/clientes" },
   { icon: UserCheck, label: "Vendedores", path: "/vendedores" },
-  { icon: Car, label: "Precio", path: "/Pricings" },
+  { icon: Car, label: "Cotizaciones", path: "/Pricings" },
   { icon: MessageSquare, label: "Chat IA", action: "chat" },
 
   // ... otros
@@ -33,6 +34,7 @@ export default function Sidebar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
+  const { theme, toggleTheme } = useTheme();
 
   const [collapsed, setCollapsed] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
@@ -101,8 +103,24 @@ export default function Sidebar() {
           })}
         </nav>
 
-        {/* FOOTER / USUARIO */}
         <div className="sidebar-footer mt-auto">
+          {/* Theme Toggle */}
+          <div className="px-3 mb-3">
+            <button
+              className="btn-theme-toggle w-100 d-flex align-items-center justify-content-center gap-2 p-2 rounded-3"
+              onClick={toggleTheme}
+              style={{
+                background: "var(--background-soft)",
+                border: "1px solid var(--border-color)",
+                color: "var(--text-main)",
+                transition: "all 0.2s"
+              }}
+            >
+              {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+              {!collapsed && <span>{theme === "dark" ? "Modo Claro" : "Modo Oscuro"}</span>}
+            </button>
+          </div>
+
           <div className="user-mini">
             <div className="user-avatar">
               {user?.nombre?.[0]?.toUpperCase() || "?"}
