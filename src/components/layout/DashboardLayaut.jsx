@@ -11,20 +11,32 @@ const MODULES = [
   {
     key: "inicio",
     label: "Inicio",
-    path: "/panel",
+    path: "/cliente/dashboard",
     icon: "bi bi-speedometer2",
   },
   {
     key: "carros",
     label: "Carros",
-    path: "/panel/carros",
+    path: "/cliente/catalogo",
     icon: "bi bi-car-front",
+  },
+  {
+    key: "mis-cotizaciones",
+    label: "Mis Cotizaciones",
+    path: "/cliente/cotizaciones",
+    icon: "bi bi-file-earmark-text",
   },
   {
     key: "mis-compras",
     label: "Mis Compras",
-    path: "/panel/mis-compras",
+    path: "/cliente/compras",
     icon: "bi bi-bag",
+  },
+  {
+    key: "mis-pagos",
+    label: "Mis Pagos",
+    path: "/cliente/pagos",
+    icon: "bi bi-credit-card",
   },
   {
     key: "chat-ia",

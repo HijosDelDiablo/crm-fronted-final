@@ -11,7 +11,7 @@ class AuthService {
       this.user = JSON.parse(saved);
     }
   }
-   
+
   // Notifica a todos los componentes suscritos
   notify() {
     this.subscribers.forEach((callback) => callback(this.user));
@@ -30,8 +30,11 @@ class AuthService {
   }
 
   login(userData) {
+    console.log('🔐 AuthService.login - User data:', userData);
+    console.log('🔐 AuthService.login - User role:', userData?.rol);
     this.user = userData;
     localStorage.setItem("user", JSON.stringify(userData));
+    console.log('🔐 AuthService.login - User saved to localStorage and state');
     this.notify();
   }
 

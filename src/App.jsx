@@ -28,6 +28,19 @@ import AuthGuard from "./guards/AuthGuard";
 import AdminGuard from "./guards/AdminGuard";
 import ClientGuard from "./guards/ClientGuard";
 
+// Páginas nuevas CLIENTE
+import MisCompras from "./pages/client/MisCompras";
+import DetalleCompra from "./pages/client/DetalleCompra";
+import MisPagos from "./pages/client/MisPagos";
+import MisCotizaciones from "./pages/client/MisCotizaciones";
+
+// Páginas nuevas ADMIN
+import RevisarCompras from "./pages/admin/RevisarCompras";
+import DetalleCompraAdmin from "./pages/admin/DetalleCompraAdmin";
+import ComprasPorCliente from "./pages/admin/ComprasPorCliente";
+import ComprasPorVendedor from "./pages/admin/ComprasPorVendedor";
+import GestionPagos from "./pages/admin/GestionPagos";
+
 function App() {
   useHeartbeat();
   return (
@@ -53,7 +66,12 @@ function App() {
                   <Route path="vendedores" element={<Sellers />} />
                   <Route path="seller-reviews/:id" element={<SellerReview />} />
                   <Route path="suppliers" element={<Suppliers />} />
-                  {/* TODO: Agregar rutas nuevas de compras/pagos en fases futuras */}
+                  {/* Nuevas rutas admin */}
+                  <Route path="compras" element={<RevisarCompras />} />
+                  <Route path="compras/:id" element={<DetalleCompraAdmin />} />
+                  <Route path="compras-por-cliente" element={<ComprasPorCliente />} />
+                  <Route path="compras-por-vendedor" element={<ComprasPorVendedor />} />
+                  <Route path="pagos" element={<GestionPagos />} />
                 </Routes>
               </AdminGuard>
             } />
@@ -65,7 +83,11 @@ function App() {
                   <Route path="dashboard" element={<DashboardHome />} />
                   <Route path="catalogo" element={<ViewProducts />} />
                   <Route path="mis-compras" element={<ViewPurchases />} />
-                  {/* TODO: Agregar rutas nuevas de cotizaciones/pagos en fases futuras */}
+                  {/* Nuevas rutas cliente */}
+                  <Route path="compras" element={<MisCompras />} />
+                  <Route path="compras/:id" element={<DetalleCompra />} />
+                  <Route path="pagos" element={<MisPagos />} />
+                  <Route path="cotizaciones" element={<MisCotizaciones />} />
                   {/* TODO: Unificar con Client/Perfil.jsx existente */}
                 </Routes>
               </ClientGuard>
@@ -83,9 +105,21 @@ function App() {
               <Route path="/suppliers" element={<Suppliers />} />
             </Route>
 
-            <Route path="/panel" element={<DashboardHome />} />
-            <Route path="/panel/carros" element={<ViewProducts />} />
-            <Route path="/panel/mis-compras" element={<ViewPurchases />} />
+            <Route path="/panel" element={
+              <ClientGuard>
+                <DashboardHome />
+              </ClientGuard>
+            } />
+            <Route path="/panel/carros" element={
+              <ClientGuard>
+                <ViewProducts />
+              </ClientGuard>
+            } />
+            <Route path="/panel/mis-compras" element={
+              <ClientGuard>
+                <ViewPurchases />
+              </ClientGuard>
+            } />
           </Routes>
         </AuthContextProvider>
       </ThemeProvider>
