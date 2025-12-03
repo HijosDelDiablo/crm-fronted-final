@@ -45,7 +45,6 @@ export default function SolutionsSection() {
                   <div className="solutions-card-pill">{s.pill}</div>
                   <h3 className="solutions-card-title">{s.title}</h3>
                   <p className="solutions-card-desc">{s.desc}</p>
-                  <button className="solutions-card-btn">Saber más</button>
                 </div>
               ))}
             </div>

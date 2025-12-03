@@ -40,23 +40,6 @@ export default function Hero() {
               <strong>Inteligencia Artificial</strong>, planes flexibles y
               asesoría en cada paso.
             </p>
-
-            <div className="hero-actions">
-              <Button className="btn-hero" onClick={() => navigate("/catalogo")}>
-                Ver catálogo de autos
-              </Button>
-              <button
-                type="button"
-                className="btn-hero-secondary"
-                onClick={() =>
-                  document
-                    .getElementById("soluciones")
-                    ?.scrollIntoView({ behavior: "smooth" })
-                }
-              >
-                Explorar por tipo de cliente
-              </button>
-            </div>
           </Col>
 
           {/* Columna derecha: tarjeta de métricas */}
