@@ -1,25 +1,16 @@
 .pricings-container {
     padding: 2rem 0;
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    /* Remove fixed gradient background to allow global theme background */
+    background: transparent;
     min-height: 100vh;
 }
 
 .pricings-title {
     font-weight: 700;
-    color: #ffffff;
+    color: var(--text-main);
     margin-bottom: 2rem;
-    text-align: center;
+    text-align: left;
     position: relative;
-}
-
-.pricings-title::after {
-    content: '';
-    display: block;
-    width: 60px;
-    height: 4px;
-    background: #0d6efd;
-    margin: 10px auto 0;
-    border-radius: 2px;
 }
 
 /* Modal Styles */
@@ -28,14 +19,14 @@
     height: 300px;
     object-fit: cover;
     border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-sm);
 }
 
 .pricing-modal-section-title {
     font-size: 1.1rem;
     font-weight: 600;
-    color: #495057;
-    border-bottom: 2px solid #e9ecef;
+    color: var(--text-secondary);
+    border-bottom: 2px solid var(--border-color);
     padding-bottom: 0.5rem;
     margin-bottom: 1rem;
     margin-top: 1.5rem;
@@ -49,44 +40,56 @@
     margin-bottom: 0.5rem;
     display: flex;
     justify-content: space-between;
-    border-bottom: 1px dashed #eee;
+    border-bottom: 1px dashed var(--border-light);
     padding-bottom: 0.25rem;
 }
 
 .pricing-detail-label {
     font-weight: 600;
-    color: #6c757d;
+    color: var(--text-secondary);
 }
 
 .pricing-detail-value {
     font-weight: 500;
-    color: #212529;
+    color: var(--text-main);
 }
 
 /* Enhanced Modal Styles */
 .modal-content {
     border-radius: 15px;
-    border: none;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-strong);
+    background-color: var(--background-card);
+    color: var(--text-main);
 }
 
 .modal-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
     color: white;
     border-radius: 15px 15px 0 0;
     border-bottom: none;
 }
 
+.modal-header .btn-close {
+    filter: brightness(0) invert(1);
+}
+
 .modal-body {
-    background-color: #f8f9fa;
+    background-color: var(--background-card);
     padding: 2rem;
+    color: var(--text-main);
+}
+
+.modal-footer {
+    background-color: var(--background-card);
+    border-top: 1px solid var(--border-color);
 }
 
 .pricing-modal-section-title {
     font-size: 1.2rem;
     font-weight: 600;
-    color: #495057;
-    border-bottom: 3px solid #0d6efd;
+    color: var(--text-secondary);
+    border-bottom: 3px solid var(--primary);
     padding-bottom: 0.5rem;
     margin-bottom: 1.5rem;
     margin-top: 2rem;
@@ -104,7 +107,7 @@
     left: 0;
     width: 50px;
     height: 3px;
-    background: #0d6efd;
+    background: var(--primary);
 }
 
 .pricing-detail-row {
@@ -112,26 +115,32 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: white;
+    background: var(--background-soft);
     padding: 0.5rem 1rem;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-sm);
     transition: transform 0.2s ease;
+    border: 1px solid var(--border-light);
 }
 
 .pricing-detail-row:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary);
 }
 
 .pricing-detail-label {
     font-weight: 600;
-    color: #6c757d;
+    color: var(--text-secondary);
     font-size: 0.9rem;
 }
 
 .pricing-detail-value {
     font-weight: 500;
-    color: #212529;
+    color: var(--text-main);
     font-size: 0.95rem;
+}
+
+.text-muted {
+    color: var(--text-muted) !important;
 }

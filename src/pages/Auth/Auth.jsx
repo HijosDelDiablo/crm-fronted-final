@@ -271,13 +271,14 @@ const Auth = () => {
               </button>
             </div>
           )}
-          <ButtonPrimary btnType="submit" isDisabled={isLoading} text={
-            isLoading ? 'Cargando...' : (
+          <Button variant="primary" type="submit" disabled={isLoading} >
+            {isLoading ? 'Cargando...' : (
               view === 'login' ? 'Entrar' :
                 view === 'register' ? 'Registrarse' :
                   'Enviar link'
-            )
-          } />
+            )}
+          </Button>
+
 
         </form>
 

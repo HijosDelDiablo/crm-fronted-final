@@ -5,8 +5,10 @@ import api from "../../../services/api.js";
 import Sidebar from "../../../components/layout/Sidebar.jsx";
 import "../../../pages/suppliers.css";
 import "../../../pages/suppliers-form.css";
+import { useNavigate } from "react-router-dom";
 
 export default function Suppliers() {
+    const navigate = useNavigate();
     const [suppliers, setSuppliers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
@@ -32,6 +34,8 @@ export default function Suppliers() {
         setLoading(true);
         try {
             const { data } = await api.get("/proveedores");
+            console.log('status', data.status);
+            if (data.status == 401) navigate('/login');
             setSuppliers(data);
         } catch (err) {
             toast.error("Error al cargar proveedores: " + (err.response?.data?.message || err.message));
@@ -139,7 +143,7 @@ export default function Suppliers() {
             <div className="dashboard-container">
                 <div className="suppliers-container">
                     <div className="suppliers-header">
-                        <h2 className="suppliers-title">Proveedores</h2>
+                        <h2 className="pricings-title">Proveedores</h2>
                         <button
                             className="suppliers-create-btn"
                             onClick={() => setShowModal(true)}

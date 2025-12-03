@@ -5,6 +5,7 @@ import { Toaster } from "react-hot-toast";
 import Landing from "./pages/Landing/Landing";
 import Auth from "./pages/Auth/Auth";
 import { AuthContextProvider } from "./context/AuthContextProvider";
+import { ThemeProvider } from "./context/ThemeContext";
 import NotFound from "./pages/NotFound/NotFound";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Home from "./pages/inicio/Home";
@@ -22,45 +23,44 @@ import ViewProducts from "./pages/ViewProducts";
 import ViewPurchases from "./pages/ViewPurchases";
 import DashboardHome from "./pages/DashboardHome";
 
-// import Login from "./pages/Login/Login"; // lo crearás después
-// import Dashboard from "./pages/Dashboard/Dashboard"; // más adelante
-
 function App() {
 
   useHeartbeat();
   return (
     <BrowserRouter>
-      <AuthContextProvider>
+      <ThemeProvider>
+        <AuthContextProvider>
 
-        <Routes>
-          <Route path="*" element={<NotFound />} />
-          {/* LANDING COMO PÁGINA INICIAL */}
-          <Route path="/" element={<Landing />} />
+          <Routes>
+            <Route path="*" element={<NotFound />} />
+            {/* LANDING COMO PÁGINA INICIAL */}
+            <Route path="/" element={<Landing />} />
 
-          {/* LOGIN */}
-          <Route path="/login" element={<Auth />} />
-          <Route path="/loginGoogle" element={<LoginGoogle />} />
+            {/* LOGIN */}
+            <Route path="/login" element={<Auth />} />
+            <Route path="/loginGoogle" element={<LoginGoogle />} />
 
 
-          {/* SISTEMA INTERNO */}
-          <Route element={<ProtectedAdminRoutes />}>
+            {/* SISTEMA INTERNO */}
+            <Route element={<ProtectedAdminRoutes />}>
 
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/products" element={<Products />} />
-            <Route path="/pricings" element={<Pricings />} />
-            <Route path="/clientes" element={<Clients />} />
-            <Route path="/vendedores" element={<Sellers />} />
-            <Route path="/seller-reviews/:id" element={<SellerReview />} />
-            <Route path="/suppliers" element={<Suppliers />} />
-          </Route>
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/products" element={<Products />} />
+              <Route path="/pricings" element={<Pricings />} />
+              <Route path="/clientes" element={<Clients />} />
+              <Route path="/vendedores" element={<Sellers />} />
+              <Route path="/seller-reviews/:id" element={<SellerReview />} />
+              <Route path="/suppliers" element={<Suppliers />} />
+            </Route>
 
-          {/* SISTEMA INTERNO, uso del dashboard */}
-          <Route path="/panel" element={<DashboardHome />} />
-          <Route path="/panel/carros" element={<ViewProducts />} />
-          <Route path="/panel/mis-compras" element={<ViewPurchases />} />
-          {/* ETC */}
-        </Routes>
-      </AuthContextProvider>
+            {/* SISTEMA INTERNO, uso del dashboard */}
+            <Route path="/panel" element={<DashboardHome />} />
+            <Route path="/panel/carros" element={<ViewProducts />} />
+            <Route path="/panel/mis-compras" element={<ViewPurchases />} />
+            {/* ETC */}
+          </Routes>
+        </AuthContextProvider>
+      </ThemeProvider>
       <Toaster
         position="top-center"
         toastOptions={{

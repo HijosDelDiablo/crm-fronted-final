@@ -3,7 +3,9 @@
 .dashboard-layout {
   display: flex;
   min-height: 100vh;
-  background: #f4f7fa;
+  background: var(--background);
+  color: var(--text-main);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* El contenido de la derecha: que sea el que hace scroll */
@@ -11,6 +13,7 @@
   flex: 1;
   padding: 1.2rem 1.4rem;
   overflow-y: auto;
+  background: var(--background);
 }
 
 /* ===== SIDEBAR ===== */
@@ -22,15 +25,16 @@
 
   height: 100vh;
   width: 260px;
-  background: linear-gradient(180deg, #1e3a8a 0%, #3b82f6 100%);
-  border-right: 1px solid rgba(59, 130, 246, 0.5);
+  background: var(--background-card);
+  border-right: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
   padding: 0.9rem 0.9rem 1rem;
 
   transition: width 0.22s ease, box-shadow 0.22s ease,
-    transform 0.22s ease;
+    transform 0.22s ease, background-color 0.3s ease;
   z-index: 20;
+  box-shadow: var(--shadow-soft);
 }
 
 /* Cuando está colapsada: solo columna delgadita con el botón */
@@ -48,7 +52,7 @@
   justify-content: space-between;
   gap: 0.4rem;
   padding-bottom: 0.7rem;
-  border-bottom: 1px solid rgba(59, 130, 246, 0.3);
+  border-bottom: 1px solid var(--border-light);
 }
 
 .sidebar-brand {
@@ -67,7 +71,7 @@
 .sidebar-title {
   font-weight: 700;
   font-size: 0.98rem;
-  color: #ffffff;
+  color: var(--text-main);
 }
 
 /* Botón hamburguesa */
@@ -76,8 +80,9 @@
   width: 32px;
   height: 32px;
   border-radius: 999px;
-  border: none;
-  background: linear-gradient(135deg, #eef2ff, #f3f4f6);
+  border: 1px solid var(--border-light);
+  background: var(--background-soft);
+  color: var(--text-main);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -87,8 +92,8 @@
 }
 
 .sidebar-toggle-btn:hover {
-  background: linear-gradient(135deg, #eef2ff, #e6f0ff);
-  box-shadow: 0 6px 18px rgba(12, 74, 110, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  background: var(--border-light);
+  box-shadow: var(--shadow-sm);
 }
 
 .sidebar-toggle-icon {
@@ -110,7 +115,7 @@
 .sidebar-link {
   width: 100%;
   font-size: 0.9rem !important;
-  color: #e2e8f0 !important;
+  color: var(--text-secondary) !important;
   border-radius: 10px;
   padding: 0.55rem 0.7rem !important;
   margin-bottom: 0.25rem;
@@ -126,15 +131,15 @@
 }
 
 .sidebar-link:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #ffffff !important;
+  background: var(--background-soft);
+  color: var(--primary) !important;
   transform: translateX(4px);
 }
 
 .sidebar-link--active {
-  background: linear-gradient(90deg, #4f46e5, #a78bfa);
+  background: var(--primary);
   color: #fff !important;
-  box-shadow: 0 6px 18px rgba(79, 70, 229, 0.12);
+  box-shadow: 0 6px 18px rgba(0, 122, 255, 0.25);
 }
 
 /* Hide text when collapsed, keep icons centered */
@@ -155,14 +160,14 @@
 }
 
 .sidebar-link--active svg {
-  filter: drop-shadow(0 6px 12px rgba(79, 70, 229, 0.14));
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
 }
 
 /* ===== FOOTER USUARIO ===== */
 
 .sidebar-footer {
   margin-top: 0.8rem;
-  border-top: 1px solid rgba(59, 130, 246, 0.3);
+  border-top: 1px solid var(--border-light);
   padding-top: 0.7rem;
 }
 
@@ -176,7 +181,7 @@
   width: 32px;
   height: 32px;
   border-radius: 999px;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: linear-gradient(135deg, var(--primary), var(--accent));
   color: #fff;
   font-size: 0.9rem;
   display: flex;
@@ -192,7 +197,7 @@
 .user-name {
   font-size: 0.85rem;
   font-weight: 500;
-  color: #e2e8f0;
+  color: var(--text-main);
 }
 
 .btn-link-logout {
@@ -201,9 +206,14 @@
   border: none;
   background: none;
   font-size: 0.78rem;
-  color: #cbd5e1;
+  color: var(--text-secondary);
   text-align: left;
   cursor: pointer;
+}
+
+.btn-link-logout:hover {
+  color: var(--primary);
+  text-decoration: underline;
 }
 
 /* Small helper: show a tooltip-like label when collapsed on hover */
@@ -211,13 +221,14 @@
   content: attr(data-label);
   position: absolute;
   left: 72px;
-  background: #0f172a;
-  color: #fff;
+  background: var(--secondary);
+  color: var(--background);
   padding: 6px 10px;
   border-radius: 6px;
   font-size: 0.82rem;
   white-space: nowrap;
-  box-shadow: 0 6px 20px rgba(2, 6, 23, 0.2);
+  box-shadow: var(--shadow-md);
+  z-index: 50;
 }
 
 /* ===== RESPONSIVE: en pantallas chicas la barra puede quedar encima ===== */
@@ -246,27 +257,27 @@
 
 /* Seller Cards */
 .seller-card {
-  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
-  color: #e0e0e0;
-  border: 1px solid rgba(59, 130, 246, 0.5);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  background: var(--background-card);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .seller-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
-  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+  box-shadow: var(--shadow-strong);
+  border-color: var(--primary);
 }
 
 .seller-card .card-title {
-  color: #ffffff;
+  color: var(--text-main);
 }
 
 .seller-card .card-text {
-  color: #e0e0e0;
+  color: var(--text-secondary);
 }
 
 .seller-card .text-muted {
-  color: #bbb !important;
+  color: var(--text-muted) !important;
 }
