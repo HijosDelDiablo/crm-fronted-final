@@ -24,7 +24,6 @@ export default function Products() {
         color: "",
         numPuertas: "",
         vin: "",
-        stock: "",
         proveedor: ""
     });
     const [image, setImage] = useState(null);
@@ -130,7 +129,6 @@ export default function Products() {
             if (form.precioBase) payload.precioBase = Number(form.precioBase);
             if (form.kilometraje) payload.kilometraje = Number(form.kilometraje);
             if (form.numPuertas) payload.numPuertas = Number(form.numPuertas);
-            if (form.stock) payload.stock = Number(form.stock);
 
             // Agregar proveedor solo si tiene valor
             if (form.proveedor) payload.proveedor = form.proveedor;
@@ -159,7 +157,6 @@ export default function Products() {
                 color: "",
                 numPuertas: "",
                 vin: "",
-                stock: "",
                 proveedor: ""
             });
             setImage(null);
@@ -212,12 +209,12 @@ export default function Products() {
                             {products.map((p) => (
                                 <div
                                     key={p._id}
-                                    className="product-card"
+                                    className="product-card h-100"
                                     onClick={() => {
                                         setSelectedProduct(p);
                                         setShowStockModal(true);
                                     }}
-                                    style={{ cursor: 'pointer', backgroundColor: '#0f172a' }}
+                                    style={{ cursor: 'pointer' }}
                                 >
                                     {p.imageUrl && (
                                         <img src={p.imageUrl} alt={p.modelo} className="product-card-img" />
@@ -270,7 +267,7 @@ export default function Products() {
                                     <p className="products-form-subtitle">Completa la información para crear un nuevo producto. Los campos marcados con <span className='text-red-500'>*</span> son obligatorios.</p>
                                 </div>
                                 <div className="product-form-grid">
-                                    {/* Columna 1 */}
+                                    {/* Columna 1 - Información básica y administrativa */}
                                     <div className="flex flex-col gap-4">
                                         <Form.Group className="product-form-group">
                                             <Form.Label className="product-form-label">Marca <span className="text-red-500">*</span></Form.Label>
@@ -293,10 +290,6 @@ export default function Products() {
                                             <Form.Control name="kilometraje" value={form.kilometraje} onChange={handleChange} required type="number" className="product-form-input" />
                                         </Form.Group>
                                         <Form.Group className="product-form-group">
-                                            <Form.Label className="product-form-label">Tipo</Form.Label>
-                                            <Form.Control name="tipo" value={form.tipo} onChange={handleChange} className="product-form-input" />
-                                        </Form.Group>
-                                        <Form.Group className="product-form-group">
                                             <Form.Label className="product-form-label">Proveedor</Form.Label>
                                             <Form.Select name="proveedor" value={form.proveedor} onChange={handleChange} className="product-form-input">
                                                 <option value="">Seleccionar proveedor</option>
@@ -308,8 +301,12 @@ export default function Products() {
                                             </Form.Select>
                                         </Form.Group>
                                     </div>
-                                    {/* Columna 2 */}
+                                    {/* Columna 2 - Especificaciones técnicas */}
                                     <div className="flex flex-col gap-4">
+                                        <Form.Group className="product-form-group">
+                                            <Form.Label className="product-form-label">Tipo</Form.Label>
+                                            <Form.Control name="tipo" value={form.tipo} onChange={handleChange} className="product-form-input" />
+                                        </Form.Group>
                                         <Form.Group className="product-form-group">
                                             <Form.Label className="product-form-label">Transmisión</Form.Label>
                                             <Form.Control name="transmision" value={form.transmision} onChange={handleChange} className="product-form-input" />
@@ -329,10 +326,6 @@ export default function Products() {
                                         <Form.Group className="product-form-group">
                                             <Form.Label className="product-form-label">VIN</Form.Label>
                                             <Form.Control name="vin" value={form.vin} onChange={handleChange} className="product-form-input" />
-                                        </Form.Group>
-                                        <Form.Group className="product-form-group">
-                                            <Form.Label className="product-form-label">Stock</Form.Label>
-                                            <Form.Control name="stock" value={form.stock} onChange={handleChange} type="number" className="product-form-input" />
                                         </Form.Group>
                                         <Form.Group className="product-form-group">
                                             <Form.Label className="product-form-label">Descripción</Form.Label>

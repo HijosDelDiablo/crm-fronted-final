@@ -122,7 +122,7 @@ const MisCompras = () => {
                 ) : (
                     <Row className="g-4">
                         {compras.map((compra) => (
-                            <Col xxl={3} xl={4} lg={6} md={6} sm={12} key={compra._id}>
+                            <Col xxl={3} xl={4} lg={6} md={6} sm={12} xs={12} key={compra._id}>
                                 <PurchaseCard
                                     purchase={compra}
                                     onViewDetail={handleViewDetail}
@@ -131,17 +131,6 @@ const MisCompras = () => {
                         ))}
                     </Row>
                 )}
-                <div className="pagos-section">
-                    <h3>Mis Pagos</h3>
-                    <p>Total Pagos: {totalPagos}</p>
-                    <ul>
-                        {pagos.map((pago) => (
-                            <li key={pago._id}>
-                                Monto: {pago.monto}, Método: {pago.metodoPago}, Status: {pago.status}, Fecha: {new Date(pago.fecha).toLocaleString()}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
             </div>
         </DashboardLayout>
     );

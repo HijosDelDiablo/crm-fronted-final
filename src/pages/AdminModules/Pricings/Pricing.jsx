@@ -26,7 +26,7 @@ const Pricing = ({ pricing, onClick }) => {
           alt={coche ? `${coche.marca} ${coche.modelo}` : "Coche no disponible"}
           className="pricing-card-img"
         />
-        <span className={`pricing-status-badge ${pricing.status === 'Aprobada' ? 'bg-success' : pricing.status === 'Rechazada' ? 'bg-danger' : 'bg-warning'}`}>
+        <span className={`pricing-status-badge ${pricing.status === 'Completada' ? 'bg-completed' : pricing.status === 'Aprobada' ? 'bg-success' : pricing.status === 'Rechazada' ? 'bg-danger' : 'bg-warning'}`}>
           {pricing.status}
         </span>
       </div>

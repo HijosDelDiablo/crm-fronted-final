@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Container, Row, Col, Card, Badge, Spinner, Modal, Form, Button } from "react-bootstrap";
+import { Container, Row, Col, Card, Badge, Spinner, Modal, Form } from "react-bootstrap";
 import { Car, Calendar, DollarSign, Gauge, Settings, Palette, Hash } from "lucide-react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
@@ -118,65 +118,84 @@ export default function ViewProducts() {
                                             className="product-img"
                                             loading="lazy"
                                         />
-                                        <Badge
-                                            bg={product.condicion === "Nuevo" ? "success" : "warning"}
-                                            className="product-badge"
-                                        >
-                                            {product.condicion}
-                                        </Badge>
                                     </div>
 
                                     <Card.Body className="product-body">
-                                        <div className="mb-3">
-                                            <h5 className="fw-bold mb-1">{product.marca} {product.modelo}</h5>
-                                            <small className="text-muted d-block mb-2">
-                                                <Calendar size={14} className="me-1" />
-                                                {product.ano}
-                                            </small>
-                                        </div>
-
-                                        <div className="product-details mb-3">
-                                            <div className="detail-row">
-                                                <DollarSign size={14} />
-                                                <span className="fw-bold text-primary fs-5">
-                                                    ${product.precioBase?.toLocaleString()}
-                                                </span>
-                                            </div>
-
-                                            <div className="detail-row">
-                                                <Gauge size={14} />
-                                                <span>{product.kilometraje?.toLocaleString()} km</span>
-                                            </div>
-
-                                            <div className="detail-row">
-                                                <Settings size={14} />
-                                                <span>{product.transmision}</span>
-                                            </div>
-
-                                            <div className="detail-row">
-                                                <Palette size={14} />
-                                                <span>{product.color}</span>
-                                            </div>
-
-                                            <div className="detail-row">
-                                                <Hash size={14} />
-                                                <span>{product.numPuertas} puertas</span>
+                                        <div className="product-header mb-4">
+                                            <h5 className="product-title fw-bold mb-2">{product.marca} {product.modelo}</h5>
+                                            <div className="product-meta d-flex align-items-center gap-3">
+                                                <small className="text-muted d-flex align-items-center">
+                                                    <Calendar size={14} className="me-1" />
+                                                    {product.ano}
+                                                </small>
+                                                <Badge
+                                                    bg="success"
+                                                    className="condition-badge"
+                                                >
+                                                    Nuevo
+                                                </Badge>
                                             </div>
                                         </div>
 
-                                        <div className="mt-auto">
-                                            <small className="text-muted">
-                                                Tipo: {product.tipo} • Motor: {product.motor}
-                                            </small>
+                                        <div className="product-details mb-4">
+                                            <div className="price-section mb-3">
+                                                <div className="d-flex align-items-center">
+                                                    <DollarSign size={16} className="text-primary me-2" />
+                                                    <span className="price-amount fw-bold text-primary fs-4">
+                                                        ${product.precioBase?.toLocaleString()}
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div className="specs-grid">
+                                                <div className="spec-item d-flex align-items-center justify-content-between">
+                                                    <div className="d-flex align-items-center">
+                                                        <Gauge size={14} className="me-2 text-muted" />
+                                                        <span className="spec-label">Kilometraje</span>
+                                                    </div>
+                                                    <span className="spec-value fw-medium">{product.kilometraje?.toLocaleString()} km</span>
+                                                </div>
+
+                                                <div className="spec-item d-flex align-items-center justify-content-between">
+                                                    <div className="d-flex align-items-center">
+                                                        <Settings size={14} className="me-2 text-muted" />
+                                                        <span className="spec-label">Transmisión</span>
+                                                    </div>
+                                                    <span className="spec-value fw-medium">{product.transmision}</span>
+                                                </div>
+
+                                                <div className="spec-item d-flex align-items-center justify-content-between">
+                                                    <div className="d-flex align-items-center">
+                                                        <Palette size={14} className="me-2 text-muted" />
+                                                        <span className="spec-label">Color</span>
+                                                    </div>
+                                                    <span className="spec-value fw-medium">{product.color}</span>
+                                                </div>
+
+                                                <div className="spec-item d-flex align-items-center justify-content-between">
+                                                    <div className="d-flex align-items-center">
+                                                        <Hash size={14} className="me-2 text-muted" />
+                                                        <span className="spec-label">Puertas</span>
+                                                    </div>
+                                                    <span className="spec-value fw-medium">{product.numPuertas}</span>
+                                                </div>
+                                            </div>
                                         </div>
 
-                                        <Button
-                                            variant="primary"
-                                            className="w-100 mt-3"
-                                            onClick={() => handleCotizar(product)}
-                                        >
-                                            Cotizar Vehículo
-                                        </Button>
+                                        <div className="product-footer mt-auto">
+                                            <div className="engine-info mb-3">
+                                                <small className="text-muted">
+                                                    <strong>Tipo:</strong> {product.tipo} • <strong>Motor:</strong> {product.motor}
+                                                </small>
+                                            </div>
+
+                                            <button
+                                                className="btn-cotizar w-100"
+                                                onClick={() => handleCotizar(product)}
+                                            >
+                                                Cotizar Vehículo
+                                            </button>
+                                        </div>
                                     </Card.Body>
                                 </Card>
                             </Col>
@@ -186,20 +205,26 @@ export default function ViewProducts() {
             </Container>
 
             {/* Modal de Cotización */}
-            <Modal show={showModal} onHide={handleCloseModal} centered>
+            <Modal show={showModal} onHide={handleCloseModal} centered dialogClassName="custom-modal">
                 <Modal.Header closeButton>
                     <Modal.Title>Cotizar Vehículo</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     {selectedProduct && (
-                        <div className="mb-3">
-                            <h6>{selectedProduct.marca} {selectedProduct.modelo}</h6>
-                            <p className="text-muted">Precio base: ${selectedProduct.precioBase?.toLocaleString()}</p>
+                        <div className="vehicle-info-card">
+                            <h6 style={{ color: '#f1f5f9', fontWeight: '700', marginBottom: '0.5rem', fontSize: '1.25rem' }}>
+                                {selectedProduct.marca} {selectedProduct.modelo}
+                            </h6>
+                            <p style={{ color: '#94a3b8', margin: '0', fontSize: '0.9rem' }}>
+                                Precio base: ${selectedProduct.precioBase?.toLocaleString()}
+                            </p>
                         </div>
                     )}
                     <Form onSubmit={handleSubmitCotizacion}>
                         <Form.Group className="mb-3">
-                            <Form.Label>Enganche ($)</Form.Label>
+                            <Form.Label style={{ color: '#e2e8f0', fontWeight: '600', marginBottom: '0.5rem' }}>
+                                Enganche ($)
+                            </Form.Label>
                             <Form.Control
                                 type="number"
                                 value={formData.enganche}
@@ -207,10 +232,19 @@ export default function ViewProducts() {
                                 placeholder="Ingrese el monto del enganche"
                                 required
                                 min="0"
+                                style={{
+                                    background: 'rgba(255, 255, 255, 0.05)',
+                                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                                    borderRadius: '8px',
+                                    color: '#f1f5f9',
+                                    padding: '0.75rem 1rem'
+                                }}
                             />
                         </Form.Group>
                         <Form.Group className="mb-3">
-                            <Form.Label>Plazo (meses)</Form.Label>
+                            <Form.Label style={{ color: '#e2e8f0', fontWeight: '600', marginBottom: '0.5rem' }}>
+                                Plazo (meses)
+                            </Form.Label>
                             <Form.Control
                                 type="number"
                                 value={formData.plazoMeses}
@@ -219,15 +253,31 @@ export default function ViewProducts() {
                                 required
                                 min="1"
                                 max="120"
+                                style={{
+                                    background: 'rgba(255, 255, 255, 0.05)',
+                                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                                    borderRadius: '8px',
+                                    color: '#f1f5f9',
+                                    padding: '0.75rem 1rem'
+                                }}
                             />
                         </Form.Group>
-                        <div className="d-flex gap-2">
-                            <Button variant="secondary" onClick={handleCloseModal}>
-                                Cancelar
-                            </Button>
-                            <Button variant="primary" type="submit">
-                                Crear Cotización
-                            </Button>
+                        <div className="modal-action-buttons">
+                            <div className="d-flex gap-3">
+                                <button
+                                    type="button"
+                                    className="btn-modal-secondary flex-fill"
+                                    onClick={handleCloseModal}
+                                >
+                                    Cancelar
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="btn-modal-primary flex-fill"
+                                >
+                                    Crear Cotización
+                                </button>
+                            </div>
                         </div>
                     </Form>
                 </Modal.Body>
