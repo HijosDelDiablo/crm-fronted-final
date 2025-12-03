@@ -137,14 +137,15 @@ main {
   padding: 1.1rem 1.2rem;
   border: 1px solid rgba(229, 231, 235, 0.95);
   box-shadow: 0 12px 45px rgba(15, 23, 42, 0.08);
-  transition: transform 0.18s ease, box-shadow 0.18s ease,
-    border-color 0.18s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease,
+    border-color 0.3s ease, background 0.3s ease;
 }
 
 .solutions-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 18px 60px rgba(15, 23, 42, 0.16);
-  border-color: rgba(0, 122, 255, 0.4);
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 20px 70px rgba(0, 122, 255, 0.2);
+  border-color: rgba(0, 122, 255, 0.5);
+  background: rgba(255, 255, 255, 0.95);
 }
 
 .solutions-card-pill {
@@ -157,6 +158,12 @@ main {
   background: #f5f5f7;
   color: #6b7280;
   margin-bottom: 0.3rem;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.solutions-card:hover .solutions-card-pill {
+  background: var(--primary);
+  color: #ffffff;
 }
 
 .solutions-card-title {
@@ -180,13 +187,14 @@ main {
   background: var(--primary);
   color: #ffffff;
   border: none;
-  transition: transform 0.14s ease, box-shadow 0.14s ease, background 0.14s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  box-shadow: 0 4px 15px rgba(0, 122, 255, 0.3);
 }
 
 .solutions-card-btn:hover {
   background: #0063cc;
-  transform: translateY(-1px);
-  box-shadow: 0 8px 25px rgba(0, 122, 255, 0.4);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 8px 25px rgba(0, 122, 255, 0.5);
 }
 
 /* Mockup derecha */
