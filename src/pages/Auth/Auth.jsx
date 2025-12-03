@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import './../../styles/Auth.css';
 import ButtonPrimary from '../../components/shared/ButtonPrimary';
+import { Button } from 'react-bootstrap';
 import { loginFetch, registerFetch } from '../../api/auth';
 import { notifyError, notifySuccess } from '../../components/shared/Alerts';
 import { validateField } from './validations';
 import AuthService from './AuthService';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { loginSuccess } from '../../redux/slices/authSlice';
 import { handleLoginResponse } from '../../utils/authUtils';
 
 const Auth = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
   const isRegistro = searchParams.get('registro');
   const [view, setView] = useState('login'); // 'login', 'register', 'recovery'
@@ -79,7 +83,7 @@ const Auth = () => {
     try {
       if (view === 'login') {
         const response = await loginFetch(formData);
-        handleLoginResponse(response, navigate, (u) => AuthService.login(u), setIsLoading);
+        handleLoginResponse(response, navigate, dispatch, (u) => AuthService.login(u), setIsLoading);
 
       } else if (view === 'register') {
         console.log('Register:', {

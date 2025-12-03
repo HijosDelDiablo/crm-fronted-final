@@ -18,17 +18,21 @@ export default function Products() {
         precioBase: "",
         kilometraje: "",
         descripcion: "",
-        condicion: "Nuevo",
         tipo: "",
         transmision: "",
         motor: "",
         color: "",
         numPuertas: "",
         vin: "",
+        stock: "",
         proveedor: ""
     });
     const [image, setImage] = useState(null);
     const [uploading, setUploading] = useState(false);
+    const [showStockModal, setShowStockModal] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState(null);
+    const [stockQuantity, setStockQuantity] = useState("");
+    const [updatingStock, setUpdatingStock] = useState(false);
     const [formError, setFormError] = useState("");
     const marcaInputRef = useRef(null);
 
@@ -68,14 +72,30 @@ export default function Products() {
         }
     };
 
-    const handleDelete = async (id) => {
-        if (!window.confirm("¿Seguro que deseas eliminar este producto?")) return;
+    const handleIncrementStock = async (e) => {
+        e.preventDefault();
+        setFormError("");
+        if (!stockQuantity || stockQuantity <= 0) {
+            setFormError("Ingresa una cantidad válida mayor a 0");
+            return;
+        }
+
+        setUpdatingStock(true);
         try {
-            await api.delete(`/products/${id}`);
-            toast.success("Producto eliminado");
-            setProducts((prev) => prev.filter((p) => p._id !== id));
+            await api.patch(`/products/${selectedProduct._id}/increment-stock`, {
+                quantity: Number(stockQuantity)
+            });
+            toast.success(`Stock incrementado en ${stockQuantity} unidades`);
+            setShowStockModal(false);
+            setStockQuantity("");
+            setSelectedProduct(null);
+            fetchProducts(); // Recargar productos para mostrar el stock actualizado
         } catch (err) {
-            toast.error("Error al eliminar: " + (err.response?.data?.message || err.message));
+            const msg = err.response?.data?.message || err.message;
+            setFormError(msg);
+            toast.error("Error al incrementar stock: " + msg);
+        } finally {
+            setUpdatingStock(false);
         }
     };
 
@@ -92,15 +112,30 @@ export default function Products() {
         setFormError("");
         setUploading(true);
         try {
-            // Castear campos numéricos
+            // Castear campos numéricos y construir payload limpio
             const payload = {
-                ...form,
-                ano: form.ano ? Number(form.ano) : undefined,
-                precioBase: form.precioBase ? Number(form.precioBase) : undefined,
-                kilometraje: form.kilometraje ? Number(form.kilometraje) : undefined,
-                numPuertas: form.numPuertas ? Number(form.numPuertas) : undefined,
-                proveedor: form.proveedor || undefined
+                marca: form.marca,
+                modelo: form.modelo,
+                descripcion: form.descripcion,
+                tipo: form.tipo,
+                transmision: form.transmision,
+                motor: form.motor,
+                color: form.color,
+                vin: form.vin,
+                condicion: "Nuevo"
             };
+
+            // Agregar campos numéricos solo si tienen valor
+            if (form.ano) payload.ano = Number(form.ano);
+            if (form.precioBase) payload.precioBase = Number(form.precioBase);
+            if (form.kilometraje) payload.kilometraje = Number(form.kilometraje);
+            if (form.numPuertas) payload.numPuertas = Number(form.numPuertas);
+            if (form.stock) payload.stock = Number(form.stock);
+
+            // Agregar proveedor solo si tiene valor
+            if (form.proveedor) payload.proveedor = form.proveedor;
+
+            console.log('Payload a enviar:', payload);
             const { data } = await api.post("/products", payload);
             if (image) {
                 const formData = new FormData();
@@ -118,13 +153,13 @@ export default function Products() {
                 precioBase: "",
                 kilometraje: "",
                 descripcion: "",
-                condicion: "Nuevo",
                 tipo: "",
                 transmision: "",
                 motor: "",
                 color: "",
                 numPuertas: "",
                 vin: "",
+                stock: "",
                 proveedor: ""
             });
             setImage(null);
@@ -144,6 +179,15 @@ export default function Products() {
             setTimeout(() => marcaInputRef.current.focus(), 200);
         }
     }, [showModal]);
+
+    // Resetear modal de stock cuando se cierra
+    useEffect(() => {
+        if (!showStockModal) {
+            setSelectedProduct(null);
+            setStockQuantity("");
+            setFormError("");
+        }
+    }, [showStockModal]);
 
     return (
         <div className="dashboard-layout">
@@ -166,14 +210,25 @@ export default function Products() {
                     ) : (
                         <div className="products-grid">
                             {products.map((p) => (
-                                <div key={p._id} className="product-card">
+                                <div
+                                    key={p._id}
+                                    className="product-card"
+                                    onClick={() => {
+                                        setSelectedProduct(p);
+                                        setShowStockModal(true);
+                                    }}
+                                    style={{ cursor: 'pointer' }}
+                                >
                                     {p.imageUrl && (
                                         <img src={p.imageUrl} alt={p.modelo} className="product-card-img" />
                                     )}
                                     <button
                                         className="product-card-delete"
                                         title="Eliminar producto"
-                                        onClick={() => handleDelete(p._id)}
+                                        onClick={(e) => {
+                                            e.stopPropagation(); // Evitar que se abra el modal de stock
+                                            handleDelete(p._id);
+                                        }}
                                     >
                                         &#10005;
                                     </button>
@@ -184,7 +239,6 @@ export default function Products() {
                                         </div>
                                         <span className="product-card-price">${p.precioBase?.toLocaleString?.() || p.precioBase}</span>
                                         <div className="product-card-tags">
-                                            <span className="product-card-tag">{p.condicion}</span>
                                             <span className="product-card-tag product-card-tag-gray">{p.tipo}</span>
                                         </div>
                                         <div className="product-card-details">
@@ -192,6 +246,7 @@ export default function Products() {
                                             <span><b>Transmisión:</b> {p.transmision} <b>Motor:</b> {p.motor}</span><br />
                                             <span><b>Color:</b> {p.color} <b>Puertas:</b> {p.numPuertas}</span><br />
                                             <span><b>VIN:</b> {p.vin}</span><br />
+                                            <span><b>Stock:</b> {p.stock}</span><br />
                                             <span><b>Proveedor:</b> {suppliers.find(s => s._id === p.proveedor)?.nombre || 'N/A'}</span>
                                         </div>
                                         <div className="product-card-desc">{p.descripcion}</div>
@@ -238,13 +293,6 @@ export default function Products() {
                                             <Form.Control name="kilometraje" value={form.kilometraje} onChange={handleChange} required type="number" className="product-form-input" />
                                         </Form.Group>
                                         <Form.Group className="product-form-group">
-                                            <Form.Label className="product-form-label">Condición</Form.Label>
-                                            <Form.Select name="condicion" value={form.condicion} onChange={handleChange} className="product-form-input">
-                                                <option>Nuevo</option>
-                                                <option>Usado</option>
-                                            </Form.Select>
-                                        </Form.Group>
-                                        <Form.Group className="product-form-group">
                                             <Form.Label className="product-form-label">Tipo</Form.Label>
                                             <Form.Control name="tipo" value={form.tipo} onChange={handleChange} className="product-form-input" />
                                         </Form.Group>
@@ -283,6 +331,10 @@ export default function Products() {
                                             <Form.Control name="vin" value={form.vin} onChange={handleChange} className="product-form-input" />
                                         </Form.Group>
                                         <Form.Group className="product-form-group">
+                                            <Form.Label className="product-form-label">Stock</Form.Label>
+                                            <Form.Control name="stock" value={form.stock} onChange={handleChange} type="number" className="product-form-input" />
+                                        </Form.Group>
+                                        <Form.Group className="product-form-group">
                                             <Form.Label className="product-form-label">Descripción</Form.Label>
                                             <Form.Control name="descripcion" value={form.descripcion} onChange={handleChange} as="textarea" className="product-form-textarea" />
                                         </Form.Group>
@@ -303,6 +355,49 @@ export default function Products() {
                                             <Spinner size="sm" animation="border" className="me-2" /> Subiendo...
                                         </>
                                     ) : "Crear"}
+                                </button>
+                            </Modal.Footer>
+                        </Form>
+                    </Modal>
+
+                    <Modal show={showStockModal} onHide={() => setShowStockModal(false)}>
+                        <Modal.Header closeButton className="products-modal-header">
+                            <Modal.Title>Incrementar Stock</Modal.Title>
+                        </Modal.Header>
+                        <Form onSubmit={handleIncrementStock}>
+                            <Modal.Body className="products-modal-body">
+                                {formError && (
+                                    <div className="products-form-error">{formError}</div>
+                                )}
+                                {selectedProduct && (
+                                    <div className="mb-4">
+                                        <h5>{selectedProduct.marca} {selectedProduct.modelo}</h5>
+                                        <p className="text-muted">Stock actual: {selectedProduct.stock}</p>
+                                    </div>
+                                )}
+                                <Form.Group className="product-form-group">
+                                    <Form.Label className="product-form-label">Cantidad a agregar <span className="text-red-500">*</span></Form.Label>
+                                    <Form.Control
+                                        type="number"
+                                        min="1"
+                                        value={stockQuantity}
+                                        onChange={(e) => setStockQuantity(e.target.value)}
+                                        required
+                                        className="product-form-input"
+                                        placeholder="Ej: 5"
+                                    />
+                                </Form.Group>
+                            </Modal.Body>
+                            <Modal.Footer className="products-modal-footer">
+                                <button type="button" className="product-form-cancel" onClick={() => setShowStockModal(false)}>
+                                    Cancelar
+                                </button>
+                                <button type="submit" disabled={updatingStock} className="product-form-submit">
+                                    {updatingStock ? (
+                                        <>
+                                            <Spinner size="sm" animation="border" className="me-2" /> Actualizando...
+                                        </>
+                                    ) : "Incrementar Stock"}
                                 </button>
                             </Modal.Footer>
                         </Form>

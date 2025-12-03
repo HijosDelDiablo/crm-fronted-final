@@ -50,9 +50,17 @@
 }
 
 @keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.2); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.2);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
 .ai-chat-window {
@@ -115,8 +123,15 @@
 }
 
 @keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
 }
 
 .header-actions {
@@ -304,8 +319,16 @@
 }
 
 @keyframes typing {
-  0%, 60%, 100% { transform: translateY(0); }
-  30% { transform: translateY(-10px); }
+
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+  }
+
+  30% {
+    transform: translateY(-10px);
+  }
 }
 
 .ai-input-area {
@@ -750,6 +773,7 @@
   flex: 1;
   font-size: 0.9rem;
   font-weight: 500;
+  color: var(--dark-color);
 }
 
 .history-list {
@@ -820,11 +844,11 @@
     right: 20px;
     left: 20px;
   }
-  
+
   .grid-container {
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   }
-  
+
   .kpi-grid {
     grid-template-columns: 1fr;
   }

@@ -11,11 +11,13 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     loginSuccess: (state, action) => {
+      console.log('🔄 Redux authSlice - loginSuccess called with:', action.payload);
       state.user = action.payload.user;
       state.token = action.payload.token;
       state.isAuthenticated = true;
       localStorage.setItem('user', JSON.stringify(action.payload.user));
       localStorage.setItem('token', action.payload.token);
+      console.log('🔄 Redux authSlice - State updated:', state);
     },
     updateUserData: (state, action) => {
       state.user = { ...state.user, ...action.payload };

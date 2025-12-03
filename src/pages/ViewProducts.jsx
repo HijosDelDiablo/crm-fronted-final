@@ -1,14 +1,20 @@
 import { useEffect, useState } from "react";
-import { Container, Row, Col, Card, Badge, Spinner } from "react-bootstrap";
+import { Container, Row, Col, Card, Badge, Spinner, Modal, Form, Button } from "react-bootstrap";
 import { Car, Calendar, DollarSign, Gauge, Settings, Palette, Hash } from "lucide-react";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 import api from "../services/api";
+import { crearCotizacion } from "../api/pricings.api";
 import DashboardLayout from "../components/layout/DashboardLayaut";
 import "./products.css";
 
 export default function ViewProducts() {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [showModal, setShowModal] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState(null);
+    const [formData, setFormData] = useState({ enganche: '', plazoMeses: '' });
+    const { user } = useSelector((state) => state.auth);
 
     useEffect(() => {
         fetchProducts();
@@ -17,13 +23,46 @@ export default function ViewProducts() {
     const fetchProducts = async () => {
         setLoading(true);
         try {
-            const { data } = await api.get("/products/all");
+            const { data } = await api.get("/products/tienda");
             setProducts(data);
         } catch (err) {
             console.error("Error fetching products:", err);
             toast.error("Error al cargar los productos");
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleCotizar = (product) => {
+        setSelectedProduct(product);
+        setShowModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+        setSelectedProduct(null);
+        setFormData({ enganche: '', plazoMeses: '' });
+    };
+
+    const handleSubmitCotizacion = async (e) => {
+        e.preventDefault();
+        if (!user?._id) {
+            toast.error("Usuario no identificado");
+            return;
+        }
+
+        try {
+            const payload = {
+                cocheId: selectedProduct._id,
+                enganche: parseFloat(formData.enganche),
+                plazoMeses: parseInt(formData.plazoMeses)
+            };
+
+            await crearCotizacion(payload, () => { });
+            toast.success("Cotización creada exitosamente. Espera la aprobación del vendedor.");
+            handleCloseModal();
+        } catch (err) {
+            toast.error("Error al crear la cotización");
         }
     };
 
@@ -130,6 +169,14 @@ export default function ViewProducts() {
                                                 Tipo: {product.tipo} • Motor: {product.motor}
                                             </small>
                                         </div>
+
+                                        <Button
+                                            variant="primary"
+                                            className="w-100 mt-3"
+                                            onClick={() => handleCotizar(product)}
+                                        >
+                                            Cotizar Vehículo
+                                        </Button>
                                     </Card.Body>
                                 </Card>
                             </Col>
@@ -137,6 +184,54 @@ export default function ViewProducts() {
                     </Row>
                 )}
             </Container>
+
+            {/* Modal de Cotización */}
+            <Modal show={showModal} onHide={handleCloseModal} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Cotizar Vehículo</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {selectedProduct && (
+                        <div className="mb-3">
+                            <h6>{selectedProduct.marca} {selectedProduct.modelo}</h6>
+                            <p className="text-muted">Precio base: ${selectedProduct.precioBase?.toLocaleString()}</p>
+                        </div>
+                    )}
+                    <Form onSubmit={handleSubmitCotizacion}>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Enganche ($)</Form.Label>
+                            <Form.Control
+                                type="number"
+                                value={formData.enganche}
+                                onChange={(e) => setFormData({ ...formData, enganche: e.target.value })}
+                                placeholder="Ingrese el monto del enganche"
+                                required
+                                min="0"
+                            />
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Plazo (meses)</Form.Label>
+                            <Form.Control
+                                type="number"
+                                value={formData.plazoMeses}
+                                onChange={(e) => setFormData({ ...formData, plazoMeses: e.target.value })}
+                                placeholder="Ingrese el plazo en meses"
+                                required
+                                min="1"
+                                max="120"
+                            />
+                        </Form.Group>
+                        <div className="d-flex gap-2">
+                            <Button variant="secondary" onClick={handleCloseModal}>
+                                Cancelar
+                            </Button>
+                            <Button variant="primary" type="submit">
+                                Crear Cotización
+                            </Button>
+                        </div>
+                    </Form>
+                </Modal.Body>
+            </Modal>
         </DashboardLayout>
     );
 }

@@ -23,27 +23,79 @@ import ViewProducts from "./pages/ViewProducts";
 import ViewPurchases from "./pages/ViewPurchases";
 import DashboardHome from "./pages/DashboardHome";
 
-function App() {
+// Guards nuevos
+import AuthGuard from "./guards/AuthGuard";
+import AdminGuard from "./guards/AdminGuard";
+import ClientGuard from "./guards/ClientGuard";
 
+// Páginas nuevas CLIENTE
+import MisCompras from "./pages/client/MisCompras";
+import DetalleCompra from "./pages/client/DetalleCompra";
+import MisPagos from "./pages/client/MisPagos";
+import MisCotizaciones from "./pages/client/MisCotizaciones";
+
+// Páginas nuevas ADMIN
+import RevisarCompras from "./pages/admin/RevisarCompras";
+import DetalleCompraAdmin from "./pages/admin/DetalleCompraAdmin";
+import ComprasPorCliente from "./pages/admin/ComprasPorCliente";
+import ComprasPorVendedor from "./pages/admin/ComprasPorVendedor";
+import GestionPagos from "./pages/admin/GestionPagos";
+
+function App() {
   useHeartbeat();
   return (
     <BrowserRouter>
       <ThemeProvider>
         <AuthContextProvider>
-
           <Routes>
             <Route path="*" element={<NotFound />} />
-            {/* LANDING COMO PÁGINA INICIAL */}
-            <Route path="/" element={<Landing />} />
 
-            {/* LOGIN */}
+            {/* RUTAS PÚBLICAS */}
+            <Route path="/" element={<Landing />} />
             <Route path="/login" element={<Auth />} />
             <Route path="/loginGoogle" element={<LoginGoogle />} />
 
+            {/* RUTAS ADMIN - Protegidas por AdminGuard */}
+            <Route path="/admin/*" element={
+              <AdminGuard>
+                <Routes>
+                  <Route path="dashboard" element={<Dashboard />} />
+                  <Route path="products" element={<Products />} />
+                  <Route path="pricings" element={<Pricings />} />
+                  <Route path="clientes" element={<Clients />} />
+                  <Route path="vendedores" element={<Sellers />} />
+                  <Route path="seller-reviews/:id" element={<SellerReview />} />
+                  <Route path="suppliers" element={<Suppliers />} />
+                  {/* Nuevas rutas admin */}
+                  <Route path="compras" element={<RevisarCompras />} />
+                  <Route path="compras/:id" element={<DetalleCompraAdmin />} />
+                  <Route path="compras-por-cliente" element={<ComprasPorCliente />} />
+                  <Route path="compras-por-vendedor" element={<ComprasPorVendedor />} />
+                  <Route path="pagos" element={<GestionPagos />} />
+                </Routes>
+              </AdminGuard>
+            } />
 
-            {/* SISTEMA INTERNO */}
+            {/* RUTAS CLIENTE - Protegidas por ClientGuard */}
+            <Route path="/cliente/*" element={
+              <ClientGuard>
+                <Routes>
+                  <Route path="dashboard" element={<DashboardHome />} />
+                  <Route path="catalogo" element={<ViewProducts />} />
+                  <Route path="mis-compras" element={<ViewPurchases />} />
+                  {/* Nuevas rutas cliente */}
+                  <Route path="compras" element={<MisCompras />} />
+                  <Route path="compras/:id" element={<DetalleCompra />} />
+                  <Route path="pagos" element={<MisPagos />} />
+                  <Route path="cotizaciones" element={<MisCotizaciones />} />
+                  {/* TODO: Unificar con Client/Perfil.jsx existente */}
+                </Routes>
+              </ClientGuard>
+            } />
+
+            {/* RUTAS LEGACY - Temporalmente mantenidas para compatibilidad */}
+            {/* TODO: Eliminar estas rutas legacy después de migrar navegación */}
             <Route element={<ProtectedAdminRoutes />}>
-
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/products" element={<Products />} />
               <Route path="/pricings" element={<Pricings />} />
@@ -53,11 +105,21 @@ function App() {
               <Route path="/suppliers" element={<Suppliers />} />
             </Route>
 
-            {/* SISTEMA INTERNO, uso del dashboard */}
-            <Route path="/panel" element={<DashboardHome />} />
-            <Route path="/panel/carros" element={<ViewProducts />} />
-            <Route path="/panel/mis-compras" element={<ViewPurchases />} />
-            {/* ETC */}
+            <Route path="/panel" element={
+              <ClientGuard>
+                <DashboardHome />
+              </ClientGuard>
+            } />
+            <Route path="/panel/carros" element={
+              <ClientGuard>
+                <ViewProducts />
+              </ClientGuard>
+            } />
+            <Route path="/panel/mis-compras" element={
+              <ClientGuard>
+                <ViewPurchases />
+              </ClientGuard>
+            } />
           </Routes>
         </AuthContextProvider>
       </ThemeProvider>

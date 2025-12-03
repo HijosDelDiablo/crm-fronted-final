@@ -4,7 +4,7 @@ import "./dash.css";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import { logout } from "../../redux/slices/authSlice";
-import { House, Box, ShoppingBag, LogOut, Car, Menu, Truck, Users, UserCheck, MessageSquare, Sun, Moon } from "lucide-react";
+import { House, Box, ShoppingBag, LogOut, Car, Menu, Truck, Users, UserCheck, MessageSquare, Sun, Moon, ShoppingCart, CreditCard } from "lucide-react";
 import { useTheme } from "../../context/ThemeContext";
 import logo from "../../assets/logos/logoAuto.jpg";
 import AIChatWidget from "../chat/AIChatWidget.jsx";
@@ -17,6 +17,8 @@ const ADMIN_MENU = [
   { icon: Users, label: "Clientes", path: "/clientes" },
   { icon: UserCheck, label: "Vendedores", path: "/vendedores" },
   { icon: Car, label: "Cotizaciones", path: "/Pricings" },
+  { icon: ShoppingCart, label: "Compras", path: "/admin/compras" },
+  { icon: CreditCard, label: "Pagos", path: "/admin/pagos" },
   { icon: MessageSquare, label: "Chat IA", action: "chat" },
 
   // ... otros
@@ -24,8 +26,10 @@ const ADMIN_MENU = [
 
 // Menú del Cliente
 const CLIENT_MENU = [
-  { icon: Car, label: "Catálogo", path: "/client/catalogo" },
-  { icon: ShoppingBag, label: "Mis Compras", path: "/client/mis-compras" },
+  { icon: Car, label: "Catálogo", path: "/cliente/catalogo" },
+  { icon: Car, label: "Mis Cotizaciones", path: "/cliente/cotizaciones" },
+  { icon: ShoppingBag, label: "Mis Compras", path: "/cliente/compras" },
+  { icon: CreditCard, label: "Mis Pagos", path: "/cliente/pagos" },
   { icon: MessageSquare, label: "Chat IA", action: "chat" },
 ];
 
