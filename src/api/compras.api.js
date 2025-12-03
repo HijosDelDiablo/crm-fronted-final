@@ -1,4 +1,4 @@
-import { fetchApiGet, fetchApiPost, fetchApiPostWithParams } from "../utils/api-fetch-factory.util";
+import { fetchApiGet, fetchApiPost, fetchApiPostWithParams, fetchApiPatch } from "../utils/api-fetch-factory.util";
 
 // === FUNCIONES PARA CLIENTE ===
 export const getMisCompras = async (navigate) => {
@@ -39,16 +39,21 @@ export const getComprasPorVendedor = async (vendedorId, navigate) => {
 
 // === FUNCIONES PARA FLUJOS ESPECIALES ===
 export const iniciarProcesoCompra = async (payload, navigate) => {
-    const response = await fetchApiPost('/compra/iniciar', payload, navigate, 'Error al iniciar proceso de compra');
+    const response = await fetchApiPost('/compra', payload, navigate, 'Error al iniciar proceso de compra');
     return response;
 };
 
-export const evaluarFinanciamiento = async (compraId, payload, navigate) => {
-    const response = await fetchApiPost(`/compra/${compraId}/evaluar`, payload, navigate, 'Error al evaluar financiamiento');
+export const getCompraPorCotizacion = async (cotizacionId, navigate) => {
+    const response = await fetchApiGet(`/compra/por-cotizacion/${cotizacionId}`, navigate, 'Error al obtener compra por cotización');
     return response;
 };
 
 export const aprobarCompra = async (compraId, payload, navigate) => {
-    const response = await fetchApiPost(`/compra/${compraId}/aprobar`, payload, navigate, 'Error al aprobar compra');
+    const response = await fetchApiPatch(`/compra/${compraId}/aprobar`, payload, navigate, 'Error al aprobar compra');
+    return response;
+};
+
+export const evaluarFinanciamiento = async (compraId, navigate) => {
+    const response = await fetchApiPostWithParams(`/compra/${compraId}/evaluar`, navigate, 'Error al evaluar financiamiento', 'PATCH');
     return response;
 };

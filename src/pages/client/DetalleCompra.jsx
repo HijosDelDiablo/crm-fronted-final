@@ -91,30 +91,30 @@ const DetalleCompra = () => {
                                 <Row>
                                     <Col md={6}>
                                         <p><strong>ID:</strong> {compra._id}</p>
-                                        <p><strong>Estado:</strong> <StatusBadge status={estado} /></p>
-                                        <p><strong>Fecha de Creación:</strong> {new Date(fechaCreacion).toLocaleDateString('es-ES')}</p>
-                                        <p><strong>Saldo Pendiente:</strong> ${saldoPendiente?.toLocaleString('es-ES')}</p>
+                                        <p><strong>Estado:</strong> <StatusBadge status={compra?.status} /></p>
+                                        <p><strong>Fecha de Creación:</strong> {new Date(compra?.createdAt).toLocaleDateString('es-ES')}</p>
+                                        <p><strong>Saldo Pendiente:</strong> ${compra?.saldoPendiente?.toLocaleString('es-ES')}</p>
                                     </Col>
                                     <Col md={6}>
                                         <h6>Datos del Coche</h6>
-                                        <p><strong>Marca:</strong> {coche?.marca}</p>
-                                        <p><strong>Modelo:</strong> {coche?.modelo}</p>
-                                        <p><strong>Precio:</strong> ${coche?.precio?.toLocaleString('es-ES')}</p>
+                                        <p><strong>Marca:</strong> {compra?.cotizacion?.coche?.marca}</p>
+                                        <p><strong>Modelo:</strong> {compra?.cotizacion?.coche?.modelo}</p>
+                                        <p><strong>Precio:</strong> ${compra?.cotizacion?.coche?.precioBase?.toLocaleString('es-ES')}</p>
                                     </Col>
                                 </Row>
-                                {cotizacion && (
+                                {compra?.cotizacion && (
                                     <>
                                         <hr />
                                         <h6>Datos del Financiamiento</h6>
                                         <Row>
                                             <Col md={4}>
-                                                <p><strong>Pago Mensual:</strong> ${cotizacion.pagoMensual?.toLocaleString('es-ES')}</p>
+                                                <p><strong>Pago Mensual:</strong> ${compra.cotizacion.pagoMensual?.toLocaleString('es-ES')}</p>
                                             </Col>
                                             <Col md={4}>
-                                                <p><strong>Plazo:</strong> {cotizacion.plazo} meses</p>
+                                                <p><strong>Plazo:</strong> {compra.cotizacion.plazoMeses} meses</p>
                                             </Col>
                                             <Col md={4}>
-                                                <p><strong>Tasa:</strong> {cotizacion.tasa}%</p>
+                                                <p><strong>Tasa:</strong> {(compra.cotizacion.tasaInteres * 100)}%</p>
                                             </Col>
                                         </Row>
                                     </>

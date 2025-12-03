@@ -3,13 +3,14 @@ import { Container, Row, Col, Card, Button, Alert, Spinner, Form, Modal } from '
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { getCotizacionesAprobadasCliente } from '../../api/pricings.api';
-import { iniciarProcesoCompra } from '../../api/compras.api';
+import { iniciarProcesoCompra, getCompraPorCotizacion } from '../../api/compras.api';
 import StatusBadge from '../../components/shared/StatusBadge';
 import DashboardLayout from '../../components/layout/DashboardLayaut';
 import './MisCotizaciones.css';
 
 const MisCotizaciones = () => {
     const [cotizaciones, setCotizaciones] = useState([]);
+    const [compras, setCompras] = useState({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [showModal, setShowModal] = useState(false);
@@ -42,6 +43,24 @@ const MisCotizaciones = () => {
                 console.log('🔍 MisCotizaciones - Número de cotizaciones:', cotizacionesArray.length);
 
                 setCotizaciones(cotizacionesArray);
+
+                // Fetch purchases for approved quotes
+                const comprasMap = {};
+                for (const cotizacion of cotizacionesArray) {
+                    if (cotizacion.status?.toLowerCase() === 'aprobada') {
+                        try {
+                            console.log('🔍 MisCotizaciones - Buscando compra para cotización:', cotizacion._id);
+                            const compra = await getCompraPorCotizacion(cotizacion._id, navigate);
+                            if (compra) {
+                                comprasMap[cotizacion._id] = compra;
+                                console.log('🔍 MisCotizaciones - Compra encontrada:', compra);
+                            }
+                        } catch (err) {
+                            console.log('🔍 MisCotizaciones - No hay compra para cotización:', cotizacion._id);
+                        }
+                    }
+                }
+                setCompras(comprasMap);
             } catch (err) {
                 console.error('❌ MisCotizaciones - Error al cargar cotizaciones:', err);
                 setError('Error al cargar las cotizaciones');
@@ -203,14 +222,25 @@ const MisCotizaciones = () => {
                                         </div>
 
                                         {cotizacion.status?.toLowerCase() === 'aprobada' && (
-                                            <Button
-                                                variant="success"
-                                                size="sm"
-                                                onClick={() => handleIniciarCompra(cotizacion)}
-                                                className="btn-iniciar-compra"
-                                            >
-                                                Iniciar Proceso de Compra
-                                            </Button>
+                                            compras[cotizacion._id] ? (
+                                                <Button
+                                                    variant="primary"
+                                                    size="sm"
+                                                    onClick={() => navigate(`/cliente/compras/${compras[cotizacion._id]._id}`)}
+                                                    className="btn-ver-compra"
+                                                >
+                                                    Ver Compra
+                                                </Button>
+                                            ) : (
+                                                <Button
+                                                    variant="success"
+                                                    size="sm"
+                                                    onClick={() => handleIniciarCompra(cotizacion)}
+                                                    className="btn-iniciar-compra"
+                                                >
+                                                    Iniciar Proceso de Compra
+                                                </Button>
+                                            )
                                         )}
                                     </Card.Body>
                                 </Card>

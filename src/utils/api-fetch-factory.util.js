@@ -42,3 +42,18 @@ export const fetchApiPostWithParams = async (url, navigate, errorMessage, method
         return null;
     }
 };
+
+export const fetchApiPatch = async (url, body, navigate, errorMessage) => {
+    const response = await fetch(import.meta.env.VITE_APP_API_URL + url, {
+        method: 'PATCH',
+        body: JSON.stringify(body),
+        ...fetchHeader()
+    });
+    if (response.ok) {
+        return response.json();
+    } else {
+        if (response.status === 401) navigate('/login');
+        console.error(`${errorMessage} - Status: ${response.status}`);
+        return null;
+    }
+};
