@@ -16,15 +16,15 @@
 }
 
 .pricing-card .card-title {
-  color: var(--text-main);
+    color: var(--text-main);
 }
 
 .pricing-card .card-text {
-  color: var(--text-secondary);
+    color: var(--text-secondary);
 }
 
 .pricing-card .text-muted {
-  color: var(--text-muted) !important;
+    color: var(--text-muted) !important;
 }
 
 .pricing-card-img-container {
@@ -85,6 +85,10 @@
     font-weight: bold;
     color: white;
     background-color: rgba(0, 0, 0, 0.8);
+}
+
+.pricing-status-badge.bg-completed {
+    background-color: blue;
 }
 
 .pricing-footer {
