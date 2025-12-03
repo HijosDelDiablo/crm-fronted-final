@@ -105,9 +105,6 @@ export default function DashboardHome() {
                             <Car className="me-2 text-primary" />
                             Vehículos Destacados
                         </h2>
-                        <a href="/panel/carros" className="btn btn-outline-primary">
-                            Ver Todos los Vehículos
-                        </a>
                     </div>
 
                     {products.length === 0 ? (
