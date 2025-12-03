@@ -3,6 +3,20 @@
     padding: 2rem;
     max-width: 1400px;
     margin: 0 auto;
+    width: 100%;
+}
+
+/* Responsive Container */
+@media (max-width: 768px) {
+    .products-container {
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .products-container {
+        padding: 0.5rem;
+    }
 }
 
 .products-header {
@@ -10,6 +24,31 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 2rem;
+}
+
+/* Responsive Header */
+@media (max-width: 768px) {
+    .products-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .products-title {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .products-title {
+        font-size: 1.25rem;
+    }
+
+    .products-create-btn {
+        padding: 0.625rem 1.25rem;
+        font-size: 0.9rem;
+    }
 }
 
 .products-title {
@@ -44,6 +83,21 @@
     gap: 1.5rem;
 }
 
+/* Responsive Grid */
+@media (max-width: 768px) {
+    .products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .products-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+}
+
 /* Product Card - Unified Style */
 .product-card {
     background: linear-gradient(145deg, #1e293b, #334155) !important;
@@ -61,6 +115,59 @@
 .product-card:hover {
     transform: translateY(-12px) scale(1.02);
     box-shadow: 0 35px 80px rgba(246, 234, 59, 0.35);
+}
+
+/* Responsive Card Styles */
+@media (max-width: 768px) {
+    .product-card {
+        border-radius: 16px;
+    }
+
+    .product-card-body {
+        padding: 1rem;
+    }
+
+    .product-card-title {
+        font-size: 1.1rem;
+    }
+
+    .product-card-price {
+        font-size: 1.2rem;
+    }
+
+    .product-card-details {
+        font-size: 0.8rem;
+    }
+
+    .product-card-desc {
+        font-size: 0.8rem;
+        -webkit-line-clamp: 3;
+    }
+}
+
+@media (max-width: 576px) {
+    .product-card {
+        border-radius: 12px;
+    }
+
+    .product-card-img {
+        height: 180px;
+    }
+
+    .product-card-body {
+        padding: 0.875rem;
+    }
+
+    .product-card-title {
+        font-size: 1rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .product-card-badge {
+        align-self: flex-end;
+    }
 }
 
 
