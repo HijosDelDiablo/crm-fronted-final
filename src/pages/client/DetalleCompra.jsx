@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Card, Alert, Spinner, Table } from 'react-bootstrap';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getCompraById } from '../../api/compras.api';
-import { getPagosPorCompra } from '../../api/pagos.api';
+import { getMisPagos } from '../../api/pagos.api';
 import StatusBadge from '../../components/shared/StatusBadge';
 import PaymentTable from '../../components/shared/PaymentTable';
 import DashboardLayout from '../../components/layout/DashboardLayaut';
@@ -18,12 +18,39 @@ const DetalleCompra = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
+                console.log('🔍 DetalleCompra - Iniciando fetch para compra ID:', id);
+
                 const compraData = await getCompraById(id, navigate);
+                console.log('🔍 DetalleCompra - Datos de compra recibidos:', compraData);
                 setCompra(compraData);
 
-                const pagosData = await getPagosPorCompra(id, navigate);
-                setPagos(Array.isArray(pagosData) ? pagosData : []);
+                // Obtener todos los pagos del usuario y filtrar por compra
+                console.log('🔍 DetalleCompra - Obteniendo todos los pagos del usuario...');
+                const allPagosData = await getMisPagos(navigate);
+                console.log('🔍 DetalleCompra - Todos los pagos del usuario:', allPagosData);
+                console.log('🔍 DetalleCompra - Número total de pagos:', Array.isArray(allPagosData) ? allPagosData.length : 'No es array');
+
+                const pagosFiltrados = Array.isArray(allPagosData)
+                    ? allPagosData.filter(pago => {
+                        const match = pago.compra && pago.compra._id === id;
+                        console.log('🔍 DetalleCompra - Filtrando pago:', pago._id, 'compra._id:', pago.compra?._id, 'match:', match);
+                        return match;
+                    })
+                    : [];
+
+                console.log('🔍 DetalleCompra - Pagos filtrados para esta compra:', pagosFiltrados);
+                console.log('🔍 DetalleCompra - Número de pagos filtrados:', pagosFiltrados.length);
+
+                const totalPagadoCalculado = pagosFiltrados.reduce((total, pago) => {
+                    const monto = pago.monto || 0;
+                    console.log('🔍 DetalleCompra - Sumando pago:', pago._id, 'monto:', monto);
+                    return total + monto;
+                }, 0);
+                console.log('🔍 DetalleCompra - Total pagado calculado:', totalPagadoCalculado);
+
+                setPagos(pagosFiltrados);
             } catch (err) {
+                console.error('❌ DetalleCompra - Error al cargar los detalles de la compra:', err);
                 setError('Error al cargar los detalles de la compra');
             } finally {
                 setLoading(false);
@@ -67,8 +94,8 @@ const DetalleCompra = () => {
         const steps = [
             { label: 'Cotización Aprobada', status: 'completed' },
             { label: 'Solicitud Enviada', status: 'completed' },
-            { label: 'En Revisión', status: compra?.status === 'En_Revision' || compra?.status === 'Aprobada' || compra?.status === 'Completada' ? 'completed' : compra?.status === 'Pendiente' ? 'current' : 'pending' },
-            { label: 'Aprobada', status: compra?.status === 'Aprobada' || compra?.status === 'Completada' ? 'completed' : 'pending' },
+            { label: 'En Revisión', status: compra?.status === 'Pendiente' || compra?.status === 'En_Revision' || compra?.status === 'Aprobada' || compra?.status === 'Completada' ? 'completed' : 'pending' },
+            { label: 'Aprobada', status: compra?.status === 'Pendiente' || compra?.status === 'Aprobada' || compra?.status === 'Completada' ? 'completed' : 'pending' },
             { label: 'Completada', status: compra?.status === 'Completada' ? 'completed' : 'pending' }
         ];
         return steps;
@@ -97,9 +124,15 @@ const DetalleCompra = () => {
                                     </Col>
                                     <Col md={6}>
                                         <h6>Datos del Coche</h6>
-                                        <p><strong>Marca:</strong> {compra?.cotizacion?.coche?.marca}</p>
-                                        <p><strong>Modelo:</strong> {compra?.cotizacion?.coche?.modelo}</p>
-                                        <p><strong>Precio:</strong> ${compra?.cotizacion?.coche?.precioBase?.toLocaleString('es-ES')}</p>
+                                        {typeof compra?.cotizacion?.coche === 'object' ? (
+                                            <>
+                                                <p><strong>Marca:</strong> {compra?.cotizacion?.coche?.marca}</p>
+                                                <p><strong>Modelo:</strong> {compra?.cotizacion?.coche?.modelo}</p>
+                                                <p><strong>Precio:</strong> ${compra?.cotizacion?.coche?.precioBase?.toLocaleString('es-ES')}</p>
+                                            </>
+                                        ) : (
+                                            <p><strong>ID del Coche:</strong> {compra?.cotizacion?.coche}</p>
+                                        )}
                                     </Col>
                                 </Row>
                                 {compra?.cotizacion && (
@@ -128,7 +161,11 @@ const DetalleCompra = () => {
                                 <h5>Resumen</h5>
                             </Card.Header>
                             <Card.Body>
-                                <p><strong>Total Pagado:</strong> ${(compra.totalPagado || 0).toLocaleString('es-ES')}</p>
+                                {(() => {
+                                    const totalPagado = pagos.reduce((total, pago) => total + (pago.monto || 0), 0);
+                                    console.log('🔍 DetalleCompra - Render: total pagado calculado:', totalPagado, 'desde pagos:', pagos);
+                                    return <p><strong>Total Pagado:</strong> ${totalPagado.toLocaleString('es-ES')}</p>;
+                                })()}
                                 <p><strong>Próximo Pago:</strong> {compra.proximoPago ? new Date(compra.proximoPago).toLocaleDateString('es-ES') : 'N/A'}</p>
                             </Card.Body>
                         </Card>
@@ -161,6 +198,7 @@ const DetalleCompra = () => {
                         <h5>Pagos de Esta Compra</h5>
                     </Card.Header>
                     <Card.Body>
+                        {console.log('🔍 DetalleCompra - Render: pagos a pasar a PaymentTable:', pagos)}
                         <PaymentTable payments={pagos} />
                     </Card.Body>
                 </Card>

@@ -1,15 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Container, Row, Col, Alert, Spinner } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { getMisCompras } from '../../api/compras.api';
 import PurchaseCard from '../../components/shared/PurchaseCard';
 import DashboardLayout from '../../components/layout/DashboardLayaut';
+import { AuthContext } from '../../context/AuthContext';
+import './MisCompras.css';
 
 const MisCompras = () => {
     const [compras, setCompras] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [pagos, setPagos] = useState([]);
+    const [totalPagos, setTotalPagos] = useState(0);
     const navigate = useNavigate();
+    const { user } = useContext(AuthContext);
 
     useEffect(() => {
         const fetchCompras = async () => {
@@ -36,6 +41,39 @@ const MisCompras = () => {
         fetchCompras();
     }, [navigate]);
 
+    useEffect(() => {
+        const fetchPagos = async () => {
+            if (!user || !user.accessToken) return;
+            try {
+                const response = await fetch('http://localhost:2002/pagos/mis-pagos', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${user.accessToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Pagos recibidos:', data);
+                    setPagos(data.pagos || []);
+                    setTotalPagos(data.total || 0);
+                } else {
+                    console.error('Error en la respuesta:', response.status);
+                }
+            } catch (err) {
+                console.error('Error al obtener pagos:', err);
+            }
+        };
+
+        fetchPagos();
+    }, [user]);
+
+    useEffect(() => {
+        if (pagos) {
+            console.log('Pagos recibidos:', pagos);
+        }
+    }, [pagos]);
+
     const handleViewDetail = (id) => {
         navigate(`/cliente/compras/${id}`);
     };
@@ -43,9 +81,10 @@ const MisCompras = () => {
     if (loading) {
         return (
             <DashboardLayout>
-                <Container className="d-flex justify-content-center mt-5">
-                    <Spinner animation="border" />
-                </Container>
+                <div className="loading-container">
+                    <Spinner animation="border" className="spinner-border" />
+                    <p>Cargando tus compras...</p>
+                </div>
             </DashboardLayout>
         );
     }
@@ -53,23 +92,37 @@ const MisCompras = () => {
     if (error) {
         return (
             <DashboardLayout>
-                <Container className="mt-4">
-                    <Alert variant="danger">{error}</Alert>
-                </Container>
+                <div className="error-container">
+                    <div className="error-icon">⚠️</div>
+                    <h4>Error al cargar compras</h4>
+                    <p>{error}</p>
+                </div>
             </DashboardLayout>
         );
     }
 
     return (
         <DashboardLayout>
-            <Container className="mt-4">
-                <h2>Mis Compras</h2>
+            <div className="compras-container">
+                <div className="compras-header">
+                    <h2>Mis Compras</h2>
+                    <p className="compras-subtitle">
+                        Gestiona y revisa todas tus compras realizadas
+                    </p>
+                </div>
                 {compras.length === 0 ? (
-                    <Alert variant="info">No tienes compras registradas.</Alert>
+                    <div className="empty-state">
+                        <div className="empty-state-icon">🛒</div>
+                        <h3 className="empty-state-title">No tienes compras aún</h3>
+                        <p className="empty-state-message">
+                            Cuando realices tu primera compra, aparecerá aquí para que puedas
+                            hacer seguimiento de tu pedido.
+                        </p>
+                    </div>
                 ) : (
-                    <Row>
+                    <Row className="g-4">
                         {compras.map((compra) => (
-                            <Col md={6} lg={4} key={compra._id}>
+                            <Col xxl={3} xl={4} lg={6} md={6} sm={12} key={compra._id}>
                                 <PurchaseCard
                                     purchase={compra}
                                     onViewDetail={handleViewDetail}
@@ -78,7 +131,18 @@ const MisCompras = () => {
                         ))}
                     </Row>
                 )}
-            </Container>
+                <div className="pagos-section">
+                    <h3>Mis Pagos</h3>
+                    <p>Total Pagos: {totalPagos}</p>
+                    <ul>
+                        {pagos.map((pago) => (
+                            <li key={pago._id}>
+                                Monto: {pago.monto}, Método: {pago.metodoPago}, Status: {pago.status}, Fecha: {new Date(pago.fecha).toLocaleString()}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            </div>
         </DashboardLayout>
     );
 };

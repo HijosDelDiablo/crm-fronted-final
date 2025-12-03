@@ -84,7 +84,7 @@ const DetalleCompraAdmin = () => {
         );
     }
 
-    const { coche, cotizacion, cliente, vendedor, estado, saldoPendiente, fechaCreacion } = compra;
+    const { cotizacion, cliente, vendedor, status, saldoPendiente, createdAt } = compra;
 
     return (
         <Container className="mt-4">
@@ -116,8 +116,8 @@ const DetalleCompraAdmin = () => {
                             <Row>
                                 <Col md={6}>
                                     <p><strong>ID:</strong> {compra._id}</p>
-                                    <p><strong>Estado:</strong> <StatusBadge status={estado} /></p>
-                                    <p><strong>Fecha de Creación:</strong> {new Date(fechaCreacion).toLocaleDateString('es-ES')}</p>
+                                    <p><strong>Estado:</strong> <StatusBadge status={status} /></p>
+                                    <p><strong>Fecha de Creación:</strong> {new Date(createdAt).toLocaleDateString('es-ES')}</p>
                                     <p><strong>Saldo Pendiente:</strong> ${saldoPendiente?.toLocaleString('es-ES')}</p>
                                 </Col>
                                 <Col md={6}>
@@ -129,16 +129,22 @@ const DetalleCompraAdmin = () => {
                             <Row>
                                 <Col md={6}>
                                     <h6>Datos del Coche</h6>
-                                    <p><strong>Marca:</strong> {coche?.marca}</p>
-                                    <p><strong>Modelo:</strong> {coche?.modelo}</p>
-                                    <p><strong>Precio:</strong> ${coche?.precio?.toLocaleString('es-ES')}</p>
+                                    {typeof cotizacion?.coche === 'object' ? (
+                                        <>
+                                            <p><strong>Marca:</strong> {cotizacion?.coche?.marca}</p>
+                                            <p><strong>Modelo:</strong> {cotizacion?.coche?.modelo}</p>
+                                            <p><strong>Precio:</strong> ${cotizacion?.coche?.precioBase?.toLocaleString('es-ES')}</p>
+                                        </>
+                                    ) : (
+                                        <p><strong>ID del Coche:</strong> {cotizacion?.coche}</p>
+                                    )}
                                 </Col>
                                 {cotizacion && (
                                     <Col md={6}>
                                         <h6>Datos del Financiamiento</h6>
                                         <p><strong>Pago Mensual:</strong> ${cotizacion.pagoMensual?.toLocaleString('es-ES')}</p>
-                                        <p><strong>Plazo:</strong> {cotizacion.plazo} meses</p>
-                                        <p><strong>Tasa:</strong> {cotizacion.tasa}%</p>
+                                        <p><strong>Plazo:</strong> {cotizacion.plazoMeses} meses</p>
+                                        <p><strong>Tasa:</strong> {(cotizacion.tasaInteres * 100)}%</p>
                                     </Col>
                                 )}
                             </Row>

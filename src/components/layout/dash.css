@@ -231,6 +231,38 @@
   z-index: 50;
 }
 
+/* ===== CONTENIDO PRINCIPAL ===== */
+
+.dashboard-main {
+  flex: 1;
+  min-width: 0;
+  /* Para que no se expanda más allá del contenedor */
+  transition: margin-left 0.22s ease;
+}
+
+.dashboard-main-inner {
+  padding: 1.5rem 2rem;
+  min-height: 100vh;
+  background: var(--background);
+}
+
+/* Cuando el sidebar está colapsado, el main content se expande */
+.dashboard-layout:has(.dashboard-sidebar.sidebar--collapsed) .dashboard-main-inner {
+  padding: 1.5rem 3rem;
+}
+
+@media (min-width: 1200px) {
+  .dashboard-layout:has(.dashboard-sidebar.sidebar--collapsed) .dashboard-main-inner {
+    padding: 1.5rem 4rem;
+  }
+}
+
+@media (min-width: 1400px) {
+  .dashboard-layout:has(.dashboard-sidebar.sidebar--collapsed) .dashboard-main-inner {
+    padding: 2rem 5rem;
+  }
+}
+
 /* ===== RESPONSIVE: en pantallas chicas la barra puede quedar encima ===== */
 
 @media (max-width: 768px) {
@@ -252,6 +284,14 @@
 
   .dashboard-sidebar.sidebar--collapsed {
     width: 56px;
+  }
+
+  .dashboard-main-inner {
+    padding: 1rem 1.5rem;
+  }
+
+  .dashboard-layout:has(.dashboard-sidebar.sidebar--collapsed) .dashboard-main-inner {
+    padding: 1rem 2rem;
   }
 }
 

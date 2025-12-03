@@ -182,7 +182,7 @@ const MisCotizaciones = () => {
                 ) : (
                     <Row>
                         {cotizaciones.map((cotizacion) => (
-                            <Col md={6} lg={4} key={cotizacion._id} className="mb-4">
+                            <Col xxl={3} xl={4} lg={4} md={6} sm={12} key={cotizacion._id} className="mb-4">
                                 <Card className="cotizacion-card">
                                     <Card.Header className="cotizacion-card-header">
                                         <div className="cotizacion-info">
