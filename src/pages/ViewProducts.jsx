@@ -118,65 +118,84 @@ export default function ViewProducts() {
                                             className="product-img"
                                             loading="lazy"
                                         />
-                                        <Badge
-                                            bg={product.condicion === "Nuevo" ? "success" : "warning"}
-                                            className="product-badge"
-                                        >
-                                            {product.condicion}
-                                        </Badge>
                                     </div>
 
                                     <Card.Body className="product-body">
-                                        <div className="mb-3">
-                                            <h5 className="fw-bold mb-1">{product.marca} {product.modelo}</h5>
-                                            <small className="text-muted d-block mb-2">
-                                                <Calendar size={14} className="me-1" />
-                                                {product.ano}
-                                            </small>
-                                        </div>
-
-                                        <div className="product-details mb-3">
-                                            <div className="detail-row">
-                                                <DollarSign size={14} />
-                                                <span className="fw-bold text-primary fs-5">
-                                                    ${product.precioBase?.toLocaleString()}
-                                                </span>
-                                            </div>
-
-                                            <div className="detail-row">
-                                                <Gauge size={14} />
-                                                <span>{product.kilometraje?.toLocaleString()} km</span>
-                                            </div>
-
-                                            <div className="detail-row">
-                                                <Settings size={14} />
-                                                <span>{product.transmision}</span>
-                                            </div>
-
-                                            <div className="detail-row">
-                                                <Palette size={14} />
-                                                <span>{product.color}</span>
-                                            </div>
-
-                                            <div className="detail-row">
-                                                <Hash size={14} />
-                                                <span>{product.numPuertas} puertas</span>
+                                        <div className="product-header mb-4">
+                                            <h5 className="product-title fw-bold mb-2">{product.marca} {product.modelo}</h5>
+                                            <div className="product-meta d-flex align-items-center gap-3">
+                                                <small className="text-muted d-flex align-items-center">
+                                                    <Calendar size={14} className="me-1" />
+                                                    {product.ano}
+                                                </small>
+                                                <Badge
+                                                    bg="success"
+                                                    className="condition-badge"
+                                                >
+                                                    Nuevo
+                                                </Badge>
                                             </div>
                                         </div>
 
-                                        <div className="mt-auto">
-                                            <small className="text-muted">
-                                                Tipo: {product.tipo} • Motor: {product.motor}
-                                            </small>
+                                        <div className="product-details mb-4">
+                                            <div className="price-section mb-3">
+                                                <div className="d-flex align-items-center">
+                                                    <DollarSign size={16} className="text-primary me-2" />
+                                                    <span className="price-amount fw-bold text-primary fs-4">
+                                                        ${product.precioBase?.toLocaleString()}
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div className="specs-grid">
+                                                <div className="spec-item d-flex align-items-center justify-content-between">
+                                                    <div className="d-flex align-items-center">
+                                                        <Gauge size={14} className="me-2 text-muted" />
+                                                        <span className="spec-label">Kilometraje</span>
+                                                    </div>
+                                                    <span className="spec-value fw-medium">{product.kilometraje?.toLocaleString()} km</span>
+                                                </div>
+
+                                                <div className="spec-item d-flex align-items-center justify-content-between">
+                                                    <div className="d-flex align-items-center">
+                                                        <Settings size={14} className="me-2 text-muted" />
+                                                        <span className="spec-label">Transmisión</span>
+                                                    </div>
+                                                    <span className="spec-value fw-medium">{product.transmision}</span>
+                                                </div>
+
+                                                <div className="spec-item d-flex align-items-center justify-content-between">
+                                                    <div className="d-flex align-items-center">
+                                                        <Palette size={14} className="me-2 text-muted" />
+                                                        <span className="spec-label">Color</span>
+                                                    </div>
+                                                    <span className="spec-value fw-medium">{product.color}</span>
+                                                </div>
+
+                                                <div className="spec-item d-flex align-items-center justify-content-between">
+                                                    <div className="d-flex align-items-center">
+                                                        <Hash size={14} className="me-2 text-muted" />
+                                                        <span className="spec-label">Puertas</span>
+                                                    </div>
+                                                    <span className="spec-value fw-medium">{product.numPuertas}</span>
+                                                </div>
+                                            </div>
                                         </div>
 
-                                        <Button
-                                            variant="primary"
-                                            className="w-100 mt-3"
-                                            onClick={() => handleCotizar(product)}
-                                        >
-                                            Cotizar Vehículo
-                                        </Button>
+                                        <div className="product-footer mt-auto">
+                                            <div className="engine-info mb-3">
+                                                <small className="text-muted">
+                                                    <strong>Tipo:</strong> {product.tipo} • <strong>Motor:</strong> {product.motor}
+                                                </small>
+                                            </div>
+
+                                            <button
+                                                className="btn-cotizar w-100"
+                                                onClick={() => handleCotizar(product)}
+                                            >
+                                                Cotizar Vehículo
+                                            </button>
+                                        </div>
                                     </Card.Body>
                                 </Card>
                             </Col>
