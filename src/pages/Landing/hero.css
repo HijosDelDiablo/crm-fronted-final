@@ -123,21 +123,23 @@
 
 .hero-stats-card:hover {
   transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 30px 90px rgba(0, 0, 0, 1.2);
+  box-shadow: 0 30px 90px rgba(0, 122, 255, 0.4);
 }
 
 .hero-stats-card h3 {
   font-size: 0.95rem;
   text-transform: uppercase;
   letter-spacing: 0.18em;
-  color: #1f2937;
+  color: #ffffff;
   margin-bottom: 0.5rem;
+  font-weight: 800;
 }
 
 .hero-stats-desc {
   font-size: 0.9rem;
-  color: #374151;
+  color: #e5e7eb;
   margin-bottom: 1.4rem;
+  font-weight: 500;
 }
 
 .hero-stats-grid {
@@ -151,22 +153,50 @@
   border-radius: 14px;
   background: rgba(15, 23, 42, 0.6);
   border: 1px solid rgba(75, 85, 99, 0.9);
+  transition: transform 0.2s ease, background 0.2s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.hero-stats-grid>div:hover {
+  transform: translateY(-2px);
+  background: rgba(15, 23, 42, 0.8);
+  box-shadow: 0 8px 25px rgba(255, 193, 7, 0.6);
+}
+
+.hero-stats-grid>div:nth-child(1)::before {
+  content: "🚗";
+  font-size: 1.5rem;
+  margin-bottom: 0.3rem;
+}
+
+.hero-stats-grid>div:nth-child(2)::before {
+  content: "🤖";
+  font-size: 1.5rem;
+  margin-bottom: 0.3rem;
+}
+
+.hero-stats-grid>div:nth-child(3)::before {
+  content: "⏱️";
+  font-size: 1.5rem;
+  margin-bottom: 0.3rem;
 }
 
 .stat-label {
   display: block;
   font-size: 1.1rem;
-  font-weight: 700;
-  color: transparent;
-  background: linear-gradient(45deg, #007aff, #6366f1);
-  -webkit-background-clip: text;
-  background-clip: text;
+  font-weight: 900;
+  color: #ffffff;
 }
 
 .stat-caption {
   display: block;
   font-size: 0.78rem;
-  color: #4b5563;
+  color: #d1d5db;
+  font-weight: 600;
 }
 
 /* Responsive */
