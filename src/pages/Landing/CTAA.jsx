@@ -9,13 +9,6 @@ export default function CTA() {
           La IA te ayudará en cada paso del camino. Únete a AutoBost IA hoy y
           lleva tu compra al siguiente nivel.
         </p>
-
-        <Button
-          className="btn-landing mt-3"
-          onClick={() => (window.location.href = "/login")}
-        >
-          Comprar
-        </Button>
       </Container>
     </section>
   );

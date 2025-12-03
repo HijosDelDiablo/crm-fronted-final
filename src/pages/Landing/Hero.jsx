@@ -12,15 +12,14 @@ export default function Hero() {
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
-    const handleEnded = () => video.pause();
-    video.addEventListener("ended", handleEnded);
-    return () => video.removeEventListener("ended", handleEnded);
+    // Remove pause on end to allow looping
+    return () => { };
   }, []);
 
   return (
     <section className="landing-hero">
       {/* VIDEO FONDO */}
-      <video ref={videoRef} autoPlay muted className="hero-video">
+      <video ref={videoRef} autoPlay muted loop className="hero-video">
         <source src={carro2} type="video/mp4" />
       </video>
 
@@ -36,28 +35,11 @@ export default function Hero() {
             </h1>
 
             <p className="hero-subtitle">
-              Explora nuestro catálogo de vehículos nuevos y seminuevos con
+              Explora, compara y decide con confianza nuestro catálogo de vehículos nuevos y seminuevos con
               recomendaciones impulsadas por{" "}
               <strong>Inteligencia Artificial</strong>, planes flexibles y
               asesoría en cada paso.
             </p>
-
-            <div className="hero-actions">
-              <Button className="btn-hero" onClick={() => navigate("/catalogo")}>
-                Ver catálogo de autos
-              </Button>
-              <button
-                type="button"
-                className="btn-hero-secondary"
-                onClick={() =>
-                  document
-                    .getElementById("soluciones")
-                    ?.scrollIntoView({ behavior: "smooth" })
-                }
-              >
-                Explorar por tipo de cliente
-              </button>
-            </div>
           </Col>
 
           {/* Columna derecha: tarjeta de métricas */}
