@@ -20,7 +20,7 @@
 .logo-text {
   font-weight: 600;
   letter-spacing: -0.03em;
-  color: var(--text-main);
+  color: #0b1120; /* Color oscuro para mejor contraste */
 }
 
 /* Links */
@@ -28,7 +28,7 @@
   position: relative;
   font-size: 0.95rem;
   font-weight: 500;
-  color: var(--text-secondary) !important;
+  color: #4b5563 !important; /* Color más oscuro para mejor visibilidad */
   padding: 0.4rem 0 !important;
 }
 
@@ -39,7 +39,7 @@
   bottom: -0.25rem;
   width: 0;
   height: 2px;
-  background: var(--text-main);
+  background: #0b1120; /* Color oscuro para la barra de hover */
   border-radius: 999px;
   transition: width 0.2s ease;
 }
@@ -49,8 +49,12 @@
   width: 100%;
 }
 
+.main-navbar .nav-link:hover {
+  color: #0b1120 !important; /* Color oscuro en hover */
+}
+
 .main-navbar .nav-link.active {
-  color: var(--text-main) !important;
+  color: #0b1120 !important;
 }
 
 /* Botones */
@@ -58,9 +62,9 @@
   border-radius: 999px;
   font-size: 0.9rem;
   padding: 0.45rem 1.4rem;
-  border: 1px solid rgba(209, 213, 219, 0.9);
+  border: 1px solid rgba(107, 114, 128, 0.6);
   background: #ffffff;
-  color: var(--text-secondary);
+  color: #374151; /* Color más oscuro para mejor contraste */
   box-shadow: none;
   transition: background 0.18s ease, border-color 0.18s ease,
     color 0.18s ease, transform 0.14s ease;
@@ -68,9 +72,9 @@
 
 .btn-nav-ghost:hover,
 .btn-nav-ghost:focus {
-  background: var(--background-soft);
-  border-color: rgba(156, 163, 175, 0.9);
-  color: var(--text-main);
+  background: #f9fafb;
+  border-color: rgba(107, 114, 128, 0.8);
+  color: #111827; /* Aún más oscuro en hover */
   transform: translateY(-1px);
 }
 
@@ -101,4 +105,42 @@
 
 .navbar-toggler:focus {
   box-shadow: none;
+}
+
+/* Modo oscuro */
+[data-theme="dark"] .main-navbar {
+  background: rgba(17, 24, 39, 0.9);
+  border-bottom: 1px solid rgba(55, 65, 81, 0.8);
+}
+
+[data-theme="dark"] .logo-text {
+  color: #f9fafb;
+}
+
+[data-theme="dark"] .main-navbar .nav-link {
+  color: #d1d5db !important;
+}
+
+[data-theme="dark"] .main-navbar .nav-link:hover {
+  color: #f9fafb !important;
+}
+
+[data-theme="dark"] .main-navbar .nav-link.active {
+  color: #f9fafb !important;
+}
+
+[data-theme="dark"] .main-navbar .nav-link::after {
+  background: #f9fafb;
+}
+
+[data-theme="dark"] .btn-nav-ghost {
+  background: rgba(31, 41, 55, 0.8);
+  color: #d1d5db;
+  border-color: rgba(75, 85, 99, 0.6);
+}
+
+[data-theme="dark"] .btn-nav-ghost:hover {
+  background: rgba(55, 65, 81, 0.9);
+  color: #f9fafb;
+  border-color: rgba(107, 114, 128, 0.8);
 }

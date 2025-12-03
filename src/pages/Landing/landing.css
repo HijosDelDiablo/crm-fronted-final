@@ -29,11 +29,13 @@ main {
   font-size: 2.4rem;
   letter-spacing: -0.04em;
   margin-bottom: 0.8rem;
+  color: #0b1120; /* Texto más oscuro para mejor contraste */
 }
 
 .landing-section p {
   font-size: 1rem;
   line-height: 1.6;
+  color: #4b5563; /* Texto más oscuro para mejor contraste */
 }
 
 /* -------- FEATURES -------- */
@@ -52,11 +54,12 @@ main {
   font-size: 1.1rem;
   font-weight: 600;
   margin-bottom: 0.4rem;
+  color: #0b1120; /* Texto oscuro para contraste */
 }
 
 .card-glass p {
   margin: 0;
-  color: var(--text-secondary);
+  color: #4b5563; /* Texto más oscuro */
 }
 
 .card-glass:hover {
@@ -78,7 +81,7 @@ main {
 .ia-box p {
   margin-top: 0.6rem;
   max-width: 480px;
-  color: var(--text-secondary);
+  color: #4b5563; /* Texto más oscuro */
 }
 
 /* -------- CTA -------- */
@@ -162,11 +165,12 @@ main {
   font-size: 1rem;
   font-weight: 600;
   margin-bottom: 0.2rem;
+  color: #0b1120; /* Texto oscuro */
 }
 
 .solutions-card-desc {
   font-size: 0.9rem;
-  color: var(--text-secondary);
+  color: #4b5563; /* Texto más oscuro */
 }
 
 /* Mockup derecha */
@@ -278,11 +282,12 @@ main {
   font-size: 1.05rem;
   font-weight: 600;
   margin-bottom: 0.3rem;
+  color: #0b1120; /* Texto oscuro */
 }
 
 .module-desc {
   font-size: 0.9rem;
-  color: var(--text-secondary);
+  color: #4b5563; /* Texto más oscuro */
   margin-bottom: 0.7rem;
 }
 
@@ -291,7 +296,7 @@ main {
   padding-left: 0;
   margin: 0;
   font-size: 0.87rem;
-  color: var(--text-secondary);
+  color: #4b5563; /* Texto más oscuro */
 }
 
 .module-list li {
@@ -364,6 +369,7 @@ main {
 .pricing-title {
   font-size: 1.05rem;
   font-weight: 600;
+  color: #0b1120; /* Texto oscuro */
 }
 
 .pricing-badge {
@@ -380,6 +386,7 @@ main {
   display: block;
   font-size: 1.7rem;
   font-weight: 700;
+  color: #0b1120; /* Texto oscuro */
 }
 
 .pricing-note {
@@ -393,7 +400,7 @@ main {
   padding-left: 0;
   margin: 0 0 1.5rem 0;
   font-size: 0.87rem;
-  color: var(--text-secondary);
+  color: #4b5563; /* Texto más oscuro */
 }
 
 .pricing-list li {
@@ -414,7 +421,7 @@ main {
   border-radius: 999px;
   border: 1px solid rgba(209, 213, 219, 0.95);
   background: #ffffff;
-  color: var(--text-main);
+  color: #0b1120; /* Texto oscuro */
   padding: 0.6rem 1.6rem;
   font-size: 0.9rem;
   font-weight: 500;
@@ -433,7 +440,7 @@ main {
   margin-top: 1.8rem;
   text-align: center;
   font-size: 0.9rem;
-  color: var(--text-secondary);
+  color: #4b5563; /* Texto más oscuro */
 }
 
 /* ===== SOPORTE V2 ===== */
@@ -640,11 +647,13 @@ main {
   font-size: 1.3rem;
   margin-top: 10px;
   margin-bottom: 8px;
+  color: #0b1120; /* Texto oscuro */
 }
 
 .topcar-desc {
   font-size: 0.95rem;
   opacity: 0.75;
+  color: #4b5563; /* Texto más oscuro */
 }
 
 .topcar-stats {
@@ -675,4 +684,31 @@ main {
 
 .btn-topcar:hover {
   background: #1F2937;
+}
+
+/* ===== MODO OSCURO ===== */
+[data-theme="dark"] .landing-section h2,
+[data-theme="dark"] .card-glass h4,
+[data-theme="dark"] .solutions-card-title,
+[data-theme="dark"] .module-title,
+[data-theme="dark"] .pricing-title,
+[data-theme="dark"] .pricing-price,
+[data-theme="dark"] .topcar-title {
+  color: #f9fafb;
+}
+
+[data-theme="dark"] .landing-section p,
+[data-theme="dark"] .card-glass p,
+[data-theme="dark"] .ia-box p,
+[data-theme="dark"] .solutions-card-desc,
+[data-theme="dark"] .module-desc,
+[data-theme="dark"] .module-list,
+[data-theme="dark"] .pricing-list,
+[data-theme="dark"] .pricing-footnote-v2,
+[data-theme="dark"] .topcar-desc {
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .btn-pricing-v2 {
+  color: #f9fafb;
 }
