@@ -10,7 +10,7 @@ export const setSellerToClient = async (data, navigate) => {
     return response;
 };
 export const setSellerToPricing = async (data, navigate) => {
-    const response = await fetchApiPostWithParams(`/cotizacion/${data.pricingId}/set-seller-to-pricing/${data.sellerId}`,
+    const response = await fetchApiPostWithParams(`/cotizaciones/${data.pricingId}/set-seller-to-pricing/${data.sellerId}`,
         navigate, 'Error al asignar vendedor a cotizacion', 'PATCH');
     return response;
 };

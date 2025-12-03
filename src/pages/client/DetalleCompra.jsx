@@ -67,9 +67,9 @@ const DetalleCompra = () => {
         const steps = [
             { label: 'Cotización Aprobada', status: 'completed' },
             { label: 'Solicitud Enviada', status: 'completed' },
-            { label: 'En Revisión', status: estado === 'En revisión' || estado === 'Aprobada' || estado === 'Completada' ? 'completed' : estado === 'Pendiente' ? 'current' : 'pending' },
-            { label: 'Aprobada', status: estado === 'Aprobada' || estado === 'Completada' ? 'completed' : 'pending' },
-            { label: 'Completada', status: estado === 'Completada' ? 'completed' : 'pending' }
+            { label: 'En Revisión', status: compra?.status === 'En_Revision' || compra?.status === 'Aprobada' || compra?.status === 'Completada' ? 'completed' : compra?.status === 'Pendiente' ? 'current' : 'pending' },
+            { label: 'Aprobada', status: compra?.status === 'Aprobada' || compra?.status === 'Completada' ? 'completed' : 'pending' },
+            { label: 'Completada', status: compra?.status === 'Completada' ? 'completed' : 'pending' }
         ];
         return steps;
     };
