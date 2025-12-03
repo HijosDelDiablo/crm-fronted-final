@@ -5,14 +5,24 @@ import { loginFetch, registerFetch } from '../../api/auth';
 import { notifyError, notifySuccess } from '../../components/shared/Alerts';
 import { validateField } from './validations';
 import AuthService from './AuthService';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { handleLoginResponse } from '../../utils/authUtils';
+import { useSelector } from 'react-redux';
 
 const Auth = () => {
   const navigate = useNavigate();
+  const { user, isAuthenticated } = useSelector((state) => state.auth);
   const [searchParams] = useSearchParams();
   const isRegistro = searchParams.get('registro');
   const [view, setView] = useState('login'); // 'login', 'register', 'recovery'
+
+  // Redirigir si ya hay sesión iniciada
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      const dashboardPath = user.rol === 'ADMIN' ? '/dashboard' : '/panel';
+      navigate(dashboardPath, { replace: true });
+    }
+  }, [isAuthenticated, user, navigate]);
   const [formData, setFormData] = useState({
     email: '',
     tel: '',
@@ -134,13 +144,13 @@ const Auth = () => {
     <div className="auth-container">
       <div className="auth-card">
         {/* Logo */}
-        <div className="logo-container">
+        <Link to="/" className="logo-container" style={{ textDecoration: 'none', color: 'inherit' }}>
           <div className="logo-icon">AI</div>
           <div className="logo-text">
             <span className="logo-title">Autobots IA</span>
             <span className="logo-subtitle">CRM automotriz con IA</span>
           </div>
-        </div>
+        </Link>
 
         {/* Header */}
         <div className="auth-header">
@@ -271,15 +281,22 @@ const Auth = () => {
               </button>
             </div>
           )}
-          <Button variant="primary" type="submit" disabled={isLoading} >
+          <button 
+            type="submit" 
+            className="btn-auth-main w-100 mb-2" 
+            disabled={isLoading}
+          >
             {isLoading ? 'Cargando...' : (
               view === 'login' ? 'Entrar' :
                 view === 'register' ? 'Registrarse' :
                   'Enviar link'
             )}
-          </Button>
+          </button>
 
-
+          {/* Botón para regresar al inicio */}
+          <Link to="/" className="btn-back-home w-100 d-block text-center mt-2">
+            ← Volver al inicio
+          </Link>
         </form>
 
         {/* Google Auth - Solo en login y register */}

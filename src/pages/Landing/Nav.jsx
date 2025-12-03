@@ -1,11 +1,21 @@
 // src/components/layout/Navbar.jsx
 import { Navbar as BsNavbar, Nav, Container, Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import logo from "../../assets/logos/logoAuto.jpg";
 import "./nav.css";
 
 export default function MainNavbar() {
   const navigate = useNavigate();
+  const { user, isAuthenticated } = useSelector((state) => state.auth);
+
+  const handleDashboardRedirect = () => {
+    if (user?.rol === 'ADMIN') {
+      navigate('/dashboard');
+    } else {
+      navigate('/panel');
+    }
+  };
 
   return (
     <BsNavbar expand="lg" className="main-navbar" fixed="top">
@@ -46,23 +56,35 @@ export default function MainNavbar() {
             </a>
           </Nav>
 
-          {/* Botones (Login y Registro) */}
+          {/* Botones condicionales según estado de sesión */}
           <div className="d-flex align-items-center gap-2 mt-3 mt-lg-0 ms-lg-4">
-            <Button
-              variant="outline-primary"
-              className="btn-nav-ghost"
-              onClick={() => navigate("/login")}
-            >
-              Iniciar sesión
-            </Button>
+            {isAuthenticated ? (
+              <Button
+                variant="primary"
+                className="btn-nav-primary"
+                onClick={handleDashboardRedirect}
+              >
+                Entrar
+              </Button>
+            ) : (
+              <>
+                <Button
+                  variant="outline-primary"
+                  className="btn-nav-ghost"
+                  onClick={() => navigate("/login")}
+                >
+                  Iniciar sesión
+                </Button>
 
-            <Button
-              variant="primary"
-              className="btn-nav-primary"
-              onClick={() => navigate("/login?registro=true")}
-            >
-              Comenzar
-            </Button>
+                <Button
+                  variant="primary"
+                  className="btn-nav-primary"
+                  onClick={() => navigate("/login?registro=true")}
+                >
+                  Comenzar
+                </Button>
+              </>
+            )}
           </div>
         </BsNavbar.Collapse>
       </Container>
