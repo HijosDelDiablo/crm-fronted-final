@@ -139,7 +139,7 @@ export default function Suppliers() {
             <div className="dashboard-container">
                 <div className="suppliers-container">
                     <div className="suppliers-header">
-                        <h2 className="suppliers-title">Proveedores</h2>
+                        <h2 className="pricings-title">Proveedores</h2>
                         <button
                             className="suppliers-create-btn"
                             onClick={() => setShowModal(true)}

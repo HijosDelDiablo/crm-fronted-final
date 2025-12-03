@@ -40,20 +40,20 @@ const Pricing = ({ pricing, onClick }) => {
                 {coche.marca} {coche.modelo}
               </a>
             ) : (
-              <span className="text-muted fw-bold">Coche no disponible</span>
+              <span className="card-text fw-bold">Coche no disponible</span>
             )}
           </h5>
-          <p className="text-muted small mb-2">{coche ? coche.ano : 'N/A'}</p>
+          <p className="card-text small mb-2">{coche ? coche.ano : 'N/A'}</p>
 
           <div className="row g-1 small text-secondary">
             <div className="col-6">
-              <span className="fw-bold">Condición:</span> {coche ? coche.condicion : 'N/A'}
+              <span className="card-text">Condición:</span> {coche ? coche.condicion : 'N/A'}
             </div>
             <div className="col-6">
-              <span className="fw-bold">Transmisión:</span> {coche ? coche.transmision : 'N/A'}
+              <span className="card-text">Transmisión:</span> {coche ? coche.transmision : 'N/A'}
             </div>
             <div className="col-12 mt-1">
-              <span className="fw-bold">Fecha:</span> {formatDate(pricing.fechaCreacion)}
+              <span className="card-text">Fecha:</span> {formatDate(pricing.fechaCreacion)}
             </div>
           </div>
         </div>
