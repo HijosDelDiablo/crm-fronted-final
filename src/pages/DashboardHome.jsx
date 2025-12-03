@@ -100,11 +100,14 @@ export default function DashboardHome() {
 
                 {/* Featured Products Section */}
                 <div>
-                    <div className="mb-4">
+                    <div className="d-flex justify-content-between align-items-center mb-4">
                         <h2 className="fw-bold text-white mb-0">
                             <Car className="me-2 text-primary" />
                             Vehículos Destacados
                         </h2>
+                        <a href="/panel/carros" className="btn btn-outline-primary">
+                            Ver Todos los Vehículos
+                        </a>
                     </div>
 
                     {products.length === 0 ? (
