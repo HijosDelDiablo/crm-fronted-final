@@ -2,7 +2,7 @@ import axios from 'axios';
 import { store } from '../redux/store';
 
 const api = axios.create({
-  baseURL: 'https://crm-back-final-production.up.railway.app',
+  baseURL: import.meta.env.VITE_APP_API_URL || 'http://localhost:2002',
 });
 
 api.interceptors.request.use((config) => {

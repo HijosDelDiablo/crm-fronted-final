@@ -78,7 +78,7 @@ const GestionPagos = () => {
                             </Col>
                             <Col md={6}>
                                 <p><strong>Coche:</strong> {compra.coche?.marca} {compra.coche?.modelo}</p>
-                                <p><strong>Saldo Pendiente:</strong> ${compra.saldoPendiente?.toLocaleString('es-ES')}</p>
+                                <p><strong>Saldo Pendiente:</strong> ${compra.saldoPendiente}</p>
                                 <p><strong>Fecha:</strong> {new Date(compra.fechaCreacion).toLocaleDateString('es-ES')}</p>
                             </Col>
                         </Row>

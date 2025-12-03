@@ -120,7 +120,7 @@ const DetalleCompra = () => {
                                         <p><strong>ID:</strong> {compra._id}</p>
                                         <p><strong>Estado:</strong> <StatusBadge status={compra?.status} /></p>
                                         <p><strong>Fecha de Creación:</strong> {new Date(compra?.createdAt).toLocaleDateString('es-ES')}</p>
-                                        <p><strong>Saldo Pendiente:</strong> ${compra?.saldoPendiente?.toLocaleString('es-ES')}</p>
+                                        <p><strong>Saldo Pendiente:</strong> ${compra?.saldoPendiente}</p>
                                     </Col>
                                     <Col md={6}>
                                         <h6>Datos del Coche</h6>

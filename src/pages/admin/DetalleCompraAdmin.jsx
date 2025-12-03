@@ -118,7 +118,7 @@ const DetalleCompraAdmin = () => {
                                     <p><strong>ID:</strong> {compra._id}</p>
                                     <p><strong>Estado:</strong> <StatusBadge status={status} /></p>
                                     <p><strong>Fecha de Creación:</strong> {new Date(createdAt).toLocaleDateString('es-ES')}</p>
-                                    <p><strong>Saldo Pendiente:</strong> ${saldoPendiente?.toLocaleString('es-ES')}</p>
+                                    <p><strong>Saldo Pendiente:</strong> ${saldoPendiente}</p>
                                 </Col>
                                 <Col md={6}>
                                     <p><strong>Cliente:</strong> {cliente?.nombre}</p>

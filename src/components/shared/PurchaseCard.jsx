@@ -64,17 +64,10 @@ const PurchaseCard = ({ purchase, onViewDetail }) => {
                     <div className="purchase-card-detail">
                         <span className="purchase-card-label">Saldo Pendiente</span>
                         <span className="purchase-card-value">
-                            ${saldoPendiente?.toLocaleString('es-ES') || 'N/A'}
+                            ${saldoPendiente || 'N/A'}
                         </span>
                     </div>
-                    {montoTotalCredito && (
-                        <div className="purchase-card-detail">
-                            <span className="purchase-card-label">Monto Total Crédito</span>
-                            <span className="purchase-card-value">
-                                ${montoTotalCredito?.toLocaleString('es-ES')}
-                            </span>
-                        </div>
-                    )}
+
                     {totalPagado && (
                         <div className="purchase-card-detail">
                             <span className="purchase-card-label">Total Pagado</span>

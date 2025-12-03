@@ -81,15 +81,39 @@ const MisPagos = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {sortedPagos.map((pago) => (
-                                <tr key={pago._id}>
-                                    <td>{pago.compraId || 'N/A'}</td>
-                                    <td>${pago.monto?.toLocaleString('es-ES')}</td>
-                                    <td>{pago.metodoPago}</td>
-                                    <td>{new Date(pago.fecha).toLocaleDateString('es-ES')}</td>
-                                    <td><StatusBadge status={pago.estado} /></td>
-                                </tr>
-                            ))}
+                            {sortedPagos.map((pago) => {
+                                // Función para obtener el nombre de la compra/coche
+                                const getCompraInfo = () => {
+                                    if (!pago.compra) return 'N/A';
+
+                                    // Si la compra tiene información del coche
+                                    if (pago.compra.cotizacion?.coche) {
+                                        const coche = pago.compra.cotizacion.coche;
+                                        if (typeof coche === 'object' && coche.marca && coche.modelo) {
+                                            return `${coche.marca} ${coche.modelo}`;
+                                        }
+                                        if (typeof coche === 'object' && coche.nombre) {
+                                            return coche.nombre;
+                                        }
+                                        if (typeof coche === 'string') {
+                                            return `ID: ${coche}`;
+                                        }
+                                    }
+
+                                    // Si no hay info del coche, mostrar ID de compra de manera legible
+                                    return `Compra #${pago.compra._id?.slice(-6)}`;
+                                };
+
+                                return (
+                                    <tr key={pago._id}>
+                                        <td>{getCompraInfo()}</td>
+                                        <td>${pago.monto?.toLocaleString('es-ES')}</td>
+                                        <td>{pago.metodoPago}</td>
+                                        <td>{new Date(pago.fecha).toLocaleDateString('es-ES')}</td>
+                                        <td><StatusBadge status={pago.status} /></td>
+                                    </tr>
+                                );
+                            })}
                         </tbody>
                     </Table>
                 )}
