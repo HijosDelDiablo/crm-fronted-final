@@ -89,15 +89,6 @@ export default function PricingSection() {
                     <li key={i}>{f}</li>
                   ))}
                 </ul>
-
-                <Button
-                  className={
-                    "btn-pricing-v2" +
-                    (p.highlighted ? " btn-pricing-v2--primary" : "")
-                  }
-                >
-                  Hablar con un asesor
-                </Button>
               </div>
             </Col>
           ))}
