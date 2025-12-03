@@ -15,8 +15,18 @@ const MisCompras = () => {
         const fetchCompras = async () => {
             try {
                 const data = await getMisCompras(navigate);
+                console.log('🔍 MisCompras - Datos recibidos de getMisCompras:', data);
+                console.log('🔍 MisCompras - Tipo de dato:', typeof data);
+                console.log('🔍 MisCompras - Es array:', Array.isArray(data));
+                if (Array.isArray(data)) {
+                    console.log('🔍 MisCompras - Número de compras:', data.length);
+                    data.forEach((compra, index) => {
+                        console.log(`🔍 MisCompras - Compra ${index}:`, compra);
+                    });
+                }
                 setCompras(data);
             } catch (err) {
+                console.error('❌ MisCompras - Error al cargar compras:', err);
                 setError('Error al cargar las compras');
             } finally {
                 setLoading(false);
