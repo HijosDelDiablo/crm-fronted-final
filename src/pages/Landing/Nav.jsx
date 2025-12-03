@@ -48,13 +48,7 @@ export default function MainNavbar() {
 
           {/* Botones (Login y Registro) */}
           <div className="d-flex align-items-center gap-2 mt-3 mt-lg-0 ms-lg-4">
-            <Button
-              variant="outline-primary"
-              className="btn-nav-ghost"
-              onClick={() => navigate("/login")}
-            >
-              Iniciar sesión
-            </Button>
+
 
             <Button
               variant="primary"
@@ -62,6 +56,13 @@ export default function MainNavbar() {
               onClick={() => navigate("/login?registro=true")}
             >
               Comenzar
+            </Button>
+            <Button
+              variant="outline-primary"
+              className="btn-nav-ghost "
+              onClick={() => navigate("/login")}
+            >
+              Iniciar sesión
             </Button>
           </div>
         </BsNavbar.Collapse>
