@@ -69,32 +69,28 @@ export default function AIChatWidget({ externalIsOpen, onExternalClose, hideFloa
   };
 
   const loadSuggestionsForRole = (role) => {
+    // Common suggestions available to all roles
+    const commonSuggestions = [
+      { icon: <Car size={16} />, text: "Ver autos disponibles", query: "Muéstrame los autos disponibles" },
+      { icon: <Car size={16} />, text: "Buscar autos específicos", query: "Busca autos Mazda" },
+      { icon: <DollarSign size={16} />, text: "Calcular financiamiento", query: "Calcula financiamiento para $300,000 con 20% de enganche a 48 meses" },
+      { icon: <HelpCircle size={16} />, text: "Cómo funciona el financiamiento", query: "Explícame cómo funciona el financiamiento" },
+      { icon: <Calendar size={16} />, text: "Agendar prueba de manejo", query: "Quiero agendar una prueba de manejo" },
+      { icon: <MapPin size={16} />, text: "Información de contacto", query: "Dónde están ubicados" },
+      { icon: <Star size={16} />, text: "Mejores vendedores", query: "Quiénes son los mejores vendedores" },
+      { icon: <Phone size={16} />, text: "Contactar con soporte", query: "Necesito contactar a soporte" },
+    ];
+
     if (role === "CLIENTE") {
       setSuggestions([
-        { icon: <Car size={16} />, text: "Ver autos disponibles", query: "Muéstrame los autos disponibles" },
-        { icon: <Car size={16} />, text: "Buscar autos específicos", query: "Busca autos Mazda" },
-        { icon: <DollarSign size={16} />, text: "Calcular financiamiento", query: "Calcula financiamiento para $300,000 con 20% de enganche a 48 meses" },
-        { icon: <HelpCircle size={16} />, text: "Cómo funciona el financiamiento", query: "Explícame cómo funciona el financiamiento" },
-        { icon: <Calendar size={16} />, text: "Agendar prueba de manejo", query: "Quiero agendar una prueba de manejo" },
-        { icon: <MapPin size={16} />, text: "Información de contacto", query: "Dónde están ubicados" },
-        { icon: <Star size={16} />, text: "Mejores vendedores", query: "Quiénes son los mejores vendedores" },
-        { icon: <Phone size={16} />, text: "Contactar con soporte", query: "Necesito contactar a soporte" },
+        ...commonSuggestions,
+        // Cliente personal options
         { icon: <MessageSquare size={16} />, text: "Ver mis cotizaciones", query: "Estado de mis cotizaciones" },
         { icon: <User size={16} />, text: "Ver mi perfil", query: "Quién soy" },
       ]);
     } else if (role === "VENDEDOR") {
       setSuggestions([
-        // All CLIENTE suggestions
-        { icon: <Car size={16} />, text: "Ver autos disponibles", query: "Muéstrame los autos disponibles" },
-        { icon: <Car size={16} />, text: "Buscar autos específicos", query: "Busca autos Mazda" },
-        { icon: <DollarSign size={16} />, text: "Calcular financiamiento", query: "Calcula financiamiento para $300,000 con 20% de enganche a 48 meses" },
-        { icon: <HelpCircle size={16} />, text: "Cómo funciona el financiamiento", query: "Explícame cómo funciona el financiamiento" },
-        { icon: <Calendar size={16} />, text: "Agendar prueba de manejo", query: "Quiero agendar una prueba de manejo" },
-        { icon: <MapPin size={16} />, text: "Información de contacto", query: "Dónde están ubicados" },
-        { icon: <Star size={16} />, text: "Mejores vendedores", query: "Quiénes son los mejores vendedores" },
-        { icon: <Phone size={16} />, text: "Contactar con soporte", query: "Necesito contactar a soporte" },
-        { icon: <MessageSquare size={16} />, text: "Ver mis cotizaciones", query: "Estado de mis cotizaciones" },
-        { icon: <User size={16} />, text: "Ver mi perfil", query: "Quién soy" },
+        ...commonSuggestions,
         // VENDEDOR specific
         { icon: <HelpCircle size={16} />, text: "Qué puede hacer un cliente", query: "Qué puede hacer un cliente" },
         { icon: <Users size={16} />, text: "Cliente con más compras", query: "Cliente con más compras" },
@@ -111,17 +107,8 @@ export default function AIChatWidget({ externalIsOpen, onExternalClose, hideFloa
       ]);
     } else if (role === "ADMIN") {
       setSuggestions([
-        // All VENDEDOR suggestions (which include CLIENTE)
-        { icon: <Car size={16} />, text: "Ver autos disponibles", query: "Muéstrame los autos disponibles" },
-        { icon: <Car size={16} />, text: "Buscar autos específicos", query: "Busca autos Mazda" },
-        { icon: <DollarSign size={16} />, text: "Calcular financiamiento", query: "Calcula financiamiento para $300,000 con 20% de enganche a 48 meses" },
-        { icon: <HelpCircle size={16} />, text: "Cómo funciona el financiamiento", query: "Explícame cómo funciona el financiamiento" },
-        { icon: <Calendar size={16} />, text: "Agendar prueba de manejo", query: "Quiero agendar una prueba de manejo" },
-        { icon: <MapPin size={16} />, text: "Información de contacto", query: "Dónde están ubicados" },
-        { icon: <Star size={16} />, text: "Mejores vendedores", query: "Quiénes son los mejores vendedores" },
-        { icon: <Phone size={16} />, text: "Contactar con soporte", query: "Necesito contactar a soporte" },
-        { icon: <MessageSquare size={16} />, text: "Ver mis cotizaciones", query: "Estado de mis cotizaciones" },
-        { icon: <User size={16} />, text: "Ver mi perfil", query: "Quién soy" },
+        ...commonSuggestions,
+        // VENDEDOR specific
         { icon: <HelpCircle size={16} />, text: "Qué puede hacer un cliente", query: "Qué puede hacer un cliente" },
         { icon: <Users size={16} />, text: "Cliente con más compras", query: "Cliente con más compras" },
         { icon: <Car size={16} />, text: "Autos con más stock", query: "Autos con más stock" },
@@ -145,11 +132,7 @@ export default function AIChatWidget({ externalIsOpen, onExternalClose, hideFloa
       ]);
     } else {
       // Default suggestions for unknown roles
-      setSuggestions([
-        { icon: <Car size={16} />, text: "Ver vehículos disponibles", query: "Muéstrame los autos disponibles" },
-        { icon: <HelpCircle size={16} />, text: "Cómo funciona el financiamiento", query: "Explícame cómo funciona el financiamiento" },
-        { icon: <Phone size={16} />, text: "Contactar con soporte", query: "Necesito contactar a soporte" },
-      ]);
+      setSuggestions(commonSuggestions);
     }
   };
 
@@ -206,7 +189,19 @@ export default function AIChatWidget({ externalIsOpen, onExternalClose, hideFloa
         inventory_analysis: /(análisis\s+de\s+inventario|analisis\s+de\s+inventario|stock\s+lento)/i
       },
       ADMIN: {
-        ...rolePatterns.VENDEDOR,
+        ...commonPatterns,
+        client_capabilities: /(qué\s+puede\s+hacer|que\s+puede\s+hacer)\s+un\s+cliente/i,
+        top_client: /(cliente\s+con\s+más\s+compras|cliente\s+con\s+mas\s+compras|top\s+cliente)/i,
+        cars_most_stock: /(autos?\s+con\s+más\s+stock|autos?\s+con\s+mas\s+stock|inventario\s+más\s+grande|inventario\s+mas\s+grande)/i,
+        summary_cars: /(resumen\s+de\s+autos|estadísticas\s+de\s+autos|estadisticas\s+de\s+autos)/i,
+        summary_clients: /(resumen\s+de\s+clientes|estadísticas\s+de\s+clientes|estadisticas\s+de\s+clientes)/i,
+        my_tasks: /(mis\s+tareas|pendientes|agenda|tareas\s+pendientes)/i,
+        pending_quotes: /(cotizaciones?\s+pendientes|por\s+aprobar)/i,
+        my_clients: /(mis\s+clientes|prospectos?\s+asignados?)/i,
+        sales_report: /(ventas\s+de\s+este\s+mes|reporte\s+de\s+(ventas|ganancias))/i,
+        expenses: /(gastos\s+del\s+mes|luz|agua|etc)/i,
+        my_performance: /(mi\s+rendimiento|desempeño\s+personal|desempeno\s+personal)/i,
+        inventory_analysis: /(análisis\s+de\s+inventario|analisis\s+de\s+inventario|stock\s+lento)/i,
         summary_employees: /(resumen\s+de\s+empleados|estadísticas\s+de\s+empleados|estadisticas\s+de\s+empleados)/i,
         team_performance: /(rendimiento\s+del\s+equipo|equipo\s+de\s+ventas)/i,
         all_pending_quotes: /(todas\s+las\s+cotizaciones?\s+pendientes)/i,
