@@ -386,3 +386,138 @@
 .engine-info strong {
     color: #e2e8f0;
 }
+
+/* Modal Styles */
+.custom-modal .modal-content {
+    background: linear-gradient(145deg, #1e293b, #334155);
+    border: 1px solid #475569;
+    border-radius: 20px;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(20px);
+}
+
+.custom-modal .modal-header {
+    background: rgba(59, 130, 246, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px 20px 0 0;
+    padding: 1.5rem 2rem;
+}
+
+.custom-modal .modal-title {
+    color: #f1f5f9;
+    font-weight: 700;
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+.custom-modal .btn-close {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    opacity: 0.8;
+    transition: all 0.2s ease;
+}
+
+.custom-modal .btn-close:hover {
+    background: rgba(239, 68, 68, 0.2);
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.custom-modal .modal-body {
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.vehicle-info-card {
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.vehicle-info-card h6 {
+    color: #f1f5f9;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    font-size: 1.25rem;
+}
+
+.vehicle-info-card p {
+    color: #94a3b8;
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.custom-modal .form-label {
+    color: #e2e8f0;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.custom-modal .form-control {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: #f1f5f9;
+    padding: 0.75rem 1rem;
+    transition: all 0.2s ease;
+}
+
+.custom-modal .form-control:focus {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25);
+    color: #f1f5f9;
+}
+
+.custom-modal .form-control::placeholder {
+    color: #94a3b8;
+}
+
+.modal-action-buttons {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-modal-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #e2e8f0;
+    border-radius: 8px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-modal-secondary:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: #f1f5f9;
+    transform: translateY(-1px);
+}
+
+.btn-modal-primary {
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    border: none;
+    color: white;
+    border-radius: 8px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+}
+
+.btn-modal-primary:hover {
+    background: linear-gradient(135deg, #1d4ed8, #1e40af);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+    color: white;
+}

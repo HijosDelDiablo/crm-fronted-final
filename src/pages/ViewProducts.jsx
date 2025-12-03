@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Container, Row, Col, Card, Badge, Spinner, Modal, Form, Button } from "react-bootstrap";
+import { Container, Row, Col, Card, Badge, Spinner, Modal, Form } from "react-bootstrap";
 import { Car, Calendar, DollarSign, Gauge, Settings, Palette, Hash } from "lucide-react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
@@ -205,20 +205,26 @@ export default function ViewProducts() {
             </Container>
 
             {/* Modal de Cotización */}
-            <Modal show={showModal} onHide={handleCloseModal} centered>
+            <Modal show={showModal} onHide={handleCloseModal} centered dialogClassName="custom-modal">
                 <Modal.Header closeButton>
                     <Modal.Title>Cotizar Vehículo</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     {selectedProduct && (
-                        <div className="mb-3">
-                            <h6>{selectedProduct.marca} {selectedProduct.modelo}</h6>
-                            <p className="text-muted">Precio base: ${selectedProduct.precioBase?.toLocaleString()}</p>
+                        <div className="vehicle-info-card">
+                            <h6 style={{ color: '#f1f5f9', fontWeight: '700', marginBottom: '0.5rem', fontSize: '1.25rem' }}>
+                                {selectedProduct.marca} {selectedProduct.modelo}
+                            </h6>
+                            <p style={{ color: '#94a3b8', margin: '0', fontSize: '0.9rem' }}>
+                                Precio base: ${selectedProduct.precioBase?.toLocaleString()}
+                            </p>
                         </div>
                     )}
                     <Form onSubmit={handleSubmitCotizacion}>
                         <Form.Group className="mb-3">
-                            <Form.Label>Enganche ($)</Form.Label>
+                            <Form.Label style={{ color: '#e2e8f0', fontWeight: '600', marginBottom: '0.5rem' }}>
+                                Enganche ($)
+                            </Form.Label>
                             <Form.Control
                                 type="number"
                                 value={formData.enganche}
@@ -226,10 +232,19 @@ export default function ViewProducts() {
                                 placeholder="Ingrese el monto del enganche"
                                 required
                                 min="0"
+                                style={{
+                                    background: 'rgba(255, 255, 255, 0.05)',
+                                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                                    borderRadius: '8px',
+                                    color: '#f1f5f9',
+                                    padding: '0.75rem 1rem'
+                                }}
                             />
                         </Form.Group>
                         <Form.Group className="mb-3">
-                            <Form.Label>Plazo (meses)</Form.Label>
+                            <Form.Label style={{ color: '#e2e8f0', fontWeight: '600', marginBottom: '0.5rem' }}>
+                                Plazo (meses)
+                            </Form.Label>
                             <Form.Control
                                 type="number"
                                 value={formData.plazoMeses}
@@ -238,15 +253,31 @@ export default function ViewProducts() {
                                 required
                                 min="1"
                                 max="120"
+                                style={{
+                                    background: 'rgba(255, 255, 255, 0.05)',
+                                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                                    borderRadius: '8px',
+                                    color: '#f1f5f9',
+                                    padding: '0.75rem 1rem'
+                                }}
                             />
                         </Form.Group>
-                        <div className="d-flex gap-2">
-                            <Button variant="secondary" onClick={handleCloseModal}>
-                                Cancelar
-                            </Button>
-                            <Button variant="primary" type="submit">
-                                Crear Cotización
-                            </Button>
+                        <div className="modal-action-buttons">
+                            <div className="d-flex gap-3">
+                                <button
+                                    type="button"
+                                    className="btn-modal-secondary flex-fill"
+                                    onClick={handleCloseModal}
+                                >
+                                    Cancelar
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="btn-modal-primary flex-fill"
+                                >
+                                    Crear Cotización
+                                </button>
+                            </div>
                         </div>
                     </Form>
                 </Modal.Body>
