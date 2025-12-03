@@ -45,7 +45,7 @@ const MisCompras = () => {
         const fetchPagos = async () => {
             if (!user || !user.accessToken) return;
             try {
-                const response = await fetch('http://localhost:2002/pagos/mis-pagos', {
+                const response = await fetch(`${import.meta.env.VITE_APP_API_URL}/pagos/mis-pagos`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${user.accessToken}`,
