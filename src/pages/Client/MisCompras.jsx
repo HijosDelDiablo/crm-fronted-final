@@ -166,8 +166,8 @@ export default function MisCompras() {
                         </Col>
                         <Col sm={6}>
                           <div className="p-3 border rounded bg-light">
-                            <small className="text-muted d-block">Mensualidad Real</small>
-                            <h5 className="fw-bold">${selectedCompra.resultadoBanco?.pagoMensual?.toLocaleString() || "Calculando..."}</h5>
+                            <small className="text-muted d-block">Saldo Pendiente</small>
+                            <h5 className="fw-bold">${selectedCompra.saldoPendiente?.toLocaleString() || "Calculando..."}</h5>
                           </div>
                         </Col>
                         <Col sm={6}>

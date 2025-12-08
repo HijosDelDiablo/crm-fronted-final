@@ -258,14 +258,7 @@ const DetalleCompra = () => {
                     </Card.Body>
                 </Card>
 
-                <Card className="mt-4 mb-5">
-                    <Card.Header>
-                        <h5>Calendario de Pagos (Proyección)</h5>
-                    </Card.Header>
-                    <Card.Body>
-                        <PaymentSchedule schedule={schedule} />
-                    </Card.Body>
-                </Card>
+               
 
                 {/* Modal Realizar Pago */}
                 <Modal show={showPaymentModal} onHide={() => setShowPaymentModal(false)}>
