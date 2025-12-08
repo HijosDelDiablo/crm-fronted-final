@@ -40,6 +40,7 @@ import DetalleCompraAdmin from "./pages/admin/DetalleCompraAdmin";
 import ComprasPorVendedor from "./pages/admin/ComprasPorVendedor";
 import GestionPagos from "./pages/admin/GestionPagos";
 import Admins from "./pages/AdminModules/Admins/Admins";
+import MyProfile from "./pages/MyProfile";
 
 function App() {
   useHeartbeat();
@@ -110,6 +111,14 @@ function App() {
                 <DashboardHome />
               </ClientGuard>
             } />
+
+            {/* Ruta Compartida - Mi Perfil */}
+            <Route path="/perfil" element={
+              <AuthGuard>
+                <MyProfile />
+              </AuthGuard>
+            } />
+
             <Route path="/panel/carros" element={
               <ClientGuard>
                 <ViewProducts />
