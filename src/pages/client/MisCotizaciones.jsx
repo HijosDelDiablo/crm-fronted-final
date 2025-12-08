@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Row, Col, Card, Button, Alert, Spinner, Form, Modal } from 'react-bootstrap';
+import { Container, Row, Col, Card, Alert, Spinner, Form, Modal } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { getMisCotizaciones } from '../../api/pricings.api';
@@ -514,11 +514,47 @@ const MisCotizaciones = () => {
                             </div>
                         </div>
                         <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary btn-rounded" onClick={() => setShowApprovedModal(false)}>Cerrar</button>
-                            <button type="button" className="btn btn-success btn-rounded" onClick={() => {
-                                setShowApprovedModal(false);
-                                handleIniciarCompra(selectedCotizacion);
-                            }}>Continuar Compra</button>
+                            <button 
+                                type="button" 
+                                style={{
+                                    borderRadius: '6px',
+                                    backgroundColor: '#6b7280',
+                                    border: '1px solid #6b7280',
+                                    color: 'white',
+                                    padding: '0.5rem 1rem',
+                                    fontWeight: '500',
+                                    cursor: 'pointer',
+                                    transition: 'background-color 0.2s ease',
+                                    fontSize: '0.875rem'
+                                }}
+                                onClick={() => setShowApprovedModal(false)}
+                                onMouseEnter={(e) => e.target.style.backgroundColor = '#4b5563'}
+                                onMouseLeave={(e) => e.target.style.backgroundColor = '#6b7280'}
+                            >
+                                Cerrar
+                            </button>
+                            <button 
+                                type="button" 
+                                style={{
+                                    borderRadius: '6px',
+                                    backgroundColor: '#10b981',
+                                    border: '1px solid #10b981',
+                                    color: 'white',
+                                    padding: '0.5rem 1rem',
+                                    fontWeight: '500',
+                                    cursor: 'pointer',
+                                    transition: 'background-color 0.2s ease',
+                                    fontSize: '0.875rem'
+                                }}
+                                onClick={() => {
+                                    setShowApprovedModal(false);
+                                    handleIniciarCompra(selectedCotizacion);
+                                }}
+                                onMouseEnter={(e) => e.target.style.backgroundColor = '#059669'}
+                                onMouseLeave={(e) => e.target.style.backgroundColor = '#10b981'}
+                            >
+                                Continuar Compra
+                            </button>
                         </div>
                     </div>
                 </Modal>
