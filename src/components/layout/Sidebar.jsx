@@ -4,7 +4,7 @@ import "./dash.css";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import { logout } from "../../redux/slices/authSlice";
-import { House, Box, ShoppingBag, LogOut, Car, Menu, Truck, Users, UserCheck, MessageSquare, Sun, Moon, ShoppingCart, CreditCard } from "lucide-react";
+import { House, Box, ShoppingBag, LogOut, Car, Menu, Truck, Users, UserCheck, MessageSquare, Sun, Moon, ShoppingCart, CreditCard, ShieldCheck } from "lucide-react";
 import { useTheme } from "../../context/ThemeContext";
 import logo from "../../assets/logos/logoAuto.jpg";
 import AIChatWidget from "../chat/AIChatWidget.jsx";
@@ -19,6 +19,7 @@ const ADMIN_MENU = [
   { icon: Car, label: "Cotizaciones", path: "/Pricings" },
   { icon: ShoppingCart, label: "Compras", path: "/admin/compras" },
   { icon: CreditCard, label: "Pagos", path: "/admin/pagos" },
+  { icon: ShieldCheck, label: "Administradores", path: "/admin/administradores" },
   { icon: MessageSquare, label: "Chat IA", action: "chat" },
 
   // ... otros

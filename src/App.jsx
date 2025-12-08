@@ -37,9 +37,9 @@ import MisCotizaciones from "./pages/client/MisCotizaciones";
 // Páginas nuevas ADMIN
 import RevisarCompras from "./pages/admin/RevisarCompras";
 import DetalleCompraAdmin from "./pages/admin/DetalleCompraAdmin";
-import ComprasPorCliente from "./pages/admin/ComprasPorCliente";
 import ComprasPorVendedor from "./pages/admin/ComprasPorVendedor";
 import GestionPagos from "./pages/admin/GestionPagos";
+import Admins from "./pages/AdminModules/Admins/Admins";
 
 function App() {
   useHeartbeat();
@@ -69,9 +69,9 @@ function App() {
                   {/* Nuevas rutas admin */}
                   <Route path="compras" element={<RevisarCompras />} />
                   <Route path="compras/:id" element={<DetalleCompraAdmin />} />
-                  <Route path="compras-por-cliente" element={<ComprasPorCliente />} />
                   <Route path="compras-por-vendedor" element={<ComprasPorVendedor />} />
                   <Route path="pagos" element={<GestionPagos />} />
+                  <Route path="administradores" element={<Admins />} />
                 </Routes>
               </AdminGuard>
             } />
