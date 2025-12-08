@@ -29,7 +29,7 @@ import AdminGuard from "./guards/AdminGuard";
 import ClientGuard from "./guards/ClientGuard";
 
 // Páginas nuevas CLIENTE
-import MisCompras from "./pages/client/MisCompras";
+import MisCompras from "./pages/Client/MisCompras";
 import DetalleCompra from "./pages/client/DetalleCompra";
 import MisPagos from "./pages/client/MisPagos";
 import MisCotizaciones from "./pages/client/MisCotizaciones";
