@@ -206,10 +206,6 @@ export default function Pricings() {
                               <span className="pricing-detail-label">Email:</span>
                               <span className="pricing-detail-value">{selectedItem.cliente.email || 'N/A'}</span>
                             </div>
-                            <div className="pricing-detail-row">
-                              <span className="pricing-detail-label">Teléfono:</span>
-                              <span className="pricing-detail-value">{selectedItem.cliente.telefono || 'N/A'}</span>
-                            </div>
                           </div>
                         ) : (
                           <p className="text-muted">Información del cliente no disponible</p>
@@ -247,10 +243,6 @@ export default function Pricings() {
                         <div className="pricing-detail-row">
                           <span className="pricing-detail-label">Plazo (meses):</span>
                           <span className="pricing-detail-value">{selectedItem.plazoMeses}</span>
-                        </div>
-                        <div className="pricing-detail-row">
-                          <span className="pricing-detail-label">Fecha de Creación:</span>
-                          <span className="pricing-detail-value">{formatDate(selectedItem.fechaCreacion)}</span>
                         </div>
                         <div className="pricing-detail-row">
                           <span className="pricing-detail-label">Notas del Vendedor:</span>

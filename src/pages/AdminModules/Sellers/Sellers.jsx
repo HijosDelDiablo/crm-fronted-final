@@ -90,9 +90,6 @@ const Sellers = () => {
                                             />
                                             <h4 className="mt-3">{selectedSeller.nombre}</h4>
                                             <div className="mb-2">
-                                                <Badge bg="warning" text="dark" className="me-2 d-inline-flex align-items-center gap-1">
-                                                    {selectedSeller.promedioEstrellas?.toFixed(1) || 0} <Star size={14} fill="currentColor" />
-                                                </Badge>
                                                 <Badge bg={selectedSeller.activo ? 'success' : 'secondary'}>
                                                     {selectedSeller.activo ? 'Activo' : 'Inactivo'}
                                                 </Badge>
@@ -101,9 +98,6 @@ const Sellers = () => {
                                         <div className="flex-grow-1 w-100">
                                             <h5>Información Personal</h5>
                                             <p><strong>Email:</strong> {selectedSeller.email}</p>
-                                            <p><strong>Teléfono:</strong> {selectedSeller.telefono || 'No especificado'}</p>
-                                            <p><strong>Fecha de Nacimiento:</strong> {selectedSeller.fechaNacimiento ? new Date(selectedSeller.fechaNacimiento).toLocaleDateString() : 'No especificada'}</p>
-                                            <p><strong>Fecha de Registro:</strong> {selectedSeller.createdAt ? new Date(selectedSeller.createdAt).toLocaleDateString() : 'No especificada'}</p>
                                         </div>
                                     </div>
                                 </div>
