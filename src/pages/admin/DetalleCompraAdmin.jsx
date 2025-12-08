@@ -34,7 +34,7 @@ const DetalleCompraAdmin = () => {
                     const precio = compraData.cotizacion.coche?.precioBase || 0;
                     const enganche = compraData.cotizacion.enganche || 0;
                     const principal = compraData.cotizacion.montoFinanciar || (precio - enganche);
-                    const rate = (compraData.cotizacion.tasaInteres || 0) * 100; 
+                    const rate = (compraData.cotizacion.tasaInteres || 0) * 100;
                     const months = compraData.cotizacion.plazoMeses || 0;
 
                     if (principal > 0 && months > 0) {
