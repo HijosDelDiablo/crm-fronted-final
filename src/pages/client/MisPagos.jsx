@@ -58,11 +58,11 @@ const MisPagos = () => {
 
     const filteredPagos = pagos.filter(pago => {
         const matchSearch = getCompraInfo(pago).toLowerCase().includes(searchTerm.toLowerCase());
-        
+
         const pagoDate = new Date(pago.fecha);
         const start = startDate ? new Date(startDate) : null;
         const end = endDate ? new Date(endDate) : null;
-        
+
         // Adjust end date to include the full day
         if (end) end.setHours(23, 59, 59, 999);
 
@@ -171,7 +171,7 @@ const MisPagos = () => {
                                     <th>Compra / Vehículo</th>
                                     <th>Monto</th>
                                     <th>Método</th>
-                                    <th 
+                                    <th
                                         onClick={() => setSortOrder(prev => prev === 'desc' ? 'asc' : 'desc')}
                                         style={{ cursor: 'pointer', userSelect: 'none' }}
                                     >

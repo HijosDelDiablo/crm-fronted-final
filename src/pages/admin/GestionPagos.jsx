@@ -16,7 +16,7 @@ const GestionPagos = () => {
     const [loading, setLoading] = useState(false);
     const [loadingCompras, setLoadingCompras] = useState(true);
     const [error, setError] = useState(null);
-    
+
     // Modal state
     const [showModal, setShowModal] = useState(false);
     const [pagoForm, setPagoForm] = useState({

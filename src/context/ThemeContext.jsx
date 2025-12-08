@@ -3,27 +3,16 @@ import { createContext, useContext, useEffect, useState } from "react";
 const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
-    const [theme, setTheme] = useState(() => {
-        // Check local storage or system preference
-        const savedTheme = localStorage.getItem("theme");
-        if (savedTheme) return savedTheme;
-        return window.matchMedia("(prefers-color-scheme: dark)").matches
-            ? "dark"
-            : "light";
-    });
+    const [theme, setTheme] = useState("dark"); // Always dark mode
 
     useEffect(() => {
         const root = window.document.documentElement;
-        if (theme === "dark") {
-            root.setAttribute("data-theme", "dark");
-        } else {
-            root.removeAttribute("data-theme");
-        }
-        localStorage.setItem("theme", theme);
-    }, [theme]);
+        root.setAttribute("data-theme", "dark"); // Always set dark theme
+        localStorage.setItem("theme", "dark");
+    }, []);
 
     const toggleTheme = () => {
-        setTheme((prev) => (prev === "light" ? "dark" : "light"));
+        // No toggle functionality - always dark
     };
 
     return (
