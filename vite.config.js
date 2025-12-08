@@ -15,65 +15,65 @@ export default defineConfig({
   },
   build: {
     chunkSizeWarningLimit: 1000, // Aumentar límite de advertencia a 1000KB
-    rollupOptions: {
-      output: {
-        manualChunks(id) {
-          // Chunk para React y sus dependencias principales
-          if (id.includes('react') || id.includes('react-dom') || id.includes('react-router-dom')) {
-            return 'react-vendor';
-          }
+    // rollupOptions: {
+    //   output: {
+    //     manualChunks(id) {
+    //       // Chunk para React y sus dependencias principales
+    //       if (id.includes('react') || id.includes('react-dom') || id.includes('react-router-dom')) {
+    //         return 'react-vendor';
+    //       }
 
-          // Chunk para UI libraries
-          if (id.includes('react-bootstrap') || id.includes('bootstrap') ||
-            id.includes('lucide-react') || id.includes('framer-motion')) {
-            return 'ui-vendor';
-          }
+    //       // Chunk para UI libraries
+    //       if (id.includes('react-bootstrap') || id.includes('bootstrap') ||
+    //         id.includes('lucide-react') || id.includes('framer-motion')) {
+    //         return 'ui-vendor';
+    //       }
 
-          // Chunk para utilidades y helpers
-          if (id.includes('axios') || id.includes('redux') || id.includes('@reduxjs/toolkit')) {
-            return 'utils-vendor';
-          }
+    //       // Chunk para utilidades y helpers
+    //       if (id.includes('axios') || id.includes('redux') || id.includes('@reduxjs/toolkit')) {
+    //         return 'utils-vendor';
+    //       }
 
-          // Chunk para funcionalidades específicas
-          if (id.includes('lightweight-charts')) {
-            return 'charts-vendor';
-          }
+    //       // Chunk para funcionalidades específicas
+    //       if (id.includes('lightweight-charts')) {
+    //         return 'charts-vendor';
+    //       }
 
-          if (id.includes('react-markdown') || id.includes('rehype-highlight') || id.includes('remark-gfm')) {
-            return 'markdown-vendor';
-          }
+    //       if (id.includes('react-markdown') || id.includes('rehype-highlight') || id.includes('remark-gfm')) {
+    //         return 'markdown-vendor';
+    //       }
 
-          // Chunk para PWA
-          if (id.includes('vite-plugin-pwa') || id.includes('workbox')) {
-            return 'pwa-vendor';
-          }
+    //       // Chunk para PWA
+    //       if (id.includes('vite-plugin-pwa') || id.includes('workbox')) {
+    //         return 'pwa-vendor';
+    //       }
 
-          // Chunk para páginas específicas
-          if (id.includes('/src/pages/AdminModules/') || id.includes('/src/pages/admin/')) {
-            return 'admin-pages';
-          }
+    //       // Chunk para páginas específicas
+    //       if (id.includes('/src/pages/AdminModules/') || id.includes('/src/pages/admin/')) {
+    //         return 'admin-pages';
+    //       }
 
-          if (id.includes('/src/pages/Client/') || id.includes('/src/pages/client/')) {
-            return 'client-pages';
-          }
+    //       if (id.includes('/src/pages/Client/') || id.includes('/src/pages/client/')) {
+    //         return 'client-pages';
+    //       }
 
-          // Chunk para APIs
-          if (id.includes('/src/api/') || id.includes('/src/services/')) {
-            return 'api-layer';
-          }
+    //       // Chunk para APIs
+    //       if (id.includes('/src/api/') || id.includes('/src/services/')) {
+    //         return 'api-layer';
+    //       }
 
-          // Chunk para componentes compartidos
-          if (id.includes('/src/components/shared/') || id.includes('/src/components/common/')) {
-            return 'shared-components';
-          }
+    //       // Chunk para componentes compartidos
+    //       if (id.includes('/src/components/shared/') || id.includes('/src/components/common/')) {
+    //         return 'shared-components';
+    //       }
 
-          // Otros node_modules van a vendor
-          if (id.includes('node_modules')) {
-            return 'vendor';
-          }
-        }
-      }
-    }
+    //       // Otros node_modules van a vendor
+    //       if (id.includes('node_modules')) {
+    //         return 'vendor';
+    //       }
+    //     }
+    //   }
+    // }
   },
   plugins: [react(), VitePWA({
     registerType: 'autoUpdate',
