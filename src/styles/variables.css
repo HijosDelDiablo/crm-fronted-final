@@ -2,14 +2,19 @@
   /* --- PALETA PRINCIPAL (Modo Claro) --- */
 
   /* Brand Colors */
-  --primary: #007aff; /* iOS Blue */
-  --primary-dark: #0063cc; /* Darker blue for hover */
-  --secondary: #111827; /* Dark Gray/Black */
-  --accent: #6366f1; /* Indigo */
+  --primary: #007aff;
+  /* iOS Blue */
+  --primary-dark: #0063cc;
+  /* Darker blue for hover */
+  --secondary: #111827;
+  /* Dark Gray/Black */
+  --accent: #6366f1;
+  /* Indigo */
 
   /* Backgrounds */
   --background: #ffffff;
-  --background-soft: #f5f5f7; /* Light gray (Apple style) */
+  --background-soft: #f5f5f7;
+  /* Light gray (Apple style) */
   --background-card: #ffffff;
   --background-glass: rgba(255, 255, 255, 0.8);
 
@@ -38,28 +43,32 @@
 /* --- MODO OSCURO --- */
 [data-theme="dark"] {
   /* Brand Colors - Adjusted for dark mode visibility */
-  --primary: #3b82f6; /* Slightly lighter blue */
+  --primary: #3b82f6;
+  /* Slightly lighter blue */
   --primary-dark: #2563eb;
-  --secondary: #f9fafb; /* White/Light Gray for secondary elements */
+  --secondary: #f9fafb;
+  /* White/Light Gray for secondary elements */
   --accent: #818cf8;
 
   /* Backgrounds */
-  --background: #0b1120; /* Very dark blue/gray */
-  --background-soft: #111827; /* Dark gray */
-  --background-card: #1f2937;
-  --background-glass: rgba(17, 24, 39, 0.8);
+  --background: #0b1120 !important;
+  /* Even darker blue background */
+  --background-soft: #111827 !important;
+  /* Dark gray */
+  --background-card: #1f2937 !important;
+  --background-glass: rgba(17, 24, 39, 0.8) !important;
 
   /* Text */
-  --text-main: #f9fafb;
-  --text-secondary: #d1d5db;
-  --text-muted: #6b7280;
-  --text-inverse: #0b1120;
+  --text-main: #f9fafb !important;
+  --text-secondary: #d1d5db !important;
+  --text-muted: #6b7280 !important;
+  --text-inverse: #0b1120 !important;
 
   /* Borders */
-  --border-color: rgba(55, 65, 81, 0.8);
-  --border-light: rgba(55, 65, 81, 0.4);
+  --border-color: rgba(55, 65, 81, 0.8) !important;
+  --border-light: rgba(55, 65, 81, 0.4) !important;
 
   /* Shadows */
-  --shadow-soft: 0 8px 30px rgba(0, 0, 0, 0.3);
-  --shadow-strong: 0 18px 60px rgba(0, 0, 0, 0.5);
+  --shadow-soft: 0 8px 30px rgba(0, 0, 0, 0.3) !important;
+  --shadow-strong: 0 18px 60px rgba(0, 0, 0, 0.5) !important;
 }

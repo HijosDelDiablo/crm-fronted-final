@@ -5,8 +5,6 @@ import { getCompraById, evaluarFinanciamiento, aprobarCompra } from '../../api/c
 import { getPagosPorCompra } from '../../api/pagos.api';
 import StatusBadge from '../../components/shared/StatusBadge';
 import PaymentTable from '../../components/shared/PaymentTable';
-import PaymentSchedule from '../../components/shared/PaymentSchedule';
-import { calculateAmortizationSchedule } from '../../utils/amortization.util';
 import Sidebar from '../../components/layout/Sidebar';
 
 const DetalleCompraAdmin = () => {
@@ -14,7 +12,6 @@ const DetalleCompraAdmin = () => {
     const navigate = useNavigate();
     const [compra, setCompra] = useState(null);
     const [pagos, setPagos] = useState([]);
-    const [schedule, setSchedule] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [showEvaluarModal, setShowEvaluarModal] = useState(false);
@@ -25,23 +22,17 @@ const DetalleCompraAdmin = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
+                console.log(`🔍 DetalleCompraAdmin - Fetching compra with ID: ${id}`);
                 const compraData = await getCompraById(id, navigate);
+                console.log(`✅ DetalleCompraAdmin - Compra data received:`, compraData);
                 setCompra(compraData);
 
                 if (compraData?.cotizacion) {
-                    const precio = compraData.cotizacion.coche?.precioBase || 0;
-                    const enganche = compraData.cotizacion.enganche || 0;
-                    const principal = compraData.cotizacion.montoFinanciar || (precio - enganche);
-                    const rate = (compraData.cotizacion.tasaInteres || 0) * 100; 
-                    const months = compraData.cotizacion.plazoMeses || 0;
-
-                    if (principal > 0 && months > 0) {
-                        const calculatedSchedule = calculateAmortizationSchedule(principal, rate, months);
-                        setSchedule(calculatedSchedule);
-                    }
+                    // Lógica de cotización si se requiere en el futuro
                 }
 
                 const pagosData = await getPagosPorCompra(id, navigate);
+                console.log(`✅ DetalleCompraAdmin - Pagos data received:`, pagosData);
                 setPagos(pagosData);
             } catch (err) {
                 setError('Error al cargar los detalles de la compra');
@@ -111,7 +102,7 @@ const DetalleCompraAdmin = () => {
         );
     }
 
-    const { cotizacion, cliente, vendedor, status, saldoPendiente, createdAt } = compra;
+    const { cotizacion, cliente, vendedor, status, saldoPendiente, createdAt, estado } = compra;
 
     return (
         <div className="dashboard-layout">
@@ -138,7 +129,7 @@ const DetalleCompraAdmin = () => {
                                     <Row>
                                         <Col md={6}>
                                             <p><strong>ID:</strong> {compra._id}</p>
-                                            <p><strong>Estado:</strong> <StatusBadge status={status} /></p>
+                                            <p><strong>Estado:</strong> <StatusBadge status={status || estado} /></p>
                                             <p><strong>Fecha de Creación:</strong> {new Date(createdAt).toLocaleDateString('es-ES')}</p>
                                             <p><strong>Saldo Pendiente:</strong> ${saldoPendiente}</p>
                                         </Col>
@@ -180,7 +171,6 @@ const DetalleCompraAdmin = () => {
                                 </Card.Header>
                                 <Card.Body>
                                     <p><strong>Total Pagado:</strong> ${(compra.totalPagado || 0).toLocaleString('es-ES')}</p>
-                                    <p><strong>Próximo Pago:</strong> {compra.proximoPago ? new Date(compra.proximoPago).toLocaleDateString('es-ES') : 'N/A'}</p>
                                 </Card.Body>
                             </Card>
                         </Col>
@@ -195,14 +185,7 @@ const DetalleCompraAdmin = () => {
                         </Card.Body>
                     </Card>
 
-                    <Card className="mt-4 mb-5 admin-card">
-                        <Card.Header>
-                            <h5>Calendario de Pagos (Proyección)</h5>
-                        </Card.Header>
-                        <Card.Body>
-                            <PaymentSchedule schedule={schedule} />
-                        </Card.Body>
-                    </Card>
+
 
                     {/* Modal Evaluar Financiamiento */}
                     <Modal show={showEvaluarModal} onHide={() => setShowEvaluarModal(false)}>

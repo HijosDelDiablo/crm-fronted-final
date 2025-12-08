@@ -297,7 +297,7 @@
 
 /* Seller Cards */
 .seller-card {
-  background: var(--background-card);
+  background: var(--background-card) !important;
   color: var(--text-main);
   border: 1px solid var(--border-color);
   box-shadow: var(--shadow-sm);

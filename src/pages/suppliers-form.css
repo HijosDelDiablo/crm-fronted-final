@@ -1,14 +1,15 @@
 /* suppliers-form.css: Estilos mejorados para el formulario de proveedores */
 
 .suppliers-modal-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #0f172a !important;
     color: white;
-    border-bottom: none;
+    border-bottom: 1px solid #334155;
     border-radius: 0.5rem 0.5rem 0 0;
 }
 
 .suppliers-modal-body {
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    background: #1e293b !important;
+    color: white;
     padding: 2rem;
     border-radius: 0 0 0.5rem 0.5rem;
 }
@@ -16,13 +17,13 @@
 .suppliers-form-title {
     font-size: 1.5rem;
     font-weight: 700;
-    color: #4c51bf;
+    color: #e2e8f0;
     margin-bottom: 0.5rem;
     letter-spacing: -0.025em;
 }
 
 .suppliers-form-subtitle {
-    color: #718096;
+    color: #94a3b8;
     font-size: 0.875rem;
     margin-bottom: 1.5rem;
 }
@@ -47,26 +48,27 @@
 
 .suppliers-form-label {
     font-weight: 600;
-    color: #2d3748;
+    color: #e2e8f0;
     font-size: 0.9rem;
 }
 
 .suppliers-form-input,
 .suppliers-form-textarea {
-    border: 2px solid #e2e8f0;
+    border: 1px solid #475569;
     border-radius: 0.75rem;
     padding: 0.75rem 1rem;
     font-size: 1rem;
     transition: all 0.3s ease;
-    background: white;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    background: #0f172a !important;
+    color: white !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .suppliers-form-input:focus,
 .suppliers-form-textarea:focus {
-    border-color: #667eea;
+    border-color: #3b82f6;
     outline: none;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1), 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3), 0 1px 3px rgba(0, 0, 0, 0.3);
     transform: translateY(-1px);
 }
 
@@ -76,18 +78,18 @@
 }
 
 .suppliers-form-error {
-    background: #fed7d7;
-    color: #c53030;
+    background: #7f1d1d;
+    color: #fecaca;
     border-radius: 0.5rem;
     padding: 0.75rem;
     margin-bottom: 1rem;
     font-size: 0.875rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .suppliers-modal-footer {
-    background: #f7fafc;
-    border-top: 1px solid #e2e8f0;
+    background: #1e293b !important;
+    border-top: 1px solid #334155;
     padding: 1.5rem 2rem;
     display: flex;
     justify-content: flex-end;

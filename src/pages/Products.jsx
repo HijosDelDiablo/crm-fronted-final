@@ -127,13 +127,13 @@ export default function Products() {
                 motor: form.motor,
                 color: form.color,
                 vin: form.vin,
-                condicion: "Nuevo"
+                condicion: "Nuevo",
+                kilometraje: 0
             };
 
             // Agregar campos numéricos solo si tienen valor
             if (form.ano) payload.ano = Number(form.ano);
             if (form.precioBase) payload.precioBase = Number(form.precioBase);
-            if (form.kilometraje) payload.kilometraje = Number(form.kilometraje);
             if (form.numPuertas) payload.numPuertas = Number(form.numPuertas);
 
             // Agregar proveedor solo si tiene valor
@@ -286,10 +286,6 @@ export default function Products() {
                                         <Form.Group className="product-form-group">
                                             <Form.Label className="product-form-label">Precio Base <span className="text-red-500">*</span></Form.Label>
                                             <Form.Control name="precioBase" value={form.precioBase} onChange={handleChange} required type="number" className="product-form-input" />
-                                        </Form.Group>
-                                        <Form.Group className="product-form-group">
-                                            <Form.Label className="product-form-label">Kilometraje <span className="text-red-500">*</span></Form.Label>
-                                            <Form.Control name="kilometraje" value={form.kilometraje} onChange={handleChange} required type="number" className="product-form-input" />
                                         </Form.Group>
                                         <Form.Group className="product-form-group">
                                             <Form.Label className="product-form-label">Proveedor</Form.Label>

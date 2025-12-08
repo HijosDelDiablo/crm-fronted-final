@@ -39,6 +39,7 @@ export const getComprasPorVendedor = async (vendedorId, navigate) => {
 
 export const getAllCompras = async (navigate) => {
     const response = await fetchApiGet('/compra/all', navigate, 'Error al obtener todas las compras');
+    console.log(`📋 getAllCompras - Respuesta completa:`, response);
     return response;
 };
 

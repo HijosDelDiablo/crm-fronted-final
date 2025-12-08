@@ -125,27 +125,40 @@ const MisCotizaciones = () => {
 
     const handleVerDetallesAprobados = (cotizacion) => {
         setSelectedCotizacion(cotizacion);
-        setShowApprovedModal(true);
+        if (cotizacion.status?.toLowerCase() === 'aprobada') {
+            setShowApprovedModal(true);
+        } else {
+            // Para otros estados, podríamos mostrar un modal diferente o el mismo con diferente contenido
+            // Por ahora usaremos el mismo modal pero adaptaremos el contenido
+            setShowApprovedModal(true);
+        }
     };
 
     const getStatusBadge = (status) => {
         const s = status?.toLowerCase() || 'pendiente';
-        if (s === 'aprobada') {
+
+        if (s === 'aprobada' || s === 'completada') {
             return (
-                <span className="product-badge d-flex align-items-center gap-1 badge bg-success">
-                    <CheckCircle size={14} /> ¡Aprobada!
+                <span className="d-inline-flex align-items-center gap-1 badge bg-success rounded-pill px-3 py-2">
+                    <CheckCircle size={14} /> {status}
                 </span>
             );
-        } else if (s === 'rechazada') {
+        } else if (s === 'rechazada' || s === 'cancelada') {
             return (
-                <span className="product-badge d-flex align-items-center gap-1 badge bg-danger">
-                    <XCircle size={14} /> Rechazada
+                <span className="d-inline-flex align-items-center gap-1 badge bg-danger rounded-pill px-3 py-2">
+                    <XCircle size={14} /> {status}
+                </span>
+            );
+        } else if (s === 'en revision' || s === 'en revisión') {
+            return (
+                <span className="d-inline-flex align-items-center gap-1 badge bg-info text-dark rounded-pill px-3 py-2">
+                    <Clock size={14} /> En Revisión
                 </span>
             );
         } else {
             return (
-                <span className="product-badge d-flex align-items-center gap-1 badge bg-warning text-dark">
-                    <Clock size={14} /> Pendiente
+                <span className="d-inline-flex align-items-center gap-1 badge bg-warning text-dark rounded-pill px-3 py-2">
+                    <Clock size={14} /> {status || 'Pendiente'}
                 </span>
             );
         }
@@ -233,7 +246,7 @@ const MisCotizaciones = () => {
                                 borderRadius: '6px',
                                 backgroundColor: '#3b82f6',
                                 border: '1px solid #3b82f6',
-                                color: 'white',
+                                color: '#e5e7eb',
                                 padding: '0.5rem 1rem',
                                 fontWeight: '500',
                                 cursor: 'pointer',
@@ -249,73 +262,138 @@ const MisCotizaciones = () => {
                         </button>
                     </div>
                 ) : (
-                    <Row>
-                        {cotizaciones.map((cotizacion) => (
-                            <Col xxl={3} xl={4} lg={4} md={6} sm={12} key={cotizacion._id} className="mb-4">
-                                <div className="product-card h-100 d-flex flex-column">
-                                    <div className="product-img-container" style={{ height: '160px' }}>
-                                        <img
-                                            className="product-img"
-                                            src={cotizacion.coche?.imageUrl || "https://via.placeholder.com/400x300?text=Auto"}
-                                            alt={`${cotizacion.coche?.marca} ${cotizacion.coche?.modelo}`}
-                                        />
-                                        {getStatusBadge(cotizacion.status)}
-                                    </div>
-                                    <div className="product-body flex-grow-1">
-                                        <h5 className="fw-bold mb-1">
-                                            {cotizacion.coche?.marca} {cotizacion.coche?.modelo}
-                                        </h5>
-                                        <small className="text-muted mb-3 d-block">
-                                            Solicitado el: {new Date(cotizacion.createdAt).toLocaleDateString('es-ES')}
-                                        </small>
-
-                                        <div className="p-3 bg-light rounded mb-3">
-                                            <div className="d-flex justify-content-between mb-1">
-                                                <span>Enganche:</span>
-                                                <span className="fw-bold">${cotizacion.enganche?.toLocaleString('es-MX')}</span>
+                    <div className="table-responsive rounded-3 overflow-hidden shadow-lg">
+                        <table className="table table-dark table-hover align-middle mb-0 custom-table">
+                            <thead>
+                                <tr>
+                                    <th className="py-3 ps-4">ID</th>
+                                    <th className="py-3">Vehículo</th>
+                                    <th className="py-3">Fecha Solicitud</th>
+                                    <th className="py-3">Enganche</th>
+                                    <th className="py-3">Mensualidad</th>
+                                    <th className="py-3">Estado</th>
+                                    <th className="py-3 pe-4 text-end">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {cotizaciones.map((cotizacion) => (
+                                    <tr key={cotizacion._id}>
+                                        <td className="ps-4">
+                                            <span className="text-light" style={{ fontFamily: 'monospace', fontSize: '0.9rem' }}>
+                                                #{cotizacion._id}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div className="d-flex align-items-center gap-3">
+                                                <div className="img-thumbnail-wrapper">
+                                                    <img
+                                                        src={cotizacion.coche?.imageUrl || "https://via.placeholder.com/400x300?text=Auto"}
+                                                        alt={`${cotizacion.coche?.marca} ${cotizacion.coche?.modelo}`}
+                                                        className="rounded-3"
+                                                        style={{ width: '60px', height: '60px', objectFit: 'cover' }}
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <h6 className="mb-0 fw-bold text-light">{cotizacion.coche?.marca} {cotizacion.coche?.modelo}</h6>
+                                                    <small className="text-muted">{cotizacion.coche?.ano} • {cotizacion.coche?.transmision || 'Auto'}</small>
+                                                </div>
                                             </div>
-                                            <div className="d-flex justify-content-between">
-                                                <span>Mensualidad (Est):</span>
-                                                <span className="fw-bold text-primary">
-                                                    ${cotizacion.pagoMensual?.toLocaleString('es-MX') || 'Calculando...'}
-                                                </span>
+                                        </td>
+                                        <td>
+                                            <div className="d-flex align-items-center gap-2 text-light">
+                                                <Clock size={16} className="text-muted" />
+                                                {new Date(cotizacion.createdAt).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' })}
                                             </div>
-                                        </div>
-
-                                        {cotizacion.status?.toLowerCase() === 'aprobada' ? (
-                                            compras[cotizacion._id] ? (
-                                                <button
-                                                    type="button"
-                                                    style={{
-                                                        width: '100%',
-                                                        borderRadius: '6px',
-                                                        marginTop: 'auto',
-                                                        backgroundColor: '#3b82f6',
-                                                        border: '1px solid #3b82f6',
-                                                        color: 'white',
-                                                        padding: '0.5rem 1rem',
-                                                        fontWeight: '500',
-                                                        cursor: 'pointer',
-                                                        transition: 'background-color 0.2s ease',
-                                                        fontSize: '0.875rem'
-                                                    }}
-                                                    onClick={() => navigate(`/cliente/compras/${compras[cotizacion._id]._id}`)}
-                                                    onMouseEnter={(e) => e.target.style.backgroundColor = '#2563eb'}
-                                                    onMouseLeave={(e) => e.target.style.backgroundColor = '#3b82f6'}
-                                                >
-                                                    Ver Compra Activa
-                                                </button>
-                                            ) : (
-                                                <div className="d-flex gap-2 mt-auto">
+                                        </td>
+                                        <td>
+                                            <span className="fw-medium text-light">${cotizacion.enganche?.toLocaleString('es-MX')}</span>
+                                        </td>
+                                        <td>
+                                            <span className="fw-bold text-primary">${cotizacion.pagoMensual?.toLocaleString('es-MX') || 'Calculando...'}</span>
+                                        </td>
+                                        <td>
+                                            {getStatusBadge(cotizacion.status)}
+                                        </td>
+                                        <td className="pe-4 text-end">
+                                            {cotizacion.status?.toLowerCase() === 'aprobada' ? (
+                                                compras[cotizacion._id] ? (
                                                     <button
                                                         type="button"
                                                         style={{
-                                                            flexGrow: 1,
                                                             borderRadius: '6px',
-                                                            border: '1px solid #10b981',
+                                                            backgroundColor: '#3b82f6',
+                                                            border: '1px solid #3b82f6',
+                                                            color: '#e5e7eb',
+                                                            padding: '0.4rem 0.8rem',
+                                                            fontWeight: '500',
+                                                            cursor: 'pointer',
+                                                            transition: 'background-color 0.2s ease',
+                                                            fontSize: '0.875rem'
+                                                        }}
+                                                        onClick={() => navigate(`/cliente/compras/${compras[cotizacion._id]._id}`)}
+                                                        onMouseEnter={(e) => e.target.style.backgroundColor = '#2563eb'}
+                                                        onMouseLeave={(e) => e.target.style.backgroundColor = '#3b82f6'}
+                                                    >
+                                                        Ver Compra
+                                                    </button>
+                                                ) : (
+                                                    <div className="d-flex gap-2 justify-content-end">
+                                                        <button
+                                                            type="button"
+                                                            style={{
+                                                                borderRadius: '6px',
+                                                                border: '1px solid #10b981',
+                                                                backgroundColor: 'transparent',
+                                                                color: '#10b981',
+                                                                padding: '0.4rem 0.8rem',
+                                                                fontWeight: '500',
+                                                                cursor: 'pointer',
+                                                                transition: 'all 0.2s ease',
+                                                                fontSize: '0.875rem'
+                                                            }}
+                                                            onClick={() => handleVerDetallesAprobados(cotizacion)}
+                                                            onMouseEnter={(e) => {
+                                                                e.target.style.backgroundColor = '#10b981';
+                                                                e.target.style.color = '#e5e7eb';
+                                                            }}
+                                                            onMouseLeave={(e) => {
+                                                                e.target.style.backgroundColor = 'transparent';
+                                                                e.target.style.color = '#10b981';
+                                                            }}
+                                                        >
+                                                            Detalles
+                                                        </button>
+                                                        <button
+                                                            type="button"
+                                                            style={{
+                                                                borderRadius: '6px',
+                                                                backgroundColor: '#10b981',
+                                                                border: '1px solid #10b981',
+                                                                color: '#e5e7eb',
+                                                                padding: '0.4rem 0.8rem',
+                                                                fontWeight: '500',
+                                                                cursor: 'pointer',
+                                                                transition: 'background-color 0.2s ease',
+                                                                fontSize: '0.875rem'
+                                                            }}
+                                                            onClick={() => handleIniciarCompra(cotizacion)}
+                                                            onMouseEnter={(e) => e.target.style.backgroundColor = '#059669'}
+                                                            onMouseLeave={(e) => e.target.style.backgroundColor = '#10b981'}
+                                                        >
+                                                            Comprar
+                                                        </button>
+                                                    </div>
+                                                )
+                                            ) : (
+                                                <div className="d-flex gap-2 justify-content-end">
+                                                    <button
+                                                        type="button"
+                                                        style={{
+                                                            borderRadius: '6px',
+                                                            border: '1px solid #6b7280',
                                                             backgroundColor: 'transparent',
-                                                            color: '#10b981',
-                                                            padding: '0.5rem 1rem',
+                                                            color: '#9ca3af',
+                                                            padding: '0.4rem 0.8rem',
                                                             fontWeight: '500',
                                                             cursor: 'pointer',
                                                             transition: 'all 0.2s ease',
@@ -323,52 +401,24 @@ const MisCotizaciones = () => {
                                                         }}
                                                         onClick={() => handleVerDetallesAprobados(cotizacion)}
                                                         onMouseEnter={(e) => {
-                                                            e.target.style.backgroundColor = '#10b981';
-                                                            e.target.style.color = 'white';
+                                                            e.target.style.backgroundColor = '#374151';
+                                                            e.target.style.color = '#e5e7eb';
                                                         }}
                                                         onMouseLeave={(e) => {
                                                             e.target.style.backgroundColor = 'transparent';
-                                                            e.target.style.color = '#10b981';
+                                                            e.target.style.color = '#9ca3af';
                                                         }}
                                                     >
                                                         Ver Detalles
                                                     </button>
-                                                    <button
-                                                        type="button"
-                                                        style={{
-                                                            flexGrow: 1,
-                                                            borderRadius: '6px',
-                                                            backgroundColor: '#10b981',
-                                                            border: '1px solid #10b981',
-                                                            color: 'white',
-                                                            padding: '0.5rem 1rem',
-                                                            fontWeight: '500',
-                                                            cursor: 'pointer',
-                                                            transition: 'background-color 0.2s ease',
-                                                            fontSize: '0.875rem'
-                                                        }}
-                                                        onClick={() => handleIniciarCompra(cotizacion)}
-                                                        onMouseEnter={(e) => e.target.style.backgroundColor = '#059669'}
-                                                        onMouseLeave={(e) => e.target.style.backgroundColor = '#10b981'}
-                                                    >
-                                                        Comprar
-                                                    </button>
                                                 </div>
-                                            )
-                                        ) : (
-                                            <button
-                                                type="button"
-                                                className="w-100 btn-rounded mt-auto btn btn-outline-secondary"
-                                                disabled
-                                            >
-                                                En Revisión
-                                            </button>
-                                        )}
-                                    </div>
-                                </div>
-                            </Col>
-                        ))}
-                    </Row>
+                                            )}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 )}
 
                 {/* Modal de Inicio de Compra (Formulario) */}
@@ -431,7 +481,7 @@ const MisCotizaciones = () => {
                                 borderRadius: '6px',
                                 backgroundColor: '#6b7280',
                                 border: '1px solid #6b7280',
-                                color: 'white',
+                                color: '#e5e7eb',
                                 padding: '0.5rem 1rem',
                                 fontWeight: '500',
                                 cursor: 'pointer',
@@ -449,7 +499,7 @@ const MisCotizaciones = () => {
                                 borderRadius: '6px',
                                 backgroundColor: '#3b82f6',
                                 border: '1px solid #3b82f6',
-                                color: 'white',
+                                color: '#e5e7eb',
                                 padding: '0.5rem 1rem',
                                 fontWeight: '500',
                                 cursor: 'pointer',
@@ -467,60 +517,85 @@ const MisCotizaciones = () => {
 
                 {/* Modal de Detalles Aprobados (Estilo Nuevo) */}
                 <Modal show={showApprovedModal} onHide={() => setShowApprovedModal(false)} centered size="lg" contentClassName="modal-content-custom">
-                    <div className="modal-content border-0">
-                        <div className="bg-success text-white modal-header">
+                    <div className="modal-content border-0" style={{ backgroundColor: '#1f2937', color: '#e5e7eb' }}>
+                        <div className="modal-header text-light" style={{ backgroundColor: selectedCotizacion?.status?.toLowerCase() === 'aprobada' ? '#10b981' : '#111827' }}>
                             <div className="d-flex align-items-center gap-2 modal-title h4 mb-0">
-                                <CheckCircle size={24} /> Estado: Aprobada
+                                {selectedCotizacion?.status?.toLowerCase() === 'aprobada' ? <CheckCircle size={24} /> : <Clock size={24} />}
+                                Estado: {selectedCotizacion?.status || 'Pendiente'}
                             </div>
-                            <button type="button" className="btn-close btn-close-white" onClick={() => setShowApprovedModal(false)} aria-label="Close"></button>
+                            <button type="button" className="btn-close" style={{ filter: 'invert(0.9)' }} onClick={() => setShowApprovedModal(false)} aria-label="Close"></button>
                         </div>
-                        <div className="p-4 modal-body">
+                        <div className="p-4 modal-body" style={{ backgroundColor: '#1f2937', color: '#e5e7eb' }}>
                             <div>
-                                <div className="alert alert-success border-0 shadow-sm">
-                                    <h4 className="alert-heading fw-bold">¡Felicidades! Tu crédito fue autorizado.</h4>
-                                    <p>Ya puedes pasar a la agencia para firmar contrato y recoger tu unidad.</p>
-                                </div>
-                                <h6 className="fw-bold mt-4 mb-3">Condiciones Finales del Banco</h6>
+                                {selectedCotizacion?.status?.toLowerCase() === 'aprobada' ? (
+                                    <div className="alert alert-success border-0 shadow-sm" style={{ backgroundColor: '#064e3b', color: '#d1fae5' }}>
+                                        <h4 className="alert-heading fw-bold">¡Felicidades! Tu crédito fue autorizado.</h4>
+                                        <p>Ya puedes pasar a la agencia para firmar contrato y recoger tu unidad.</p>
+                                    </div>
+                                ) : (
+                                    <div className="alert alert-secondary border-0 shadow-sm" style={{ backgroundColor: '#374151', color: '#e5e7eb' }}>
+                                        <h4 className="alert-heading fw-bold">Solicitud en Proceso</h4>
+                                        <p>Tu solicitud está siendo evaluada por nuestros asesores. Te notificaremos pronto.</p>
+                                    </div>
+                                )}
+
+                                <h6 className="fw-bold mt-4 mb-3 text-light">Detalles de la Cotización</h6>
                                 <div className="g-3 row">
                                     <div className="col-sm-6">
-                                        <div className="p-3 border rounded bg-light h-100">
-                                            <small className="text-muted d-block">Monto Aprobado</small>
+                                        <div className="p-3 border rounded h-100" style={{ backgroundColor: '#111827', borderColor: '#374151' }}>
+                                            <small className="text-light d-block">Vehículo</small>
+                                            <h5 className="fw-bold text-light">
+                                                {selectedCotizacion?.coche?.marca} {selectedCotizacion?.coche?.modelo}
+                                            </h5>
+                                        </div>
+                                    </div>
+                                    <div className="col-sm-6">
+                                        <div className="p-3 border rounded h-100" style={{ backgroundColor: '#111827', borderColor: '#374151' }}>
+                                            <small className="text-light d-block">Precio Base</small>
+                                            <h5 className="fw-bold text-light">
+                                                ${selectedCotizacion?.coche?.precioBase?.toLocaleString('es-MX')}
+                                            </h5>
+                                        </div>
+                                    </div>
+                                    <div className="col-sm-6">
+                                        <div className="p-3 border rounded h-100" style={{ backgroundColor: '#111827', borderColor: '#374151' }}>
+                                            <small className="text-light d-block">Monto a Financiar</small>
                                             <h4 className="fw-bold text-success">
                                                 ${((selectedCotizacion?.precioCoche || 0) - (selectedCotizacion?.enganche || 0)).toLocaleString('es-MX')}
                                             </h4>
                                         </div>
                                     </div>
                                     <div className="col-sm-6">
-                                        <div className="p-3 border rounded bg-light h-100">
-                                            <small className="text-muted d-block">Tasa de Interés Anual</small>
-                                            <h4 className="fw-bold text-dark">15.0%</h4>
+                                        <div className="p-3 border rounded h-100" style={{ backgroundColor: '#111827', borderColor: '#374151' }}>
+                                            <small className="text-light d-block">Tasa de Interés Anual</small>
+                                            <h4 className="fw-bold text-light">15.0%</h4>
                                         </div>
                                     </div>
                                     <div className="col-sm-6">
-                                        <div className="p-3 border rounded bg-light h-100">
-                                            <small className="text-muted d-block">Mensualidad Real</small>
-                                            <h5 className="fw-bold">
+                                        <div className="p-3 border rounded h-100" style={{ backgroundColor: '#111827', borderColor: '#374151' }}>
+                                            <small className="text-light d-block">Mensualidad Estimada</small>
+                                            <h5 className="fw-bold text-light">
                                                 ${selectedCotizacion?.pagoMensual?.toLocaleString('es-MX') || 'Calculando...'}
                                             </h5>
                                         </div>
                                     </div>
                                     <div className="col-sm-6">
-                                        <div className="p-3 border rounded bg-light h-100">
-                                            <small className="text-muted d-block">Plazo Autorizado</small>
-                                            <h5 className="fw-bold">{selectedCotizacion?.plazoMeses} Meses</h5>
+                                        <div className="p-3 border rounded h-100" style={{ backgroundColor: '#111827', borderColor: '#374151' }}>
+                                            <small className="text-light d-block">Plazo Solicitado</small>
+                                            <h5 className="fw-bold text-light">{selectedCotizacion?.plazoMeses} Meses</h5>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div className="modal-footer">
+                        <div className="modal-footer" style={{ backgroundColor: '#1f2937', color: '#e5e7eb' }}>
                             <button
                                 type="button"
                                 style={{
                                     borderRadius: '6px',
                                     backgroundColor: '#6b7280',
                                     border: '1px solid #6b7280',
-                                    color: 'white',
+                                    color: '#e5e7eb',
                                     padding: '0.5rem 1rem',
                                     fontWeight: '500',
                                     cursor: 'pointer',
@@ -533,39 +608,90 @@ const MisCotizaciones = () => {
                             >
                                 Cerrar
                             </button>
-                            <button
-                                type="button"
-                                style={{
-                                    borderRadius: '6px',
-                                    backgroundColor: '#10b981',
-                                    border: '1px solid #10b981',
-                                    color: 'white',
-                                    padding: '0.5rem 1rem',
-                                    fontWeight: '500',
-                                    cursor: 'pointer',
-                                    transition: 'background-color 0.2s ease',
-                                    fontSize: '0.875rem'
-                                }}
-                                onClick={() => {
-                                    setShowApprovedModal(false);
-                                    handleIniciarCompra(selectedCotizacion);
-                                }}
-                                onMouseEnter={(e) => e.target.style.backgroundColor = '#059669'}
-                                onMouseLeave={(e) => e.target.style.backgroundColor = '#10b981'}
-                            >
-                                Continuar Compra
-                            </button>
+                            {selectedCotizacion?.status?.toLowerCase() === 'aprobada' && (
+                                <button
+                                    type="button"
+                                    style={{
+                                        borderRadius: '6px',
+                                        backgroundColor: '#10b981',
+                                        border: '1px solid #10b981',
+                                        color: '#e5e7eb',
+                                        padding: '0.5rem 1rem',
+                                        fontWeight: '500',
+                                        cursor: 'pointer',
+                                        transition: 'background-color 0.2s ease',
+                                        fontSize: '0.875rem'
+                                    }}
+                                    onClick={() => {
+                                        setShowApprovedModal(false);
+                                        handleIniciarCompra(selectedCotizacion);
+                                    }}
+                                    onMouseEnter={(e) => e.target.style.backgroundColor = '#059669'}
+                                    onMouseLeave={(e) => e.target.style.backgroundColor = '#10b981'}
+                                >
+                                    Continuar Compra
+                                </button>
+                            )}
                         </div>
                     </div>
                 </Modal>
             </Container>
 
             <style>{`
+                /* Table Styles */
+                .custom-table {
+                    background-color: #1f2937;
+                    color: #e5e7eb;
+                    border-collapse: separate;
+                    border-spacing: 0;
+                }
+                .custom-table thead th {
+                    background-color: #111827;
+                    color: #9ca3af;
+                    font-weight: 600;
+                    text-transform: uppercase;
+                    font-size: 0.75rem;
+                    letter-spacing: 0.05em;
+                    border-bottom: 1px solid #374151;
+                }
+                .custom-table tbody tr {
+                    transition: background-color 0.2s ease;
+                }
+                .custom-table tbody tr:hover {
+                    background-color: #374151;
+                }
+                .custom-table td {
+                    border-bottom: 1px solid #374151;
+                    vertical-align: middle;
+                    color: #d1d5db;
+                }
+                .custom-table tbody tr:last-child td {
+                    border-bottom: none;
+                }
+                .img-thumbnail-wrapper {
+                    width: 60px;
+                    height: 60px;
+                    border-radius: 8px;
+                    overflow: hidden;
+                    border: 1px solid #374151;
+                }
+                
+                /* Empty State Dark Mode Override */
+                .empty-state {
+                    background: linear-gradient(135deg, #1f2937 0%, #111827 100%) !important;
+                    color: #9ca3af !important;
+                    border: 1px solid #374151;
+                }
+                .empty-state-title {
+                    color: #f3f4f6 !important;
+                }
+
+                /* Card Styles (Legacy/Mobile if needed) */
                 .product-card {
                     background-color: #1f2937;
                     border: 1px solid #374151;
                     border-radius: 8px;
-                    color: white;
+                    color: #e5e7eb;
                     transition: transform 0.2s ease, box-shadow 0.2s ease;
                     overflow: hidden;
                 }
@@ -592,7 +718,7 @@ const MisCotizaciones = () => {
                     top: 10px;
                     right: 10px;
                     background-color: #10b981 !important;
-                    color: white !important;
+                    color: #e5e7eb !important;
                     border: none;
                     font-weight: 500;
                 }
@@ -600,7 +726,7 @@ const MisCotizaciones = () => {
                     padding: 1rem;
                 }
                 .product-body h5 {
-                    color: white;
+                    color: #e5e7eb;
                     margin-bottom: 0.5rem;
                     font-weight: 600;
                 }
@@ -611,11 +737,11 @@ const MisCotizaciones = () => {
                 .product-body .bg-light {
                     background-color: #374151 !important;
                     border: 1px solid #4b5563;
-                    color: white;
+                    color: #e5e7eb;
                     border-radius: 6px;
                 }
                 .product-body .bg-light span {
-                    color: white;
+                    color: #e5e7eb;
                 }
                 .product-body .text-primary {
                     color: #3b82f6 !important;
@@ -624,7 +750,7 @@ const MisCotizaciones = () => {
                 .btn-primary {
                     background-color: #3b82f6;
                     border-color: #3b82f6;
-                    color: white;
+                    color: #e5e7eb;
                     border-radius: 6px;
                     font-weight: 500;
                     transition: background-color 0.2s ease;
@@ -632,7 +758,7 @@ const MisCotizaciones = () => {
                 .btn-primary:hover {
                     background-color: #2563eb;
                     border-color: #2563eb;
-                    color: white;
+                    color: #e5e7eb;
                 }
                 .btn-outline-success {
                     border-color: #10b981;
@@ -644,7 +770,7 @@ const MisCotizaciones = () => {
                 .btn-outline-success:hover {
                     background-color: #10b981;
                     border-color: #10b981;
-                    color: white;
+                    color: #e5e7eb;
                 }
                 .btn-success {
                     background-color: #10b981;

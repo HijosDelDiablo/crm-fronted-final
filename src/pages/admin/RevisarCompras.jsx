@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Container, Tabs, Tab, Table, Button, Alert, Spinner } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import {
-    getComprasPendientes,
-    getComprasEnRevision,
     getComprasAprobadas,
     getAllCompras
 } from '../../api/compras.api';
@@ -13,9 +11,8 @@ import Sidebar from '../../components/layout/Sidebar';
 const RevisarCompras = () => {
     const [compras, setCompras] = useState({
         todas: [],
-        pendientes: [],
-        enRevision: [],
-        aprobadas: []
+        aprobadas: [],
+        completadas: []
     });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -24,18 +21,17 @@ const RevisarCompras = () => {
     useEffect(() => {
         const fetchCompras = async () => {
             try {
-                const [todas, pendientes, enRevision, aprobadas] = await Promise.all([
+                const [todas, aprobadas] = await Promise.all([
                     getAllCompras(navigate),
-                    getComprasPendientes(navigate),
-                    getComprasEnRevision(navigate),
                     getComprasAprobadas(navigate)
                 ]);
 
+                const completadas = todas.filter(c => (c.status === 'Completada' || c.estado === 'Completada'));
+
                 setCompras({
                     todas,
-                    pendientes,
-                    enRevision,
-                    aprobadas
+                    aprobadas,
+                    completadas
                 });
             } catch (err) {
                 setError('Error al cargar las compras');
@@ -75,8 +71,8 @@ const RevisarCompras = () => {
                         <tr key={compra._id}>
                             <td>{compra.cliente?.nombre || 'N/A'}</td>
                             <td>{compra.vendedor?.nombre || 'N/A'}</td>
-                            <td><StatusBadge status={compra.status || status} /></td>
-                            <td>{new Date(compra.fechaCreacion).toLocaleDateString('es-ES')}</td>
+                            <td><StatusBadge status={compra.status || compra.estado || status} /></td>
+                            <td>{new Date(compra.createdAt || compra.fechaCreacion).toLocaleDateString('es-ES')}</td>
                             <td>${compra.saldoPendiente?.toLocaleString('es-ES')}</td>
                             <td>
                                 <button
@@ -148,14 +144,11 @@ const RevisarCompras = () => {
                         <Tab eventKey="todas" title="Todas">
                             {renderTable(compras.todas, "Todas")}
                         </Tab>
-                        <Tab eventKey="pendientes" title="Pendientes">
-                            {renderTable(compras.pendientes, "Pendiente")}
-                        </Tab>
-                        <Tab eventKey="enRevision" title="En Revisión">
-                            {renderTable(compras.enRevision, "En Revisión")}
-                        </Tab>
                         <Tab eventKey="aprobadas" title="Aprobadas">
                             {renderTable(compras.aprobadas, "Aprobada")}
+                        </Tab>
+                        <Tab eventKey="completadas" title="Completadas">
+                            {renderTable(compras.completadas, "Completada")}
                         </Tab>
                     </Tabs>
                 </Container>

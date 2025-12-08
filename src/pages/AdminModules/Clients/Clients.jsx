@@ -6,6 +6,7 @@ import { getClients } from '../../../api/clients.api';
 import Sidebar from '../../../components/layout/Sidebar';
 import { getSellersWithNumClients, setSellerToClient } from '../../../api/sellers.api';
 import { notifyError, notifySuccess } from '../../../components/shared/Alerts';
+import './ClientStyles.css';
 
 const Clients = () => {
   const navigate = useNavigate();
@@ -124,7 +125,7 @@ const Clients = () => {
           </Row>
 
           {/* Client Details Modal */}
-          <Modal show={showModal} onHide={handleClose} size="lg" centered>
+          <Modal show={showModal} onHide={handleClose} size="lg" centered className="client-modal">
             <Modal.Header closeButton>
               <Modal.Title>Información del Cliente</Modal.Title>
             </Modal.Header>
@@ -157,9 +158,9 @@ const Clients = () => {
                       <div className="pricing-user-info seller justify-content-end">
                         <div className="pricing-user-details text-end me-2">
                           <span className="pricing-user-role">Vendedor Asignado</span>
-                          <a href={`/sellers/${selectedClient.vendedorQueAtiende.id}`} className="pricing-user-name" onClick={(e) => e.stopPropagation()}>
+                          <span className="seller-name-badge">
                             {selectedClient.vendedorQueAtiende.nombre}
-                          </a>
+                          </span>
                         </div>
                         <img
                           src={selectedClient.vendedorQueAtiende.fotoPerfil}

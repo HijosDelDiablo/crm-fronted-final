@@ -122,9 +122,9 @@ const Dashboard = () => {
             <div className="dashboard-item" data-swapy-item="item-1">
               <InsightCardSubtitle
                 title="Total Sales"
-                value={dashboardData.totalSales.totalCotizaciones || "N/A"}
+                value={dashboardData.totalSales?.totalCotizaciones || "0"}
                 value2={
-                  "$" + dashboardData.totalSales.montoTotal.toFixed(2) || "N/A"
+                  "$" + (dashboardData.totalSales?.montoTotal?.toFixed(2) || "0.00")
                 }
                 icon="💰"
                 trend="up"

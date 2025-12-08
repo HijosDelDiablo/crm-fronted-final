@@ -13,7 +13,8 @@ export const getMisPagos = async (navigate) => {
 // === FUNCIONES PARA ADMIN/VENDEDOR ===
 export const getPagosPorCompra = async (compraId, navigate) => {
     const response = await fetchApiGet(`/pagos/por-compra/${compraId}`, navigate, 'Error al obtener pagos de la compra');
-    return response || [];
+    // Si la respuesta tiene la propiedad 'pagos', devolvemos eso. Si no, asumimos que es el array o devolvemos vacío.
+    return response?.pagos || response || [];
 };
 
 export const registrarPago = async (payload, navigate) => {
