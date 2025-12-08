@@ -29,9 +29,23 @@ const Gastos = () => {
                 getGastos(navigate),
                 getTotalGastos(navigate)
             ]);
-            setGastos(gastosData || []);
-            setTotalGastos(totalData?.total || 0);
+
+            console.log('💰 Gastos Data:', gastosData);
+            console.log('💰 Total Data:', totalData);
+
+            const list = gastosData || [];
+            setGastos(list);
+
+            // Calcular el total directamente de la lista para asegurar que coincida
+            const calculatedTotal = list.reduce((acc, curr) => {
+                const amount = parseFloat(curr.monto) || 0;
+                return acc + amount;
+            }, 0);
+
+            console.log('💰 Calculated Total from list:', calculatedTotal);
+            setTotalGastos(calculatedTotal);
         } catch (err) {
+            console.error(err);
             setError('Error al cargar los gastos');
         } finally {
             setLoading(false);
