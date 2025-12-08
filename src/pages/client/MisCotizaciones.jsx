@@ -228,13 +228,25 @@ const MisCotizaciones = () => {
                         <p className="empty-state-message">
                             Visita nuestro catálogo para crear tu primera cotización
                         </p>
-                        <Button 
-                            variant="primary" 
-                            className="mt-3 btn-rounded"
+                        <button
+                            style={{
+                                borderRadius: '6px',
+                                backgroundColor: '#3b82f6',
+                                border: '1px solid #3b82f6',
+                                color: 'white',
+                                padding: '0.5rem 1rem',
+                                fontWeight: '500',
+                                cursor: 'pointer',
+                                transition: 'background-color 0.2s ease',
+                                fontSize: '0.875rem',
+                                marginTop: '1rem'
+                            }}
                             onClick={() => navigate('/cliente/catalogo')}
+                            onMouseEnter={(e) => e.target.style.backgroundColor = '#2563eb'}
+                            onMouseLeave={(e) => e.target.style.backgroundColor = '#3b82f6'}
                         >
                             Ir al Catálogo
-                        </Button>
+                        </button>
                     </div>
                 ) : (
                     <Row>
@@ -242,9 +254,9 @@ const MisCotizaciones = () => {
                             <Col xxl={3} xl={4} lg={4} md={6} sm={12} key={cotizacion._id} className="mb-4">
                                 <div className="product-card h-100 d-flex flex-column">
                                     <div className="product-img-container" style={{ height: '160px' }}>
-                                        <img 
-                                            className="product-img" 
-                                            src={cotizacion.coche?.imageUrl || "https://via.placeholder.com/400x300?text=Auto"} 
+                                        <img
+                                            className="product-img"
+                                            src={cotizacion.coche?.imageUrl || "https://via.placeholder.com/400x300?text=Auto"}
                                             alt={`${cotizacion.coche?.marca} ${cotizacion.coche?.modelo}`}
                                         />
                                         {getStatusBadge(cotizacion.status)}
@@ -256,7 +268,7 @@ const MisCotizaciones = () => {
                                         <small className="text-muted mb-3 d-block">
                                             Solicitado el: {new Date(cotizacion.createdAt).toLocaleDateString('es-ES')}
                                         </small>
-                                        
+
                                         <div className="p-3 bg-light rounded mb-3">
                                             <div className="d-flex justify-content-between mb-1">
                                                 <span>Enganche:</span>
@@ -272,34 +284,80 @@ const MisCotizaciones = () => {
 
                                         {cotizacion.status?.toLowerCase() === 'aprobada' ? (
                                             compras[cotizacion._id] ? (
-                                                <button 
-                                                    type="button" 
-                                                    className="w-100 btn-rounded mt-auto btn btn-primary"
+                                                <button
+                                                    type="button"
+                                                    style={{
+                                                        width: '100%',
+                                                        borderRadius: '6px',
+                                                        marginTop: 'auto',
+                                                        backgroundColor: '#3b82f6',
+                                                        border: '1px solid #3b82f6',
+                                                        color: 'white',
+                                                        padding: '0.5rem 1rem',
+                                                        fontWeight: '500',
+                                                        cursor: 'pointer',
+                                                        transition: 'background-color 0.2s ease',
+                                                        fontSize: '0.875rem'
+                                                    }}
                                                     onClick={() => navigate(`/cliente/compras/${compras[cotizacion._id]._id}`)}
+                                                    onMouseEnter={(e) => e.target.style.backgroundColor = '#2563eb'}
+                                                    onMouseLeave={(e) => e.target.style.backgroundColor = '#3b82f6'}
                                                 >
                                                     Ver Compra Activa
                                                 </button>
                                             ) : (
                                                 <div className="d-flex gap-2 mt-auto">
-                                                    <button 
-                                                        type="button" 
-                                                        className="flex-grow-1 btn-rounded btn btn-outline-success"
+                                                    <button
+                                                        type="button"
+                                                        style={{
+                                                            flexGrow: 1,
+                                                            borderRadius: '6px',
+                                                            border: '1px solid #10b981',
+                                                            backgroundColor: 'transparent',
+                                                            color: '#10b981',
+                                                            padding: '0.5rem 1rem',
+                                                            fontWeight: '500',
+                                                            cursor: 'pointer',
+                                                            transition: 'all 0.2s ease',
+                                                            fontSize: '0.875rem'
+                                                        }}
                                                         onClick={() => handleVerDetallesAprobados(cotizacion)}
+                                                        onMouseEnter={(e) => {
+                                                            e.target.style.backgroundColor = '#10b981';
+                                                            e.target.style.color = 'white';
+                                                        }}
+                                                        onMouseLeave={(e) => {
+                                                            e.target.style.backgroundColor = 'transparent';
+                                                            e.target.style.color = '#10b981';
+                                                        }}
                                                     >
                                                         Ver Detalles
                                                     </button>
-                                                    <button 
-                                                        type="button" 
-                                                        className="flex-grow-1 btn-rounded btn btn-success"
+                                                    <button
+                                                        type="button"
+                                                        style={{
+                                                            flexGrow: 1,
+                                                            borderRadius: '6px',
+                                                            backgroundColor: '#10b981',
+                                                            border: '1px solid #10b981',
+                                                            color: 'white',
+                                                            padding: '0.5rem 1rem',
+                                                            fontWeight: '500',
+                                                            cursor: 'pointer',
+                                                            transition: 'background-color 0.2s ease',
+                                                            fontSize: '0.875rem'
+                                                        }}
                                                         onClick={() => handleIniciarCompra(cotizacion)}
+                                                        onMouseEnter={(e) => e.target.style.backgroundColor = '#059669'}
+                                                        onMouseLeave={(e) => e.target.style.backgroundColor = '#10b981'}
                                                     >
                                                         Comprar
                                                     </button>
                                                 </div>
                                             )
                                         ) : (
-                                            <button 
-                                                type="button" 
+                                            <button
+                                                type="button"
                                                 className="w-100 btn-rounded mt-auto btn btn-outline-secondary"
                                                 disabled
                                             >
@@ -368,20 +426,42 @@ const MisCotizaciones = () => {
                         </Form>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button
-                            variant="secondary"
+                        <button
+                            style={{
+                                borderRadius: '6px',
+                                backgroundColor: '#6b7280',
+                                border: '1px solid #6b7280',
+                                color: 'white',
+                                padding: '0.5rem 1rem',
+                                fontWeight: '500',
+                                cursor: 'pointer',
+                                transition: 'background-color 0.2s ease',
+                                fontSize: '0.875rem'
+                            }}
                             onClick={() => setShowModal(false)}
-                            className="btn-rounded"
+                            onMouseEnter={(e) => e.target.style.backgroundColor = '#4b5563'}
+                            onMouseLeave={(e) => e.target.style.backgroundColor = '#6b7280'}
                         >
                             Cancelar
-                        </Button>
-                        <Button
-                            variant="primary"
+                        </button>
+                        <button
+                            style={{
+                                borderRadius: '6px',
+                                backgroundColor: '#3b82f6',
+                                border: '1px solid #3b82f6',
+                                color: 'white',
+                                padding: '0.5rem 1rem',
+                                fontWeight: '500',
+                                cursor: 'pointer',
+                                transition: 'background-color 0.2s ease',
+                                fontSize: '0.875rem'
+                            }}
                             onClick={handleSubmitCompra}
-                            className="btn-rounded"
+                            onMouseEnter={(e) => e.target.style.backgroundColor = '#2563eb'}
+                            onMouseLeave={(e) => e.target.style.backgroundColor = '#3b82f6'}
                         >
                             Iniciar Compra
-                        </Button>
+                        </button>
                     </Modal.Footer>
                 </Modal>
 
@@ -443,6 +523,120 @@ const MisCotizaciones = () => {
                     </div>
                 </Modal>
             </Container>
+
+            <style>{`
+                .product-card {
+                    background-color: #1f2937;
+                    border: 1px solid #374151;
+                    border-radius: 8px;
+                    color: white;
+                    transition: transform 0.2s ease, box-shadow 0.2s ease;
+                    overflow: hidden;
+                }
+                .product-card:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+                }
+                .product-img-container {
+                    position: relative;
+                    overflow: hidden;
+                    border-radius: 8px 8px 0 0;
+                }
+                .product-img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    transition: transform 0.3s ease;
+                }
+                .product-img:hover {
+                    transform: scale(1.05);
+                }
+                .product-badge {
+                    position: absolute;
+                    top: 10px;
+                    right: 10px;
+                    background-color: #10b981 !important;
+                    color: white !important;
+                    border: none;
+                    font-weight: 500;
+                }
+                .product-body {
+                    padding: 1rem;
+                }
+                .product-body h5 {
+                    color: white;
+                    margin-bottom: 0.5rem;
+                    font-weight: 600;
+                }
+                .product-body small {
+                    color: #9ca3af;
+                    font-size: 0.875rem;
+                }
+                .product-body .bg-light {
+                    background-color: #374151 !important;
+                    border: 1px solid #4b5563;
+                    color: white;
+                    border-radius: 6px;
+                }
+                .product-body .bg-light span {
+                    color: white;
+                }
+                .product-body .text-primary {
+                    color: #3b82f6 !important;
+                    font-weight: 600;
+                }
+                .btn-primary {
+                    background-color: #3b82f6;
+                    border-color: #3b82f6;
+                    color: white;
+                    border-radius: 6px;
+                    font-weight: 500;
+                    transition: background-color 0.2s ease;
+                }
+                .btn-primary:hover {
+                    background-color: #2563eb;
+                    border-color: #2563eb;
+                    color: white;
+                }
+                .btn-outline-success {
+                    border-color: #10b981;
+                    color: #10b981;
+                    border-radius: 6px;
+                    font-weight: 500;
+                    transition: all 0.2s ease;
+                }
+                .btn-outline-success:hover {
+                    background-color: #10b981;
+                    border-color: #10b981;
+                    color: white;
+                }
+                .btn-success {
+                    background-color: #10b981;
+                    border-color: #10b981;
+                    border-radius: 6px;
+                    font-weight: 500;
+                    transition: background-color 0.2s ease;
+                }
+                .btn-success:hover {
+                    background-color: #059669;
+                    border-color: #059669;
+                }
+                .btn-outline-secondary {
+                    border-color: #6b7280;
+                    color: #6b7280;
+                    border-radius: 6px;
+                    font-weight: 500;
+                }
+                .btn-outline-secondary:disabled {
+                    background-color: #374151;
+                    border-color: #4b5563;
+                    color: #6b7280;
+                    opacity: 0.6;
+                }
+                .btn-rounded {
+                    border-radius: 6px !important;
+                }
+            `}</style>
         </DashboardLayout>
     );
 };

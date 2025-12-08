@@ -3,11 +3,13 @@ import { Container, Row, Col, Card, Alert, Spinner, Table, Button, Modal, Form }
 import { useParams, useNavigate } from 'react-router-dom';
 import { getCompraById } from '../../api/compras.api';
 import { getMisPagos, registrarPago } from '../../api/pagos.api';
+import { createSellerReview } from '../../api/reviews.api';
 import StatusBadge from '../../components/shared/StatusBadge';
 import PaymentTable from '../../components/shared/PaymentTable';
 import PaymentSchedule from '../../components/shared/PaymentSchedule';
 import { calculateAmortizationSchedule } from '../../utils/amortization.util';
 import DashboardLayout from '../../components/layout/DashboardLayaut';
+import { Star } from 'lucide-react';
 
 const DetalleCompra = () => {
     const { id } = useParams();
@@ -17,7 +19,7 @@ const DetalleCompra = () => {
     const [schedule, setSchedule] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    
+
     // Payment Modal State
     const [showPaymentModal, setShowPaymentModal] = useState(false);
     const [paymentForm, setPaymentForm] = useState({
@@ -26,6 +28,11 @@ const DetalleCompra = () => {
         notas: ''
     });
     const [submittingPayment, setSubmittingPayment] = useState(false);
+
+    // Review Modal State
+    const [showReviewModal, setShowReviewModal] = useState(false);
+    const [reviewForm, setReviewForm] = useState({ puntuacion: 5, mensaje: '' });
+    const [submittingReview, setSubmittingReview] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -42,7 +49,7 @@ const DetalleCompra = () => {
                     const enganche = compraData.cotizacion.enganche || 0;
                     const principal = compraData.cotizacion.montoFinanciar || (precio - enganche);
                     // Asumiendo que tasaInteres viene como decimal (ej: 0.15 para 15%)
-                    const rate = (compraData.cotizacion.tasaInteres || 0) * 100; 
+                    const rate = (compraData.cotizacion.tasaInteres || 0) * 100;
                     const months = compraData.cotizacion.plazoMeses || 0;
 
                     if (principal > 0 && months > 0) {
@@ -97,7 +104,7 @@ const DetalleCompra = () => {
                 metodoPago: 'Tarjeta', // Force Card for client as per requirement
                 notas: paymentForm.notas
             }, navigate);
-            
+
             alert('Pago registrado correctamente');
             setShowPaymentModal(false);
             setPaymentForm({ monto: '', metodoPago: 'Tarjeta', notas: '' });
@@ -107,6 +114,34 @@ const DetalleCompra = () => {
             alert('Error al registrar el pago');
         } finally {
             setSubmittingPayment(false);
+        }
+    };
+
+    const handleReviewSubmit = async (e) => {
+        e.preventDefault();
+        setSubmittingReview(true);
+        try {
+            // Intentar obtener el ID del vendedor de la compra
+            const vendedorId = compra.vendedor?._id || compra.vendedor || compra.cotizacion?.vendedor;
+
+            if (!vendedorId) {
+                alert('No se encontró información del vendedor para calificar.');
+                return;
+            }
+
+            await createSellerReview({
+                vendedorId: vendedorId,
+                mensaje: reviewForm.mensaje,
+                puntuacion: reviewForm.puntuacion
+            }, navigate);
+
+            alert('¡Gracias por tu calificación!');
+            setShowReviewModal(false);
+            setReviewForm({ puntuacion: 5, mensaje: '' });
+        } catch (err) {
+            alert('Error al enviar la reseña');
+        } finally {
+            setSubmittingReview(false);
         }
     };
 
@@ -221,6 +256,12 @@ const DetalleCompra = () => {
                                     <Button variant="success" onClick={() => setShowPaymentModal(true)}>
                                         Realizar Pago (Tarjeta)
                                     </Button>
+                                    {(compra.status === 'Aprobada' || compra.status === 'Completada') && (
+                                        <Button variant="outline-warning" onClick={() => setShowReviewModal(true)}>
+                                            <Star size={18} className="me-2" />
+                                            Calificar Vendedor
+                                        </Button>
+                                    )}
                                 </div>
                             </Card.Body>
                         </Card>
@@ -258,7 +299,7 @@ const DetalleCompra = () => {
                     </Card.Body>
                 </Card>
 
-               
+
 
                 {/* Modal Realizar Pago */}
                 <Modal show={showPaymentModal} onHide={() => setShowPaymentModal(false)}>
@@ -302,6 +343,66 @@ const DetalleCompra = () => {
                         </Form>
                     </Modal.Body>
                 </Modal>
+
+                {/* Modal Calificar Vendedor */}
+                <Modal show={showReviewModal} onHide={() => setShowReviewModal(false)} centered className="dark-modal">
+                    <Modal.Header closeButton className="bg-dark text-white border-secondary">
+                        <Modal.Title>Calificar Experiencia</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body className="bg-dark text-white">
+                        <Form onSubmit={handleReviewSubmit}>
+                            <div className="text-center mb-4">
+                                <p className="mb-2">¿Cómo fue tu experiencia con el vendedor?</p>
+                                <div className="d-flex justify-content-center gap-2">
+                                    {[1, 2, 3, 4, 5].map((star) => (
+                                        <Star
+                                            key={star}
+                                            size={32}
+                                            className="cursor-pointer star-rating"
+                                            fill={star <= reviewForm.puntuacion ? "#fbbf24" : "none"}
+                                            color={star <= reviewForm.puntuacion ? "#fbbf24" : "#6b7280"}
+                                            onClick={() => setReviewForm({ ...reviewForm, puntuacion: star })}
+                                            style={{ cursor: 'pointer', transition: 'transform 0.2s' }}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Comentarios</Form.Label>
+                                <Form.Control
+                                    as="textarea"
+                                    rows={3}
+                                    value={reviewForm.mensaje}
+                                    onChange={(e) => setReviewForm({ ...reviewForm, mensaje: e.target.value })}
+                                    placeholder="Escribe tu opinión aquí..."
+                                    className="bg-dark text-white border-secondary"
+                                    style={{ color: 'white', backgroundColor: '#1f2937' }}
+                                />
+                            </Form.Group>
+                            <div className="d-flex justify-content-end gap-2">
+                                <Button variant="secondary" onClick={() => setShowReviewModal(false)}>
+                                    Cancelar
+                                </Button>
+                                <Button variant="warning" type="submit" disabled={submittingReview}>
+                                    {submittingReview ? 'Enviando...' : 'Enviar Calificación'}
+                                </Button>
+                            </div>
+                        </Form>
+                    </Modal.Body>
+                </Modal>
+
+                <style>{`
+                    .dark-modal .modal-content {
+                        background-color: #1f2937;
+                        border: 1px solid #374151;
+                    }
+                    .dark-modal .btn-close {
+                        filter: invert(1) grayscale(100%) brightness(200%);
+                    }
+                    .star-rating:hover {
+                        transform: scale(1.2);
+                    }
+                `}</style>
             </Container>
         </DashboardLayout>
     );
