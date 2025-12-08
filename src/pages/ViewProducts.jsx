@@ -16,11 +16,15 @@ export default function ViewProducts() {
     const [showModal, setShowModal] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [formData, setFormData] = useState({ enganchePercent: 20, plazoMeses: 12 });
-    const { user } = useSelector((state) => state.auth);
+    const { user, token } = useSelector((state) => state.auth);
 
     useEffect(() => {
-        fetchProducts();
-    }, []);
+        if (token) {
+            fetchProducts();
+        } else {
+            setLoading(false);
+        }
+    }, [token]);
 
     const fetchProducts = async () => {
         setLoading(true);
@@ -122,6 +126,20 @@ export default function ViewProducts() {
                         <Spinner animation="border" variant="primary" />
                         <p className="mt-2">Cargando productos...</p>
                     </div>
+                </Container>
+            </DashboardLayout>
+        );
+    }
+
+    if (!token) {
+        return (
+            <DashboardLayout>
+                <Container fluid className="py-4">
+                    <Alert variant="warning">
+                        <Alert.Heading>Autenticación requerida</Alert.Heading>
+                        <p>No se puede cargar los productos porque no hay un token de autenticación válido.</p>
+                        <p>Por favor, inicia sesión nuevamente.</p>
+                    </Alert>
                 </Container>
             </DashboardLayout>
         );

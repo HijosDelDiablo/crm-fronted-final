@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import api from "../../services/api";
+import { getAllProducts } from "../../api/products.api";
+import { crearCotizacion } from "../../api/pricings.api";
 import { Container, Row, Col, Modal, Form, Button, Badge, Table, InputGroup } from "react-bootstrap";
 import { ShoppingCart, FileText, Info, CheckCircle, Car, Search, Filter, X, TrendingUp, Calendar } from "lucide-react";
 import toast from "react-hot-toast";
@@ -32,7 +33,7 @@ export default function Catalogo() {
 
   const cargarProductos = async () => {
     try {
-      const { data } = await api.get("/products/tienda");
+      const data = await getAllProducts(navigate);
       setProductos(data);
     } catch (error) {
       toast.error("Error cargando el catálogo");
@@ -58,7 +59,7 @@ export default function Catalogo() {
         plazoMeses: Number(plazo)
       };
 
-      const { data } = await api.post("/cotizacion", payload);
+      const data = await crearCotizacion(payload, navigate);
 
       if (modalType === "cotizar") {
         toast.success("¡Cotización creada.", { duration: 5000 });
@@ -67,7 +68,7 @@ export default function Catalogo() {
 
       return data._id;
     } catch (error) {
-      toast.error(error.response?.data?.message || "Error al cotizar");
+      toast.error("Error al cotizar");
       return null;
     }
   };

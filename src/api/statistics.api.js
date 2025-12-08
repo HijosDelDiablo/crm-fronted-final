@@ -1,5 +1,10 @@
 import { fetchApiGet } from "../utils/api-fetch-factory.util";
 
+// Dashboard Stats
+export const getDashboardStats = async (navigate) => {
+    return await fetchApiGet('/dashboard/stats', navigate, 'Error al obtener estadísticas del dashboard');
+};
+
 // Apis Dashboard
 export const getSalesReport = async (startDate, endDate, navigate) => {
     return await fetchApiGet('/dashboard/reporte-ventas?startDate='

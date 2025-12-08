@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Card, Button, Alert, Spinner, Form, Modal } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { getCotizacionesAprobadasCliente } from '../../api/pricings.api';
+import { getMisCotizaciones } from '../../api/pricings.api';
 import { iniciarProcesoCompra, getCompraPorCotizacion } from '../../api/compras.api';
 import StatusBadge from '../../components/shared/StatusBadge';
 import DashboardLayout from '../../components/layout/DashboardLayaut';
@@ -22,56 +22,62 @@ const MisCotizaciones = () => {
     });
     const navigate = useNavigate();
     const user = useSelector(state => state.auth.user);
+    const token = useSelector(state => state.auth.token);
 
-    useEffect(() => {
-        const fetchCotizaciones = async () => {
-            console.log('🔍 MisCotizaciones - Iniciando carga de cotizaciones');
-            console.log('🔍 MisCotizaciones - Usuario actual:', user);
+    const fetchCotizaciones = async () => {
+        console.log('🔍 MisCotizaciones - Iniciando carga de cotizaciones');
+        console.log('🔍 MisCotizaciones - Usuario actual:', user);
 
-            if (!user?._id) {
-                console.log('🔍 MisCotizaciones - No hay usuario ID, cancelando carga');
-                return;
-            }
+        if (!user?._id) {
+            console.log('🔍 MisCotizaciones - No hay usuario ID, cancelando carga');
+            return;
+        }
 
-            try {
-                console.log('🔍 MisCotizaciones - Llamando API getCotizacionesAprobadasCliente');
-                const data = await getCotizacionesAprobadasCliente(user._id, navigate);
-                console.log('🔍 MisCotizaciones - Datos recibidos:', data);
+        try {
+            console.log('🔍 MisCotizaciones - Llamando API getCotizacionesAprobadasCliente');
+            const data = await getMisCotizaciones(navigate);
+            console.log('🔍 MisCotizaciones - Datos recibidos:', data);
 
-                // Asegurar que sea un array
-                const cotizacionesArray = Array.isArray(data) ? data : [data];
-                console.log('🔍 MisCotizaciones - Número de cotizaciones:', cotizacionesArray.length);
+            // Asegurar que sea un array
+            const cotizacionesArray = Array.isArray(data) ? data : [data];
+            console.log('🔍 MisCotizaciones - Número de cotizaciones:', cotizacionesArray.length);
 
-                setCotizaciones(cotizacionesArray);
+            setCotizaciones(cotizacionesArray);
 
-                // Fetch purchases for approved quotes
-                const comprasMap = {};
-                for (const cotizacion of cotizacionesArray) {
-                    if (cotizacion.status?.toLowerCase() === 'aprobada') {
-                        try {
-                            console.log('🔍 MisCotizaciones - Buscando compra para cotización:', cotizacion._id);
-                            const compra = await getCompraPorCotizacion(cotizacion._id, navigate);
-                            if (compra) {
-                                comprasMap[cotizacion._id] = compra;
-                                console.log('🔍 MisCotizaciones - Compra encontrada:', compra);
-                            }
-                        } catch (err) {
-                            console.log('🔍 MisCotizaciones - No hay compra para cotización:', cotizacion._id);
+            // Fetch purchases for approved quotes
+            const comprasMap = {};
+            for (const cotizacion of cotizacionesArray) {
+                if (cotizacion.status?.toLowerCase() === 'aprobada') {
+                    try {
+                        console.log('🔍 MisCotizaciones - Buscando compra para cotización:', cotizacion._id);
+                        const compra = await getCompraPorCotizacion(cotizacion._id, navigate);
+                        if (compra) {
+                            comprasMap[cotizacion._id] = compra;
+                            console.log('🔍 MisCotizaciones - Compra encontrada:', compra);
                         }
+                    } catch (err) {
+                        console.log('🔍 MisCotizaciones - No hay compra para cotización:', cotizacion._id);
                     }
                 }
-                setCompras(comprasMap);
-            } catch (err) {
-                console.error('❌ MisCotizaciones - Error al cargar cotizaciones:', err);
-                setError('Error al cargar las cotizaciones');
-            } finally {
-                setLoading(false);
-                console.log('🔍 MisCotizaciones - Carga completada');
             }
-        };
+            setCompras(comprasMap);
+        } catch (err) {
+            console.error('❌ MisCotizaciones - Error al cargar cotizaciones:', err);
+            setError('Error al cargar las cotizaciones');
+        } finally {
+            setLoading(false);
+            console.log('🔍 MisCotizaciones - Carga completada');
+        }
+    };
 
-        fetchCotizaciones();
-    }, [user, navigate]);
+    useEffect(() => {
+        if (token && user?._id) {
+            fetchCotizaciones();
+        } else if (!token) {
+            setLoading(false);
+            setError('Token de autenticación no disponible');
+        }
+    }, [token, user]);
 
     const handleIniciarCompra = (cotizacion) => {
         console.log('🔍 MisCotizaciones - Iniciando compra para cotización:', cotizacion);
@@ -130,6 +136,20 @@ const MisCotizaciones = () => {
             <DashboardLayout>
                 <Container className="mt-4">
                     <Alert variant="danger">{error}</Alert>
+                </Container>
+            </DashboardLayout>
+        );
+    }
+
+    if (!token) {
+        return (
+            <DashboardLayout>
+                <Container className="mt-4">
+                    <Alert variant="warning">
+                        <Alert.Heading>Autenticación requerida</Alert.Heading>
+                        <p>No se puede cargar las cotizaciones porque no hay un token de autenticación válido.</p>
+                        <p>Por favor, inicia sesión nuevamente.</p>
+                    </Alert>
                 </Container>
             </DashboardLayout>
         );

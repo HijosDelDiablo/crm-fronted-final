@@ -5,9 +5,10 @@ export const fetchHeader = () => {
 
     // Es buena práctica validar que exista el usuario/token
     if (!user || !user.accessToken) {
+        console.log('🔐 fetchHeader - No user or token found');
         return { headers: {} };
     }
-    if (import.meta.env.DEVELOPMENT) console.log(user.accessToken)
+    if (import.meta.env.DEVELOPMENT) console.log('🔐 fetchHeader - Token:', user.accessToken.substring(0, 20) + '...');
     return {
         headers: {
             "Content-Type": "application/json",

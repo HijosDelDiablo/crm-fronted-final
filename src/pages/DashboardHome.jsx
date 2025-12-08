@@ -9,11 +9,15 @@ import "../pages/products.css";
 export default function DashboardHome() {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
-    const { user } = useSelector((state) => state.auth);
+    const { user, token } = useSelector((state) => state.auth);
 
     useEffect(() => {
-        fetchRandomProducts();
-    }, []);
+        if (token) {
+            fetchRandomProducts();
+        } else {
+            setLoading(false);
+        }
+    }, [token]);
 
     const fetchRandomProducts = async () => {
         try {
@@ -37,6 +41,20 @@ export default function DashboardHome() {
                         <Spinner animation="border" variant="primary" />
                         <p className="mt-2">Cargando...</p>
                     </div>
+                </Container>
+            </DashboardLayout>
+        );
+    }
+
+    if (!token) {
+        return (
+            <DashboardLayout>
+                <Container fluid className="py-4">
+                    <Alert variant="warning">
+                        <Alert.Heading>Autenticación requerida</Alert.Heading>
+                        <p>No se puede cargar la información porque no hay un token de autenticación válido.</p>
+                        <p>Por favor, inicia sesión nuevamente.</p>
+                    </Alert>
                 </Container>
             </DashboardLayout>
         );

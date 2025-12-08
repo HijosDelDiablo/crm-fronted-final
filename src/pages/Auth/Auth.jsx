@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './../../styles/Auth.css';
 import ButtonPrimary from '../../components/shared/ButtonPrimary';
-import { loginFetch, registerFetch } from '../../api/auth';
+import { loginFetch, registerFetch, googleLogin } from '../../api/auth';
 import { notifyError, notifySuccess } from '../../components/shared/Alerts';
 import { validateField } from './validations';
 import AuthService from './AuthService';
@@ -57,6 +57,7 @@ const Auth = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log('handleSubmit called, view:', view);
 
     // Validar todos los campos
     const newErrors = {};
@@ -72,28 +73,38 @@ const Auth = () => {
     });
 
     setErrors(newErrors);
+    console.log('Validation errors:', newErrors);
 
     if (Object.keys(newErrors).length > 0) {
+      console.log('Validation failed, not submitting');
+      const errorMessages = Object.values(newErrors).join('. ');
+      notifyError('Por favor corrige los errores: ' + errorMessages);
       return;
     }
 
     setIsLoading(true);
+    console.log('Starting submission, isLoading set to true');
 
     try {
       if (view === 'login') {
+        console.log('Calling loginFetch');
         const response = await loginFetch(formData);
         handleLoginResponse(response, navigate, dispatch, (u) => AuthService.login(u), setIsLoading);
 
       } else if (view === 'register') {
-        console.log('Register:', {
+        console.log('Calling registerFetch with:', {
           name: formData.name,
           email: formData.email,
           password: formData.password
         });
-        if (await registerFetch(formData)) {
+        const registerResponse = await registerFetch(formData);
+        console.log('registerResponse:', registerResponse);
+        if (registerResponse.status) {
           setView('login');
-          notifySuccess('Registro exitoso. Ya puedes, iniciar sesión.');
-        };
+          notifySuccess(registerResponse.message || 'Registro exitoso. Ya puedes iniciar sesión.');
+        } else {
+          notifyError(registerResponse.message || 'Error en el registro');
+        }
 
       } else if (view === 'recovery') {
         console.log('Recovery:', { email: formData.email });
@@ -109,15 +120,12 @@ const Auth = () => {
   };
 
   const handleGoogleAuth = async () => {
-    //  GOOGLE AUTH IMPLEMENTATION
-    console.log('Google Auth iniciado');
     try {
-      navigate(import.meta.env.VITE_URL_API_AUTH + '/googleInWeb');
+      googleLogin();
     } catch (error) {
-      console.error("Error en loginGoogleFetch: ", error);
-      notifyError('Error en el inicio de sesión: ' + error.message);
+      console.error("Error en Google Auth: ", error);
+      notifyError('Error en el inicio de sesión con Google: ' + error.message);
     }
-    //notifyError('Funcionalidad de Google Auth no implementada');
   };
 
   const switchView = (newView) => {
@@ -174,7 +182,7 @@ const Auth = () => {
                 className={errors.name && touched.name ? 'error' : ''}
                 placeholder="Tu nombre"
               />
-              {errors.name && touched.name && (
+              {errors.name && (
                 <span className="error-message">{errors.name}</span>
               )}
             </div>
@@ -192,7 +200,7 @@ const Auth = () => {
               className={errors.email && touched.email ? 'error' : ''}
               placeholder="tucorreo@email.com"
             />
-            {errors.email && touched.email && (
+            {errors.email && (
               <span className="error-message">{errors.email}</span>
             )}
           </div>
@@ -210,7 +218,7 @@ const Auth = () => {
                 className={errors.tel && touched.tel ? 'error' : ''}
                 placeholder="47700011100"
               />
-              {errors.tel && touched.tel && (
+              {errors.tel && (
                 <span className="error-message">{errors.tel}</span>
               )}
             </div>
@@ -229,7 +237,7 @@ const Auth = () => {
                 className={errors.password && touched.password ? 'error' : ''}
                 placeholder="••••••••"
               />
-              {errors.password && touched.password && (
+              {errors.password && (
                 <span className="error-message">{errors.password}</span>
               )}
             </div>
@@ -248,7 +256,7 @@ const Auth = () => {
                 className={errors.confirmPassword && touched.confirmPassword ? 'error' : ''}
                 placeholder="••••••••"
               />
-              {errors.confirmPassword && touched.confirmPassword && (
+              {errors.confirmPassword && (
                 <span className="error-message">{errors.confirmPassword}</span>
               )}
             </div>

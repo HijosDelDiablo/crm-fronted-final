@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { Spinner, Form, Modal } from "react-bootstrap";
 import toast from "react-hot-toast";
-import api from "../services/api";
+import { getAllProducts, createProduct, uploadProductImage } from "../api/products.api";
 import "./products.css";
 import "./products-form.css";
 import Sidebar from "../components/layout/Sidebar";
@@ -43,20 +43,10 @@ export default function Products() {
     const fetchProducts = async () => {
         setLoading(true);
         try {
-            const { data } = await api.get("/products/all");
+            const data = await getAllProducts(navigate);
             setProducts(data);
         } catch (err) {
-            if (err.response) {
-                if (err.response.status === 401) {
-                    toast.error("No autorizado. Inicia sesión como administrador.");
-                } else if (err.response.status === 403) {
-                    toast.error("Acceso prohibido. No tienes permisos de administrador.");
-                } else {
-                    toast.error("Error al cargar productos: " + (err.response.data?.message || err.message));
-                }
-            } else {
-                toast.error("Error de red al cargar productos");
-            }
+            toast.error("Error al cargar productos");
         } finally {
             setLoading(false);
         }
@@ -134,13 +124,9 @@ export default function Products() {
             if (form.proveedor) payload.proveedor = form.proveedor;
 
             console.log('Payload a enviar:', payload);
-            const { data } = await api.post("/products", payload);
+            const data = await createProduct(payload, navigate);
             if (image) {
-                const formData = new FormData();
-                formData.append("file", image);
-                await api.post(`/products/${data._id}/upload`, formData, {
-                    headers: { "Content-Type": "multipart/form-data" }
-                });
+                await uploadProductImage(data._id, image, navigate);
             }
             toast.success("Producto creado");
             setShowModal(false);

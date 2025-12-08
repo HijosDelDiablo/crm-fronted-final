@@ -8,7 +8,9 @@ export const fetchApiGet = async (url, navigate, errorMessage) => {
     if (response.ok) {
         return response.json();
     } else {
-        if (response.status === 401) navigate('/login');
+        if (response.status === 401 && navigate && typeof navigate === 'function') {
+            navigate('/login');
+        }
         console.error(`${errorMessage} - Status: ${response.status}`);
         return null;
     }
@@ -23,7 +25,9 @@ export const fetchApiPost = async (url, body, navigate, errorMessage) => {
     if (response.ok) {
         return response.json();
     } else {
-        if (response.status === 401) navigate('/login');
+        if (response.status === 401 && navigate && typeof navigate === 'function') {
+            navigate('/login');
+        }
         console.error(`${errorMessage} - Status: ${response.status}`);
         return null;
     }
@@ -37,7 +41,9 @@ export const fetchApiPostWithParams = async (url, navigate, errorMessage, method
     if (response.ok) {
         return response.json();
     } else {
-        if (response.status === 401) navigate('/login');
+        if (response.status === 401 && navigate && typeof navigate === 'function') {
+            navigate('/login');
+        }
         console.error(`${errorMessage} - Status: ${response.status}`);
         return null;
     }
@@ -52,7 +58,9 @@ export const fetchApiPatch = async (url, body, navigate, errorMessage) => {
     if (response.ok) {
         return response.json();
     } else {
-        if (response.status === 401) navigate('/login');
+        if (response.status === 401 && navigate && typeof navigate === 'function') {
+            navigate('/login');
+        }
         console.error(`${errorMessage} - Status: ${response.status}`);
         return null;
     }
