@@ -514,8 +514,8 @@ const MisCotizaciones = () => {
                             </div>
                         </div>
                         <div className="modal-footer">
-                            <button 
-                                type="button" 
+                            <button
+                                type="button"
                                 style={{
                                     borderRadius: '6px',
                                     backgroundColor: '#6b7280',
@@ -533,8 +533,8 @@ const MisCotizaciones = () => {
                             >
                                 Cerrar
                             </button>
-                            <button 
-                                type="button" 
+                            <button
+                                type="button"
                                 style={{
                                     borderRadius: '6px',
                                     backgroundColor: '#10b981',

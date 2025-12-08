@@ -2,151 +2,195 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
 import { Toaster } from "react-hot-toast";
-import Landing from "./pages/Landing/Landing";
-import Auth from "./pages/Auth/Auth";
+import { Suspense, lazy } from "react";
+
+// Context providers (cannot be lazy loaded)
 import { AuthContextProvider } from "./context/AuthContextProvider";
 import { ThemeProvider } from "./context/ThemeContext";
-import NotFound from "./pages/NotFound/NotFound";
-import "bootstrap/dist/css/bootstrap.min.css";
-import Home from "./pages/inicio/Home";
-import LoginGoogle from "./pages/Auth/LoginGoogle";
+
+// Utils (cannot be lazy loaded)
 import ProtectedAdminRoutes from "./utils/ProtectedAdminRoutes";
 import useHeartbeat from "./utils/useHeartBeat";
-import Dashboard from "./pages/AdminModules/Dashboard/Dashboard";
-import Pricings from "./pages/AdminModules/Pricings/Pricings"
-import Clients from "./pages/AdminModules/Clients/Clients";
-import Products from "./pages/Products";
-import Suppliers from "./pages/AdminModules/Suppliers/Suppliers";
-import Sellers from "./pages/AdminModules/Sellers/Sellers";
-import SellerReview from "./pages/AdminModules/Sellers/SellerReview";
-import ViewProducts from "./pages/ViewProducts";
-import ViewPurchases from "./pages/ViewPurchases";
-import DashboardHome from "./pages/DashboardHome";
 
-// Guards nuevos
-import AuthGuard from "./guards/AuthGuard";
-import AdminGuard from "./guards/AdminGuard";
-import ClientGuard from "./guards/ClientGuard";
+// Lazy load components for better code splitting
+const Landing = lazy(() => import("./pages/Landing/Landing"));
+const Auth = lazy(() => import("./pages/Auth/Auth"));
+const NotFound = lazy(() => import("./pages/NotFound/NotFound"));
+const Home = lazy(() => import("./pages/inicio/Home"));
+const LoginGoogle = lazy(() => import("./pages/Auth/LoginGoogle"));
 
-// Páginas nuevas CLIENTE
-import MisCompras from "./pages/Client/MisCompras";
-import DetalleCompra from "./pages/client/DetalleCompra";
-import MisPagos from "./pages/client/MisPagos";
-import MisCotizaciones from "./pages/client/MisCotizaciones";
+// Admin components
+const Dashboard = lazy(() => import("./pages/AdminModules/Dashboard/Dashboard"));
+const Pricings = lazy(() => import("./pages/AdminModules/Pricings/Pricings"));
+const Clients = lazy(() => import("./pages/AdminModules/Clients/Clients"));
+const Products = lazy(() => import("./pages/Products"));
+const Suppliers = lazy(() => import("./pages/AdminModules/Suppliers/Suppliers"));
+const Sellers = lazy(() => import("./pages/AdminModules/Sellers/Sellers"));
+const SellerReview = lazy(() => import("./pages/AdminModules/Sellers/SellerReview"));
+const RevisarCompras = lazy(() => import("./pages/admin/RevisarCompras"));
+const DetalleCompraAdmin = lazy(() => import("./pages/admin/DetalleCompraAdmin"));
+const ComprasPorVendedor = lazy(() => import("./pages/admin/ComprasPorVendedor"));
+const GestionPagos = lazy(() => import("./pages/admin/GestionPagos"));
+const Gastos = lazy(() => import("./pages/admin/Gastos"));
+const Admins = lazy(() => import("./pages/AdminModules/Admins/Admins"));
 
-// Páginas nuevas ADMIN
-import RevisarCompras from "./pages/admin/RevisarCompras";
-import DetalleCompraAdmin from "./pages/admin/DetalleCompraAdmin";
-import ComprasPorVendedor from "./pages/admin/ComprasPorVendedor";
-import GestionPagos from "./pages/admin/GestionPagos";
-import Gastos from "./pages/admin/Gastos";
-import Admins from "./pages/AdminModules/Admins/Admins";
-import MyProfile from "./pages/MyProfile";
+// Client components
+const DashboardHome = lazy(() => import("./pages/DashboardHome"));
+const ViewProducts = lazy(() => import("./pages/ViewProducts"));
+const ViewPurchases = lazy(() => import("./pages/ViewPurchases"));
+const MisCompras = lazy(() => import("./pages/Client/MisCompras"));
+const DetalleCompra = lazy(() => import("./pages/client/DetalleCompra"));
+const MisPagos = lazy(() => import("./pages/client/MisPagos"));
+const MisCotizaciones = lazy(() => import("./pages/client/MisCotizaciones"));
+const MyProfile = lazy(() => import("./pages/MyProfile"));
+
+// Guards
+const AuthGuard = lazy(() => import("./guards/AuthGuard"));
+const AdminGuard = lazy(() => import("./guards/AdminGuard"));
+const ClientGuard = lazy(() => import("./guards/ClientGuard"));
 
 function App() {
   useHeartbeat();
+
+  // Loading fallback component
+  const LoadingFallback = () => (
+    <div style={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '100vh',
+      backgroundColor: '#1f2937',
+      color: 'white',
+      fontSize: '1.2rem'
+    }}>
+      <div style={{ textAlign: 'center' }}>
+        <div style={{
+          width: '40px',
+          height: '40px',
+          border: '4px solid #374151',
+          borderTop: '4px solid #3b82f6',
+          borderRadius: '50%',
+          animation: 'spin 1s linear infinite',
+          margin: '0 auto 1rem'
+        }}></div>
+        Cargando Autobots CRM...
+      </div>
+      <style>{`
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      `}</style>
+    </div>
+  );
+
   return (
-    <BrowserRouter>
-      <ThemeProvider>
-        <AuthContextProvider>
-          <Routes>
-            <Route path="*" element={<NotFound />} />
+    <Suspense fallback={<LoadingFallback />}>
+      <BrowserRouter>
+        <ThemeProvider>
+          <AuthContextProvider>
+            <Provider store={store}>
+              <Toaster />
+              <Routes>
+                <Route path="*" element={<NotFound />} />
 
-            {/* RUTAS PÚBLICAS */}
-            <Route path="/" element={<Landing />} />
-            <Route path="/login" element={<Auth />} />
-            <Route path="/loginGoogle" element={<LoginGoogle />} />
+                {/* RUTAS PÚBLICAS */}
+                <Route path="/" element={<Landing />} />
+                <Route path="/login" element={<Auth />} />
+                <Route path="/loginGoogle" element={<LoginGoogle />} />
 
-            {/* RUTAS ADMIN - Protegidas por AdminGuard */}
-            <Route path="/admin/*" element={
-              <AdminGuard>
-                <Routes>
-                  <Route path="dashboard" element={<Dashboard />} />
-                  <Route path="products" element={<Products />} />
-                  <Route path="pricings" element={<Pricings />} />
-                  <Route path="clientes" element={<Clients />} />
-                  <Route path="vendedores" element={<Sellers />} />
-                  <Route path="seller-reviews/:id" element={<SellerReview />} />
-                  <Route path="suppliers" element={<Suppliers />} />
-                  {/* Nuevas rutas admin */}
-                  <Route path="compras" element={<RevisarCompras />} />
-                  <Route path="compras/:id" element={<DetalleCompraAdmin />} />
-                  <Route path="compras-por-vendedor" element={<ComprasPorVendedor />} />
-                  <Route path="pagos" element={<GestionPagos />} />
-                  <Route path="gastos" element={<Gastos />} />
-                  <Route path="administradores" element={<Admins />} />
-                </Routes>
-              </AdminGuard>
-            } />
+                {/* RUTAS ADMIN - Protegidas por AdminGuard */}
+                <Route path="/admin/*" element={
+                  <AdminGuard>
+                    <Routes>
+                      <Route path="dashboard" element={<Dashboard />} />
+                      <Route path="products" element={<Products />} />
+                      <Route path="pricings" element={<Pricings />} />
+                      <Route path="clientes" element={<Clients />} />
+                      <Route path="vendedores" element={<Sellers />} />
+                      <Route path="seller-reviews/:id" element={<SellerReview />} />
+                      <Route path="suppliers" element={<Suppliers />} />
+                      {/* Nuevas rutas admin */}
+                      <Route path="compras" element={<RevisarCompras />} />
+                      <Route path="compras/:id" element={<DetalleCompraAdmin />} />
+                      <Route path="compras-por-vendedor" element={<ComprasPorVendedor />} />
+                      <Route path="pagos" element={<GestionPagos />} />
+                      <Route path="gastos" element={<Gastos />} />
+                      <Route path="administradores" element={<Admins />} />
+                    </Routes>
+                  </AdminGuard>
+                } />
 
-            {/* RUTAS CLIENTE - Protegidas por ClientGuard */}
-            <Route path="/cliente/*" element={
-              <ClientGuard>
-                <Routes>
-                  <Route path="dashboard" element={<DashboardHome />} />
-                  <Route path="catalogo" element={<ViewProducts />} />
-                  <Route path="mis-compras" element={<ViewPurchases />} />
-                  {/* Nuevas rutas cliente */}
-                  <Route path="compras" element={<MisCompras />} />
-                  <Route path="compras/:id" element={<DetalleCompra />} />
-                  <Route path="pagos" element={<MisPagos />} />
-                  <Route path="cotizaciones" element={<MisCotizaciones />} />
-                  {/* TODO: Unificar con Client/Perfil.jsx existente */}
-                </Routes>
-              </ClientGuard>
-            } />
+                {/* RUTAS CLIENTE - Protegidas por ClientGuard */}
+                <Route path="/cliente/*" element={
+                  <ClientGuard>
+                    <Routes>
+                      <Route path="dashboard" element={<DashboardHome />} />
+                      <Route path="catalogo" element={<ViewProducts />} />
+                      <Route path="mis-compras" element={<ViewPurchases />} />
+                      {/* Nuevas rutas cliente */}
+                      <Route path="compras" element={<MisCompras />} />
+                      <Route path="compras/:id" element={<DetalleCompra />} />
+                      <Route path="pagos" element={<MisPagos />} />
+                      <Route path="cotizaciones" element={<MisCotizaciones />} />
+                      {/* TODO: Unificar con Client/Perfil.jsx existente */}
+                    </Routes>
+                  </ClientGuard>
+                } />
 
-            {/* RUTAS LEGACY - Temporalmente mantenidas para compatibilidad */}
-            {/* TODO: Eliminar estas rutas legacy después de migrar navegación */}
-            <Route element={<ProtectedAdminRoutes />}>
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/products" element={<Products />} />
-              <Route path="/pricings" element={<Pricings />} />
-              <Route path="/clientes" element={<Clients />} />
-              <Route path="/vendedores" element={<Sellers />} />
-              <Route path="/seller-reviews/:id" element={<SellerReview />} />
-              <Route path="/suppliers" element={<Suppliers />} />
-            </Route>
+                {/* RUTAS LEGACY - Temporalmente mantenidas para compatibilidad */}
+                {/* TODO: Eliminar estas rutas legacy después de migrar navegación */}
+                <Route element={<ProtectedAdminRoutes />}>
+                  <Route path="/dashboard" element={<Dashboard />} />
+                  <Route path="/products" element={<Products />} />
+                  <Route path="/pricings" element={<Pricings />} />
+                  <Route path="/clientes" element={<Clients />} />
+                  <Route path="/vendedores" element={<Sellers />} />
+                  <Route path="/seller-reviews/:id" element={<SellerReview />} />
+                  <Route path="/suppliers" element={<Suppliers />} />
+                </Route>
 
-            <Route path="/panel" element={
-              <ClientGuard>
-                <DashboardHome />
-              </ClientGuard>
-            } />
+                <Route path="/panel" element={
+                  <ClientGuard>
+                    <DashboardHome />
+                  </ClientGuard>
+                } />
 
-            {/* Ruta Compartida - Mi Perfil (Solo para Clientes) */}
-            <Route path="/perfil" element={
-              <ClientGuard>
-                <MyProfile />
-              </ClientGuard>
-            } />
+                {/* Ruta Compartida - Mi Perfil (Solo para Clientes) */}
+                <Route path="/perfil" element={
+                  <ClientGuard>
+                    <MyProfile />
+                  </ClientGuard>
+                } />
 
-            <Route path="/panel/carros" element={
-              <ClientGuard>
-                <ViewProducts />
-              </ClientGuard>
-            } />
-            <Route path="/panel/mis-compras" element={
-              <ClientGuard>
-                <ViewPurchases />
-              </ClientGuard>
-            } />
-          </Routes>
-        </AuthContextProvider>
-      </ThemeProvider>
-      <Toaster
-        position="top-center"
-        toastOptions={{
-          duration: 3500,
-          style: {
-            padding: "10px 14px",
-            fontSize: "14px",
-            borderRadius: "10px",
-            boxShadow: "0 6px 18px rgba(0,0,0,0.12)",
-          },
-        }}
-      />
-    </BrowserRouter>
+                <Route path="/panel/carros" element={
+                  <ClientGuard>
+                    <ViewProducts />
+                  </ClientGuard>
+                } />
+                <Route path="/panel/mis-compras" element={
+                  <ClientGuard>
+                    <ViewPurchases />
+                  </ClientGuard>
+                } />
+              </Routes>
+              <Toaster
+                position="top-center"
+                toastOptions={{
+                  duration: 3500,
+                  style: {
+                    padding: "10px 14px",
+                    fontSize: "14px",
+                    borderRadius: "10px",
+                    boxShadow: "0 6px 18px rgba(0,0,0,0.12)",
+                  },
+                }}
+              />
+            </Provider>
+          </AuthContextProvider>
+        </ThemeProvider>
+      </BrowserRouter>
+    </Suspense>
   );
 }
 
