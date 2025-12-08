@@ -695,3 +695,70 @@ box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
 .client-card .card-text {
   color: #e0e0e0;
 }
+/* Dark Mode Modal Styles */
+.client-modal .modal-content {
+    background-color: #1e293b !important;
+    color: #e2e8f0 !important;
+    border: 1px solid #334155 !important;
+}
+
+.client-modal .modal-header {
+    background-color: #0f172a !important;
+    border-bottom: 1px solid #334155 !important;
+    color: #fff !important;
+}
+
+.client-modal .modal-title {
+    color: #fff !important;
+}
+
+.client-modal .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+.client-modal .modal-body {
+    background-color: #1e293b !important;
+    color: #e2e8f0 !important;
+}
+
+.client-modal .modal-footer {
+    background-color: #0f172a !important;
+    border-top: 1px solid #334155 !important;
+}
+
+.client-modal .list-group-item {
+    background-color: #0f172a !important;
+    color: #e2e8f0 !important;
+    border-color: #334155 !important;
+}
+
+.client-modal .list-group-item:hover {
+    background-color: #334155 !important;
+}
+
+.client-modal strong {
+    color: #fff !important;
+}
+
+/* Seller Name Badge Style */
+.seller-name-badge {
+    display: inline-block;
+    padding: 0.35rem 1rem;
+    background-color: #1e293b;
+    color: #94a3b8;
+    border: 1px solid #334155;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: default;
+    transition: all 0.2s ease;
+    margin-top: 0.25rem;
+}
+
+.seller-name-badge:hover {
+    background-color: #334155;
+    color: #fff;
+    border-color: #475569;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
