@@ -56,7 +56,7 @@ const MyProfile = () => {
             return path;
         }
         // Special mapping for uploaded images
-       
+
         // Ajusta la URL base según tu entorno
         const baseUrl = 'https://8rnc9otm8f.ufs.sh/f/';
         const fullUrl = `${baseUrl}${path}`;
@@ -131,12 +131,12 @@ const MyProfile = () => {
         const isPdf = url?.toLowerCase().endsWith('.pdf');
 
         return (
-            <Card className="h-100 shadow-sm border-0 bg-light">
+            <Card className="h-100 shadow-sm border-0" style={{ backgroundColor: '#1e293b', color: '#e2e8f0' }}>
                 <Card.Body className="d-flex flex-column align-items-center text-center p-4">
                     <div className="mb-3 position-relative">
                         {url ? (
                             isPdf ? (
-                                <div className="d-flex align-items-center justify-content-center bg-white rounded p-4 shadow-sm" style={{ width: '100px', height: '100px' }}>
+                                <div className="d-flex align-items-center justify-content-center rounded p-4 shadow-sm" style={{ width: '100px', height: '100px', backgroundColor: '#0f172a' }}>
                                     <FileText size={48} className="text-danger" />
                                 </div>
                             ) : (
@@ -148,8 +148,8 @@ const MyProfile = () => {
                                 />
                             )
                         ) : (
-                            <div className="d-flex align-items-center justify-content-center bg-white rounded p-4 shadow-sm border border-dashed" style={{ width: '100px', height: '100px' }}>
-                                <AlertCircle size={32} className="text-muted" />
+                            <div className="d-flex align-items-center justify-content-center rounded p-4 shadow-sm border border-secondary" style={{ width: '100px', height: '100px', backgroundColor: '#0f172a' }}>
+                                <AlertCircle size={32} className="text-secondary" />
                             </div>
                         )}
                     </div>
@@ -167,25 +167,45 @@ const MyProfile = () => {
 
                     <div className="mt-auto d-flex gap-2 w-100 justify-content-center">
                         {url && (
-                            <Button
-                                variant="outline-primary"
-                                size="sm"
-                                className="d-flex align-items-center gap-1"
+                            <button
+                                type="button"
+                                style={{
+                                    background: 'transparent',
+                                    color: '#e2e8f0',
+                                    border: '1px solid #475569',
+                                    borderRadius: '0.375rem',
+                                    padding: '0.375rem 0.75rem',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '0.5rem',
+                                    cursor: 'pointer',
+                                    fontSize: '0.875rem'
+                                }}
                                 onClick={() => window.open(url, '_blank')}
                             >
                                 <Eye size={14} /> Ver
-                            </Button>
+                            </button>
                         )}
-                        <Button
-                            variant="primary"
-                            size="sm"
-                            className="d-flex align-items-center gap-1"
+                        <button
+                            type="button"
+                            style={{
+                                background: '#0f172a',
+                                color: 'white',
+                                border: '1px solid #475569',
+                                borderRadius: '0.375rem',
+                                padding: '0.375rem 0.75rem',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.5rem',
+                                cursor: loading ? 'not-allowed' : 'pointer',
+                                fontSize: '0.875rem'
+                            }}
                             onClick={() => inputRef.current?.click()}
                             disabled={loading}
                         >
                             {loading ? <Spinner size="sm" animation="border" /> : <Upload size={14} />}
                             {url ? 'Cambiar' : 'Subir'}
-                        </Button>
+                        </button>
                     </div>
 
                     <input
@@ -204,15 +224,26 @@ const MyProfile = () => {
         <Container fluid className="py-4">
             <div className="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
                 <h2 className="fw-bold mb-0 pricings-title">Mi Perfil</h2>
-                <Button variant="secondary" onClick={() => navigate(-1)}>
+                <button
+                    onClick={() => navigate(-1)}
+                    style={{
+                        background: '#0f172a',
+                        color: 'white',
+                        border: '1px solid #475569',
+                        borderRadius: '0.375rem',
+                        padding: '0.375rem 0.75rem',
+                        cursor: 'pointer',
+                        fontWeight: '500'
+                    }}
+                >
                     Return
-                </Button>
+                </button>
             </div>
 
             <Row className="g-4">
                 {/* Sección de Datos Personales y Foto */}
                 <Col lg={4}>
-                    <Card className="border-0 shadow-sm h-100 seller-card">
+                    <Card className="border-0 shadow-sm h-100" style={{ backgroundColor: '#1e293b', color: '#e2e8f0' }}>
                         <Card.Body className="text-center p-4">
                             <div className="position-relative d-inline-block mb-4">
                                 <div
@@ -225,15 +256,25 @@ const MyProfile = () => {
                                         className="w-100 h-100 object-fit-cover"
                                     />
                                 </div>
-                                <Button
-                                    variant="primary"
-                                    size="sm"
+                                <button
+                                    type="button"
                                     className="position-absolute bottom-0 end-0 rounded-circle p-2 shadow"
+                                    style={{
+                                        background: '#0f172a',
+                                        color: 'white',
+                                        border: '1px solid #475569',
+                                        cursor: 'pointer',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        width: '36px',
+                                        height: '36px'
+                                    }}
                                     onClick={() => photoInputRef.current?.click()}
                                     disabled={uploadingPhoto}
                                 >
                                     {uploadingPhoto ? <Spinner size="sm" animation="border" /> : <Camera size={18} />}
-                                </Button>
+                                </button>
                                 <input
                                     type="file"
                                     ref={photoInputRef}
@@ -246,7 +287,7 @@ const MyProfile = () => {
                             <h4 className="fw-bold mb-1">{user?.nombre}</h4>
                             <p className="text-muted mb-4">{user?.rol}</p>
 
-                            <div className="text-start p-3 rounded seller-card">
+                            <div className="text-start p-3 rounded" style={{ backgroundColor: '#0f172a' }}>
                                 <p className="mb-2 "><strong>Email:</strong> {user?.email}</p>
                                 <p className="mb-0"><strong>Teléfono:</strong> {user?.telefono || 'No registrado'}</p>
                             </div>
@@ -256,8 +297,8 @@ const MyProfile = () => {
 
                 {/* Sección de Documentos */}
                 <Col lg={8}>
-                    <Card className="border-0 shadow-sm h-100 seller-card">
-                        <Card.Header className="seller-card py-3 border-bottom-0">
+                    <Card className="border-0 shadow-sm h-100" style={{ backgroundColor: '#1e293b', color: '#e2e8f0' }}>
+                        <Card.Header className="py-3 border-bottom-0" style={{ backgroundColor: '#1e293b', color: '#e2e8f0' }}>
                             <h5 className="mb-0 fw-bold">Documentación Personal</h5>
                             <small className="text-muted">Gestiona tus archivos personales (INE, Comprobantes)</small>
                         </Card.Header>
