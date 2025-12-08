@@ -5,10 +5,11 @@ import logo from "../../assets/logos/logoAuto.jpg";
 import "./dash.css"; // opcional, si quieres estilos extra
 import { useState } from "react";
 import AIChatWidget from "../chat/AIChatWidget.jsx";
-import { MessageSquare, LogOut, Menu } from "lucide-react";
+import { MessageSquare, LogOut, Menu, Moon, User, Sun } from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../redux/slices/authSlice";
 import { useNavigate } from "react-router-dom";
+import { useTheme } from "../../context/ThemeContext.jsx";
 
 const MODULES = [
   {
@@ -56,6 +57,7 @@ export default function DashboardLayout({ children }) {
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { theme, toggleTheme } = useTheme();
 
   const handleLogout = () => {
     dispatch(logout());
@@ -114,17 +116,37 @@ export default function DashboardLayout({ children }) {
           ))}
         </Nav>
 
-        <div className="sidebar-footer">
+        <div className="sidebar-footer mt-auto">
+          {/* Theme Toggle */}
+          <div className="px-3 mb-3">
+            <button
+              className="btn-theme-toggle w-100 d-flex align-items-center justify-content-center gap-2 p-2 rounded-3"
+              onClick={toggleTheme}
+              style={{
+                background: "var(--background-soft)",
+                border: "1px solid var(--border-color)",
+                color: "var(--text-main)",
+                transition: "all 0.2s"
+              }}
+            >
+              {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+              {!collapsed && <span>{theme === "dark" ? "Modo Claro" : "Modo Oscuro"}</span>}
+            </button>
+          </div>
+
           <div className="user-mini">
             <div className="user-avatar">
               {user?.nombre?.[0]?.toUpperCase() || "?"}
             </div>
 
             <div className="user-info">
-              <span className="user-name">{user?.nombre || "Usuario"}</span>
+              <span className="user-name">{user?.nombre}</span>
 
+              <button className="btn-link-logout mb-1" onClick={() => navigate('/perfil')}>
+                <User size={14} /> Mi Perfil
+              </button>
               <button className="btn-link-logout" onClick={handleLogout}>
-                <LogOut size={14} /> {!collapsed && "Salir"}
+                <LogOut size={14} /> Salir
               </button>
             </div>
           </div>
