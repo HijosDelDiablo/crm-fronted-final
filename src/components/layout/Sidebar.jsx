@@ -4,7 +4,7 @@ import "./dash.css";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import { logout } from "../../redux/slices/authSlice";
-import { House, Box, ShoppingBag, LogOut, Car, Menu, Truck, Users, UserCheck, MessageSquare, Sun, Moon, ShoppingCart, CreditCard, ShieldCheck } from "lucide-react";
+import { House, Box, ShoppingBag, LogOut, Car, Menu, Truck, Users, UserCheck, MessageSquare, Sun, Moon, ShoppingCart, CreditCard, ShieldCheck, User } from "lucide-react";
 import { useTheme } from "../../context/ThemeContext";
 import logo from "../../assets/logos/logoAuto.jpg";
 import AIChatWidget from "../chat/AIChatWidget.jsx";
@@ -134,6 +134,9 @@ export default function Sidebar() {
             <div className="user-info">
               <span className="user-name">{user?.nombre}</span>
 
+              <button className="btn-link-logout mb-1" onClick={() => navigate('/perfil')}>
+                <User size={14} /> Mi Perfil
+              </button>
               <button className="btn-link-logout" onClick={handleLogout}>
                 <LogOut size={14} /> Salir
               </button>
