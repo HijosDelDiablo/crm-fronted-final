@@ -1,12 +1,15 @@
 import { useEffect, useState, useRef } from "react";
 import { Spinner, Form, Modal } from "react-bootstrap";
 import toast from "react-hot-toast";
-import { getAllProducts, createProduct, uploadProductImage } from "../api/products.api";
+import { getAllProducts, createProduct, uploadProductImage, deleteProduct } from "../api/products.api";
+import api from "../services/api.js";
 import "./products.css";
 import "./products-form.css";
 import Sidebar from "../components/layout/Sidebar";
+import { useNavigate } from "react-router-dom";
 
 export default function Products() {
+    const navigate = useNavigate();
     const [products, setProducts] = useState([]);
     const [suppliers, setSuppliers] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -44,9 +47,10 @@ export default function Products() {
         setLoading(true);
         try {
             const data = await getAllProducts(navigate);
-            setProducts(data);
+            setProducts(data || []);
         } catch (err) {
             toast.error("Error al cargar productos");
+            setProducts([]);
         } finally {
             setLoading(false);
         }
@@ -55,9 +59,21 @@ export default function Products() {
     const fetchSuppliers = async () => {
         try {
             const { data } = await api.get("/proveedores/activos");
-            setSuppliers(data);
+            setSuppliers(data || []);
         } catch (err) {
             toast.error("Error al cargar proveedores: " + (err.response?.data?.message || err.message));
+            setSuppliers([]);
+        }
+    };
+
+    const handleDelete = async (id) => {
+        if (!window.confirm("¿Seguro que deseas eliminar este producto?")) return;
+        try {
+            await deleteProduct(id, navigate);
+            toast.success("Producto eliminado");
+            fetchProducts();
+        } catch (err) {
+            toast.error("Error al eliminar producto");
         }
     };
 
