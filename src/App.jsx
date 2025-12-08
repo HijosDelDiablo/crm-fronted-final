@@ -29,7 +29,7 @@ import AdminGuard from "./guards/AdminGuard";
 import ClientGuard from "./guards/ClientGuard";
 
 // Páginas nuevas CLIENTE
-import MisCompras from "./pages/client/MisCompras";
+import MisCompras from "./pages/Client/MisCompras";
 import DetalleCompra from "./pages/client/DetalleCompra";
 import MisPagos from "./pages/client/MisPagos";
 import MisCotizaciones from "./pages/client/MisCotizaciones";
@@ -37,9 +37,10 @@ import MisCotizaciones from "./pages/client/MisCotizaciones";
 // Páginas nuevas ADMIN
 import RevisarCompras from "./pages/admin/RevisarCompras";
 import DetalleCompraAdmin from "./pages/admin/DetalleCompraAdmin";
-import ComprasPorCliente from "./pages/admin/ComprasPorCliente";
 import ComprasPorVendedor from "./pages/admin/ComprasPorVendedor";
 import GestionPagos from "./pages/admin/GestionPagos";
+import Admins from "./pages/AdminModules/Admins/Admins";
+import MyProfile from "./pages/MyProfile";
 
 function App() {
   useHeartbeat();
@@ -69,9 +70,9 @@ function App() {
                   {/* Nuevas rutas admin */}
                   <Route path="compras" element={<RevisarCompras />} />
                   <Route path="compras/:id" element={<DetalleCompraAdmin />} />
-                  <Route path="compras-por-cliente" element={<ComprasPorCliente />} />
                   <Route path="compras-por-vendedor" element={<ComprasPorVendedor />} />
                   <Route path="pagos" element={<GestionPagos />} />
+                  <Route path="administradores" element={<Admins />} />
                 </Routes>
               </AdminGuard>
             } />
@@ -110,6 +111,14 @@ function App() {
                 <DashboardHome />
               </ClientGuard>
             } />
+
+            {/* Ruta Compartida - Mi Perfil */}
+            <Route path="/perfil" element={
+              <AuthGuard>
+                <MyProfile />
+              </AuthGuard>
+            } />
+
             <Route path="/panel/carros" element={
               <ClientGuard>
                 <ViewProducts />

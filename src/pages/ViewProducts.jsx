@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Container, Row, Col, Card, Badge, Spinner, Modal, Form } from "react-bootstrap";
 import { Car, Calendar, DollarSign, Gauge, Settings, Palette, Hash } from "lucide-react";
 import toast from "react-hot-toast";
@@ -9,6 +10,7 @@ import DashboardLayout from "../components/layout/DashboardLayaut";
 import "./products.css";
 
 export default function ViewProducts() {
+    const navigate = useNavigate();
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
@@ -34,6 +36,37 @@ export default function ViewProducts() {
     };
 
     const handleCotizar = (product) => {
+        // Validación de documentos
+        const missingFiles = [];
+        if (!user?.uriIneFile) missingFiles.push("INE");
+        if (!user?.uriComprobanteDomicilioFile) missingFiles.push("Comprobante de Domicilio");
+        if (!user?.uriComprobanteIngresoFile) missingFiles.push("Comprobante de Ingresos");
+
+        if (missingFiles.length > 0) {
+            toast((t) => (
+                <div className="d-flex flex-column gap-2">
+                    <span className="fw-medium">
+                        Primero debe de cargar los archivos ({missingFiles.join(", ")}) en el apartado de su perfil para proceder.
+                    </span>
+                    <button
+                        onClick={() => {
+                            toast.dismiss(t.id);
+                            navigate("/perfil");
+                        }}
+                        className="btn btn-primary btn-sm w-100"
+                    >
+                        Ir a Mi Perfil
+                    </button>
+                </div>
+            ), {
+                duration: 5000,
+                style: {
+                    maxWidth: '400px'
+                }
+            });
+            return;
+        }
+
         setSelectedProduct(product);
         // Reset defaults when opening modal
         setFormData({ enganchePercent: 20, plazoMeses: 12 });
