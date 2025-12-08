@@ -1,13 +1,12 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { userActivityFetch } from '../api/user_activity.api';
 
 const useHeartbeat = () => {
+  const lastActivityRef = useRef(Date.now());
 
   useEffect(() => {
-    let lastActivity = Date.now();
-
     const updateActivity = () => {
-      lastActivity = Date.now();
+      lastActivityRef.current = Date.now();
     };
 
     // Escuchar actividad del usuario
@@ -16,12 +15,12 @@ const useHeartbeat = () => {
     window.addEventListener('click', updateActivity);
     window.addEventListener('touchstart', updateActivity);
 
-    // Enviar ping cada 30 segundos
+    // Enviar ping cada 60 segundos
     const id = setInterval(() => {
       const now = Date.now();
 
       // solo mando heartbeat si hubo actividad en los últimos 8 minutos
-      if (now - lastActivity < 8 * 60 * 1000) {
+      if (now - lastActivityRef.current < 8 * 60 * 1000) {
         userActivityFetch();
       }
     }, 60000);
