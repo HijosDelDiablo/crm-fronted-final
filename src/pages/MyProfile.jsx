@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Card, Button, Spinner, Badge } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { Camera, FileText, Upload, CheckCircle, AlertCircle, Eye } from 'lucide-react';
@@ -9,6 +10,7 @@ import { updateUserData } from '../redux/slices/authSlice'; // Ajusta la ruta
 const MyProfile = () => {
     const { user } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     // Referencias para inputs de archivos
     const photoInputRef = useRef(null);
@@ -151,12 +153,17 @@ const MyProfile = () => {
 
     return (
         <Container fluid className="py-4">
-            <h2 className="mb-4 fw-bold text-dark border-bottom pb-2">Mi Perfil</h2>
+            <div className="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
+                <h2 className="fw-bold mb-0 pricings-title">Mi Perfil</h2>
+                <Button variant="secondary" onClick={() => navigate(-1)}>
+                    Return
+                </Button>
+            </div>
 
             <Row className="g-4">
                 {/* Sección de Datos Personales y Foto */}
                 <Col lg={4}>
-                    <Card className="border-0 shadow-sm h-100">
+                    <Card className="border-0 shadow-sm h-100 seller-card">
                         <Card.Body className="text-center p-4">
                             <div className="position-relative d-inline-block mb-4">
                                 <div
@@ -164,7 +171,7 @@ const MyProfile = () => {
                                     style={{ width: '150px', height: '150px' }}
                                 >
                                     <img
-                                        src={getFileUrl(user?.fotoPerfil) || "https://via.placeholder.com/150"}
+                                        src={getFileUrl(user?.fotoPerfil) || "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?semt=ais_hybrid&w=740&q=80"}
                                         alt="Perfil"
                                         className="w-100 h-100 object-fit-cover"
                                     />
@@ -190,8 +197,8 @@ const MyProfile = () => {
                             <h4 className="fw-bold mb-1">{user?.nombre}</h4>
                             <p className="text-muted mb-4">{user?.rol}</p>
 
-                            <div className="text-start bg-light p-3 rounded">
-                                <p className="mb-2"><strong>Email:</strong> {user?.email}</p>
+                            <div className="text-start p-3 rounded seller-card">
+                                <p className="mb-2 "><strong>Email:</strong> {user?.email}</p>
                                 <p className="mb-0"><strong>Teléfono:</strong> {user?.telefono || 'No registrado'}</p>
                             </div>
                         </Card.Body>
@@ -200,15 +207,16 @@ const MyProfile = () => {
 
                 {/* Sección de Documentos */}
                 <Col lg={8}>
-                    <Card className="border-0 shadow-sm h-100">
-                        <Card.Header className="bg-white py-3 border-bottom-0">
+                    <Card className="border-0 shadow-sm h-100 seller-card">
+                        <Card.Header className="seller-card py-3 border-bottom-0">
                             <h5 className="mb-0 fw-bold">Documentación Personal</h5>
                             <small className="text-muted">Gestiona tus archivos personales (INE, Comprobantes)</small>
                         </Card.Header>
-                        <Card.Body>
+                        <Card.Body >
                             <Row className="g-4">
-                                <Col md={4}>
+                                <Col md={4} >
                                     <FilePreview
+                                        className="seller-card"
                                         label="INE / Identificación"
                                         url={getFileUrl(user?.uriIneFile)}
                                         onUpdate={onIneChange}
