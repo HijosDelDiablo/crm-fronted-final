@@ -6,6 +6,7 @@ import { getMisCotizaciones } from '../../api/pricings.api';
 import { iniciarProcesoCompra, getCompraPorCotizacion } from '../../api/compras.api';
 import StatusBadge from '../../components/shared/StatusBadge';
 import DashboardLayout from '../../components/layout/DashboardLayaut';
+import { CheckCircle, Clock, AlertCircle, XCircle } from 'lucide-react';
 import './MisCotizaciones.css';
 
 const MisCotizaciones = () => {
@@ -14,6 +15,7 @@ const MisCotizaciones = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [showModal, setShowModal] = useState(false);
+    const [showApprovedModal, setShowApprovedModal] = useState(false);
     const [selectedCotizacion, setSelectedCotizacion] = useState(null);
     const [formData, setFormData] = useState({
         ingresos: '',
@@ -121,6 +123,34 @@ const MisCotizaciones = () => {
         }
     };
 
+    const handleVerDetallesAprobados = (cotizacion) => {
+        setSelectedCotizacion(cotizacion);
+        setShowApprovedModal(true);
+    };
+
+    const getStatusBadge = (status) => {
+        const s = status?.toLowerCase() || 'pendiente';
+        if (s === 'aprobada') {
+            return (
+                <span className="product-badge d-flex align-items-center gap-1 badge bg-success">
+                    <CheckCircle size={14} /> ¡Aprobada!
+                </span>
+            );
+        } else if (s === 'rechazada') {
+            return (
+                <span className="product-badge d-flex align-items-center gap-1 badge bg-danger">
+                    <XCircle size={14} /> Rechazada
+                </span>
+            );
+        } else {
+            return (
+                <span className="product-badge d-flex align-items-center gap-1 badge bg-warning text-dark">
+                    <Clock size={14} /> Pendiente
+                </span>
+            );
+        }
+    };
+
     if (loading) {
         return (
             <DashboardLayout>
@@ -198,78 +228,93 @@ const MisCotizaciones = () => {
                         <p className="empty-state-message">
                             Visita nuestro catálogo para crear tu primera cotización
                         </p>
+                        <Button 
+                            variant="primary" 
+                            className="mt-3 btn-rounded"
+                            onClick={() => navigate('/cliente/catalogo')}
+                        >
+                            Ir al Catálogo
+                        </Button>
                     </div>
                 ) : (
                     <Row>
                         {cotizaciones.map((cotizacion) => (
                             <Col xxl={3} xl={4} lg={4} md={6} sm={12} key={cotizacion._id} className="mb-4">
-                                <Card className="cotizacion-card">
-                                    <Card.Header className="cotizacion-card-header">
-                                        <div className="cotizacion-info">
-                                            <div className="cotizacion-title">
-                                                {cotizacion.coche?.marca} {cotizacion.coche?.modelo}
+                                <div className="product-card h-100 d-flex flex-column">
+                                    <div className="product-img-container" style={{ height: '160px' }}>
+                                        <img 
+                                            className="product-img" 
+                                            src={cotizacion.coche?.imageUrl || "https://via.placeholder.com/400x300?text=Auto"} 
+                                            alt={`${cotizacion.coche?.marca} ${cotizacion.coche?.modelo}`}
+                                        />
+                                        {getStatusBadge(cotizacion.status)}
+                                    </div>
+                                    <div className="product-body flex-grow-1">
+                                        <h5 className="fw-bold mb-1">
+                                            {cotizacion.coche?.marca} {cotizacion.coche?.modelo}
+                                        </h5>
+                                        <small className="text-muted mb-3 d-block">
+                                            Solicitado el: {new Date(cotizacion.createdAt).toLocaleDateString('es-ES')}
+                                        </small>
+                                        
+                                        <div className="p-3 bg-light rounded mb-3">
+                                            <div className="d-flex justify-content-between mb-1">
+                                                <span>Enganche:</span>
+                                                <span className="fw-bold">${cotizacion.enganche?.toLocaleString('es-MX')}</span>
                                             </div>
-                                            <div className="cotizacion-id">
-                                                ID: {cotizacion._id}
-                                            </div>
-                                        </div>
-                                    </Card.Header>
-
-                                    <Card.Body className="cotizacion-card-body">
-                                        <div className="status-badge-container">
-                                            <StatusBadge status={cotizacion.status} />
-                                        </div>
-
-                                        <div className="cotizacion-details">
-                                            <div className="cotizacion-detail">
-                                                <span className="cotizacion-label">Enganche:</span>
-                                                <span className="cotizacion-value">
-                                                    ${cotizacion.enganche?.toLocaleString('es-ES')}
-                                                </span>
-                                            </div>
-                                            <div className="cotizacion-detail">
-                                                <span className="cotizacion-label">Plazo:</span>
-                                                <span className="cotizacion-value">
-                                                    {cotizacion.plazoMeses} meses
-                                                </span>
-                                            </div>
-                                            <div className="cotizacion-detail">
-                                                <span className="cotizacion-label">Fecha:</span>
-                                                <span className="cotizacion-value">
-                                                    {new Date(cotizacion.createdAt).toLocaleDateString('es-ES')}
+                                            <div className="d-flex justify-content-between">
+                                                <span>Mensualidad (Est):</span>
+                                                <span className="fw-bold text-primary">
+                                                    ${cotizacion.pagoMensual?.toLocaleString('es-MX') || 'Calculando...'}
                                                 </span>
                                             </div>
                                         </div>
 
-                                        {cotizacion.status?.toLowerCase() === 'aprobada' && (
+                                        {cotizacion.status?.toLowerCase() === 'aprobada' ? (
                                             compras[cotizacion._id] ? (
-                                                <Button
-                                                    variant="primary"
-                                                    size="sm"
+                                                <button 
+                                                    type="button" 
+                                                    className="w-100 btn-rounded mt-auto btn btn-primary"
                                                     onClick={() => navigate(`/cliente/compras/${compras[cotizacion._id]._id}`)}
-                                                    className="btn-ver-compra"
                                                 >
-                                                    Ver Compra
-                                                </Button>
+                                                    Ver Compra Activa
+                                                </button>
                                             ) : (
-                                                <Button
-                                                    variant="success"
-                                                    size="sm"
-                                                    onClick={() => handleIniciarCompra(cotizacion)}
-                                                    className="btn-iniciar-compra"
-                                                >
-                                                    Iniciar Proceso de Compra
-                                                </Button>
+                                                <div className="d-flex gap-2 mt-auto">
+                                                    <button 
+                                                        type="button" 
+                                                        className="flex-grow-1 btn-rounded btn btn-outline-success"
+                                                        onClick={() => handleVerDetallesAprobados(cotizacion)}
+                                                    >
+                                                        Ver Detalles
+                                                    </button>
+                                                    <button 
+                                                        type="button" 
+                                                        className="flex-grow-1 btn-rounded btn btn-success"
+                                                        onClick={() => handleIniciarCompra(cotizacion)}
+                                                    >
+                                                        Comprar
+                                                    </button>
+                                                </div>
                                             )
+                                        ) : (
+                                            <button 
+                                                type="button" 
+                                                className="w-100 btn-rounded mt-auto btn btn-outline-secondary"
+                                                disabled
+                                            >
+                                                En Revisión
+                                            </button>
                                         )}
-                                    </Card.Body>
-                                </Card>
+                                    </div>
+                                </div>
                             </Col>
                         ))}
                     </Row>
                 )}
 
-                <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+                {/* Modal de Inicio de Compra (Formulario) */}
+                <Modal show={showModal} onHide={() => setShowModal(false)} centered className="modal-custom">
                     <Modal.Header closeButton>
                         <Modal.Title>Iniciar Proceso de Compra</Modal.Title>
                     </Modal.Header>
@@ -326,18 +371,76 @@ const MisCotizaciones = () => {
                         <Button
                             variant="secondary"
                             onClick={() => setShowModal(false)}
-                            className="btn-modal-cancel"
+                            className="btn-rounded"
                         >
                             Cancelar
                         </Button>
                         <Button
                             variant="primary"
                             onClick={handleSubmitCompra}
-                            className="btn-modal-confirm"
+                            className="btn-rounded"
                         >
                             Iniciar Compra
                         </Button>
                     </Modal.Footer>
+                </Modal>
+
+                {/* Modal de Detalles Aprobados (Estilo Nuevo) */}
+                <Modal show={showApprovedModal} onHide={() => setShowApprovedModal(false)} centered size="lg" contentClassName="modal-content-custom">
+                    <div className="modal-content border-0">
+                        <div className="bg-success text-white modal-header">
+                            <div className="d-flex align-items-center gap-2 modal-title h4 mb-0">
+                                <CheckCircle size={24} /> Estado: Aprobada
+                            </div>
+                            <button type="button" className="btn-close btn-close-white" onClick={() => setShowApprovedModal(false)} aria-label="Close"></button>
+                        </div>
+                        <div className="p-4 modal-body">
+                            <div>
+                                <div className="alert alert-success border-0 shadow-sm">
+                                    <h4 className="alert-heading fw-bold">¡Felicidades! Tu crédito fue autorizado.</h4>
+                                    <p>Ya puedes pasar a la agencia para firmar contrato y recoger tu unidad.</p>
+                                </div>
+                                <h6 className="fw-bold mt-4 mb-3">Condiciones Finales del Banco</h6>
+                                <div className="g-3 row">
+                                    <div className="col-sm-6">
+                                        <div className="p-3 border rounded bg-light h-100">
+                                            <small className="text-muted d-block">Monto Aprobado</small>
+                                            <h4 className="fw-bold text-success">
+                                                ${((selectedCotizacion?.precioCoche || 0) - (selectedCotizacion?.enganche || 0)).toLocaleString('es-MX')}
+                                            </h4>
+                                        </div>
+                                    </div>
+                                    <div className="col-sm-6">
+                                        <div className="p-3 border rounded bg-light h-100">
+                                            <small className="text-muted d-block">Tasa de Interés Anual</small>
+                                            <h4 className="fw-bold text-dark">15.0%</h4>
+                                        </div>
+                                    </div>
+                                    <div className="col-sm-6">
+                                        <div className="p-3 border rounded bg-light h-100">
+                                            <small className="text-muted d-block">Mensualidad Real</small>
+                                            <h5 className="fw-bold">
+                                                ${selectedCotizacion?.pagoMensual?.toLocaleString('es-MX') || 'Calculando...'}
+                                            </h5>
+                                        </div>
+                                    </div>
+                                    <div className="col-sm-6">
+                                        <div className="p-3 border rounded bg-light h-100">
+                                            <small className="text-muted d-block">Plazo Autorizado</small>
+                                            <h5 className="fw-bold">{selectedCotizacion?.plazoMeses} Meses</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-secondary btn-rounded" onClick={() => setShowApprovedModal(false)}>Cerrar</button>
+                            <button type="button" className="btn btn-success btn-rounded" onClick={() => {
+                                setShowApprovedModal(false);
+                                handleIniciarCompra(selectedCotizacion);
+                            }}>Continuar Compra</button>
+                        </div>
+                    </div>
                 </Modal>
             </Container>
         </DashboardLayout>
