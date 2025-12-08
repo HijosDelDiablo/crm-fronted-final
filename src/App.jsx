@@ -39,6 +39,7 @@ import RevisarCompras from "./pages/admin/RevisarCompras";
 import DetalleCompraAdmin from "./pages/admin/DetalleCompraAdmin";
 import ComprasPorVendedor from "./pages/admin/ComprasPorVendedor";
 import GestionPagos from "./pages/admin/GestionPagos";
+import Gastos from "./pages/admin/Gastos";
 import Admins from "./pages/AdminModules/Admins/Admins";
 import MyProfile from "./pages/MyProfile";
 
@@ -72,6 +73,7 @@ function App() {
                   <Route path="compras/:id" element={<DetalleCompraAdmin />} />
                   <Route path="compras-por-vendedor" element={<ComprasPorVendedor />} />
                   <Route path="pagos" element={<GestionPagos />} />
+                  <Route path="gastos" element={<Gastos />} />
                   <Route path="administradores" element={<Admins />} />
                 </Routes>
               </AdminGuard>
