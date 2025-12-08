@@ -13,7 +13,7 @@ export default function ViewProducts() {
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
-    const [formData, setFormData] = useState({ enganche: '', plazoMeses: '' });
+    const [formData, setFormData] = useState({ enganchePercent: 20, plazoMeses: 12 });
     const { user } = useSelector((state) => state.auth);
 
     useEffect(() => {
@@ -35,13 +35,27 @@ export default function ViewProducts() {
 
     const handleCotizar = (product) => {
         setSelectedProduct(product);
+        // Reset defaults when opening modal
+        setFormData({ enganchePercent: 20, plazoMeses: 12 });
         setShowModal(true);
     };
 
     const handleCloseModal = () => {
         setShowModal(false);
         setSelectedProduct(null);
-        setFormData({ enganche: '', plazoMeses: '' });
+        setFormData({ enganchePercent: 20, plazoMeses: 12 });
+    };
+
+    const calculateMontoEnganche = () => {
+        if (!selectedProduct) return 0;
+        return (selectedProduct.precioBase * (formData.enganchePercent / 100));
+    };
+
+    const calculateMensualidad = () => {
+        if (!selectedProduct) return 0;
+        const montoEnganche = calculateMontoEnganche();
+        const montoAFinanciar = selectedProduct.precioBase - montoEnganche;
+        return montoAFinanciar / formData.plazoMeses;
     };
 
     const handleSubmitCotizacion = async (e) => {
@@ -52,9 +66,10 @@ export default function ViewProducts() {
         }
 
         try {
+            const engancheMonto = calculateMontoEnganche();
             const payload = {
                 cocheId: selectedProduct._id,
-                enganche: parseFloat(formData.enganche),
+                enganche: engancheMonto,
                 plazoMeses: parseInt(formData.plazoMeses)
             };
 
@@ -205,81 +220,118 @@ export default function ViewProducts() {
             </Container>
 
             {/* Modal de Cotización */}
-            <Modal show={showModal} onHide={handleCloseModal} centered dialogClassName="custom-modal">
+            <Modal show={showModal} onHide={handleCloseModal} centered dialogClassName="custom-modal" size="lg">
                 <Modal.Header closeButton>
-                    <Modal.Title>Cotizar Vehículo</Modal.Title>
+                    <Modal.Title></Modal.Title>
+                    <div className="w-100 text-center">
+                        <h4 style={{ color: '#0f172a', fontWeight: '700', margin: 0 }}>ACURA FINANCE</h4>
+                    </div>
                 </Modal.Header>
-                <Modal.Body>
+                <Modal.Body className="px-5 py-4">
                     {selectedProduct && (
-                        <div className="vehicle-info-card">
-                            <h6 style={{ color: '#f1f5f9', fontWeight: '700', marginBottom: '0.5rem', fontSize: '1.25rem' }}>
-                                {selectedProduct.marca} {selectedProduct.modelo}
-                            </h6>
-                            <p style={{ color: '#94a3b8', margin: '0', fontSize: '0.9rem' }}>
-                                Precio base: ${selectedProduct.precioBase?.toLocaleString()}
-                            </p>
-                        </div>
-                    )}
-                    <Form onSubmit={handleSubmitCotizacion}>
-                        <Form.Group className="mb-3">
-                            <Form.Label style={{ color: '#e2e8f0', fontWeight: '600', marginBottom: '0.5rem' }}>
-                                Enganche ($)
-                            </Form.Label>
-                            <Form.Control
-                                type="number"
-                                value={formData.enganche}
-                                onChange={(e) => setFormData({ ...formData, enganche: e.target.value })}
-                                placeholder="Ingrese el monto del enganche"
-                                required
-                                min="0"
-                                style={{
-                                    background: 'rgba(255, 255, 255, 0.05)',
-                                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                                    borderRadius: '8px',
-                                    color: '#f1f5f9',
-                                    padding: '0.75rem 1rem'
-                                }}
-                            />
-                        </Form.Group>
-                        <Form.Group className="mb-3">
-                            <Form.Label style={{ color: '#e2e8f0', fontWeight: '600', marginBottom: '0.5rem' }}>
-                                Plazo (meses)
-                            </Form.Label>
-                            <Form.Control
-                                type="number"
-                                value={formData.plazoMeses}
-                                onChange={(e) => setFormData({ ...formData, plazoMeses: e.target.value })}
-                                placeholder="Ingrese el plazo en meses"
-                                required
-                                min="1"
-                                max="120"
-                                style={{
-                                    background: 'rgba(255, 255, 255, 0.05)',
-                                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                                    borderRadius: '8px',
-                                    color: '#f1f5f9',
-                                    padding: '0.75rem 1rem'
-                                }}
-                            />
-                        </Form.Group>
-                        <div className="modal-action-buttons">
-                            <div className="d-flex gap-3">
-                                <button
-                                    type="button"
-                                    className="btn-modal-secondary flex-fill"
-                                    onClick={handleCloseModal}
-                                >
-                                    Cancelar
-                                </button>
-                                <button
-                                    type="submit"
-                                    className="btn-modal-primary flex-fill"
-                                >
-                                    Crear Cotización
-                                </button>
+                        <>
+                            <div className="text-center p-3 mb-5" style={{ background: '#020617', borderRadius: '0' }}>
+                                <h5 className="text-white text-uppercase mb-1" style={{ fontWeight: 800, letterSpacing: '1px' }}>
+                                    {selectedProduct.marca} {selectedProduct.modelo}
+                                </h5>
+                                <p className="text-white m-0 fw-bold">
+                                    ${selectedProduct.precioBase?.toLocaleString()}
+                                </p>
                             </div>
-                        </div>
-                    </Form>
+
+                            <Form onSubmit={handleSubmitCotizacion}>
+                                <Row>
+                                    <Col md={12} className="mb-4">
+                                        <div className="slider-container">
+                                            <span className="slider-label">Elige tu Enganche</span>
+
+                                            <input
+                                                type="range"
+                                                className="range-slider"
+                                                min="20"
+                                                max="50"
+                                                step="10"
+                                                value={formData.enganchePercent}
+                                                onChange={(e) => setFormData({ ...formData, enganchePercent: parseInt(e.target.value) })}
+                                            />
+
+                                            <div className="slider-ticks">
+                                                <span className="tick-label">20</span>
+                                                <span className="tick-label">30</span>
+                                                <span className="tick-label">40</span>
+                                                <span className="tick-label">50</span>
+                                            </div>
+
+                                            <div className="summary-box">
+                                                <div className="summary-label-section">
+                                                    Enganche: {formData.enganchePercent}%
+                                                </div>
+                                                <div className="summary-value-section">
+                                                    ${calculateMontoEnganche()?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} pesos
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </Col>
+
+                                    <Col md={12} className="mb-4">
+                                        <div className="slider-container">
+                                            <span className="slider-label">Elige tu Plazo</span>
+
+                                            <input
+                                                type="range"
+                                                className="range-slider"
+                                                min="12"
+                                                max="72"
+                                                step="12"
+                                                value={formData.plazoMeses}
+                                                onChange={(e) => setFormData({ ...formData, plazoMeses: parseInt(e.target.value) })}
+                                            />
+
+                                            <div className="slider-ticks">
+                                                <span className="tick-label">12</span>
+                                                <span className="tick-label">24</span>
+                                                <span className="tick-label">36</span>
+                                                <span className="tick-label">48</span>
+                                                <span className="tick-label">60</span>
+                                                <span className="tick-label">72</span>
+                                            </div>
+
+                                            <div className="summary-box">
+                                                <div className="summary-label-section">
+                                                    Plazo: {formData.plazoMeses} meses
+                                                </div>
+                                                <div className="summary-value-section">
+                                                    Mensualidad: ${calculateMensualidad()?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </Col>
+                                </Row>
+
+                                <div className="text-center mt-4">
+                                    <p className="text-muted mb-4 fs-5">Déjanos tus datos y en breve nos comunicaremos contigo.</p>
+                                </div>
+
+                                <div className="modal-action-buttons">
+                                    <div className="d-flex gap-3">
+                                        <button
+                                            type="button"
+                                            className="btn-modal-secondary flex-fill"
+                                            onClick={handleCloseModal}
+                                        >
+                                            Cancelar
+                                        </button>
+                                        <button
+                                            type="submit"
+                                            className="btn-modal-primary flex-fill"
+                                        >
+                                            Crear Cotización
+                                        </button>
+                                    </div>
+                                </div>
+                            </Form>
+                        </>
+                    )}
                 </Modal.Body>
             </Modal>
         </DashboardLayout>
