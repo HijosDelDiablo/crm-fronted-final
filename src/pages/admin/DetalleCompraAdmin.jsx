@@ -183,7 +183,6 @@ const DetalleCompraAdmin = () => {
                                 </Card.Header>
                                 <Card.Body>
                                     <p><strong>Total Pagado:</strong> ${(compra.totalPagado || 0).toLocaleString('es-ES')}</p>
-                                    <p><strong>Próximo Pago:</strong> {compra.proximoPago ? new Date(compra.proximoPago).toLocaleDateString('es-ES') : 'N/A'}</p>
                                 </Card.Body>
                             </Card>
                         </Col>
@@ -198,14 +197,7 @@ const DetalleCompraAdmin = () => {
                         </Card.Body>
                     </Card>
 
-                    <Card className="mt-4 mb-5 admin-card">
-                        <Card.Header>
-                            <h5>Calendario de Pagos (Proyección)</h5>
-                        </Card.Header>
-                        <Card.Body>
-                            <PaymentSchedule schedule={schedule} />
-                        </Card.Body>
-                    </Card>
+
 
                     {/* Modal Evaluar Financiamiento */}
                     <Modal show={showEvaluarModal} onHide={() => setShowEvaluarModal(false)}>
