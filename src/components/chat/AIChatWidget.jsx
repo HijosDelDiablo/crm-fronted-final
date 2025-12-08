@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { Button, Form, Spinner, Badge, Dropdown, Modal } from "react-bootstrap";
 import {
   Bot, X, Send, Zap, ChevronRight, Trash2,
@@ -11,6 +12,7 @@ import {
 import ReactMarkdown from "react-markdown";
 import { motion, AnimatePresence } from "framer-motion";
 import api from "../../services/api";
+import { queryAI } from "../../api/ai.api";
 import "./AIChat.css";
 
 export default function AIChatWidget({ externalIsOpen, onExternalClose, hideFloatButton = false }) {
@@ -24,6 +26,7 @@ export default function AIChatWidget({ externalIsOpen, onExternalClose, hideFloa
   const [activeView, setActiveView] = useState("chat");
   const [showExportModal, setShowExportModal] = useState(false);
   const [exportData, setExportData] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (externalIsOpen !== undefined) {
@@ -221,7 +224,7 @@ export default function AIChatWidget({ externalIsOpen, onExternalClose, hideFloa
       }
     }
 
-    return { intent: "unknown" };
+    return { intent: "unknown", originalText: text };
   };
 
   const processIntent = async (intentData, role) => {
@@ -693,10 +696,24 @@ export default function AIChatWidget({ externalIsOpen, onExternalClose, hideFloa
         }
 
       default:
-        return {
-          content: "De momento no puedo responder esa pregunta. Contacta con: soporte@autobots.mx o llama al 477 123 4567",
-          type: "text"
-        };
+        try {
+          // Fallback to AI for unknown intents
+          const aiResponse = await queryAI({ 
+            query: intentData.originalText || "Hola", 
+            role: role 
+          }, navigate);
+          
+          return {
+            content: aiResponse.answer || aiResponse.message || aiResponse.response || "Lo siento, no pude generar una respuesta.",
+            type: "text"
+          };
+        } catch (error) {
+          console.error("AI Query Error:", error);
+          return {
+            content: "De momento no puedo responder esa pregunta. Contacta con: soporte@autobots.mx o llama al 477 123 4567",
+            type: "text"
+          };
+        }
     }
   };
 

@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getAllProducts } from "../../api/products.api";
+import { getAllProducts, getStoreProducts } from "../../api/products.api";
+import { getMyFavorites, addFavorite, removeFavorite } from "../../api/favorites.api";
 import { crearCotizacion } from "../../api/pricings.api";
 import { Container, Row, Col, Modal, Form, Button, Badge, Table, InputGroup } from "react-bootstrap";
-import { ShoppingCart, FileText, Info, CheckCircle, Car, Search, Filter, X, TrendingUp, Calendar } from "lucide-react";
+import { ShoppingCart, FileText, Info, CheckCircle, Car, Search, Filter, X, TrendingUp, Calendar, Heart } from "lucide-react";
 import toast from "react-hot-toast";
 import "./ClientStyles.css";
 import Sidebar from "../../components/layout/Sidebar";
@@ -17,6 +18,7 @@ export default function Catalogo() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [productos, setProductos] = useState([]);
+  const [favorites, setFavorites] = useState([]);
   const [selectedAuto, setSelectedAuto] = useState(null);
   const [loading, setLoading] = useState(true);
   const [profileLoading, setProfileLoading] = useState(true);
@@ -72,7 +74,36 @@ export default function Catalogo() {
     
     cargarProductos();
     cargarPerfil();
+    cargarFavoritos();
   }, []);
+
+  const cargarFavoritos = async () => {
+    try {
+      const favs = await getMyFavorites(navigate);
+      setFavorites(favs || []);
+    } catch (error) {
+      console.error("Error loading favorites", error);
+    }
+  };
+
+  const toggleFavorite = async (e, product) => {
+    e.stopPropagation();
+    const isFav = favorites.some(f => f._id === product._id);
+    
+    try {
+      if (isFav) {
+        await removeFavorite(product._id, navigate);
+        setFavorites(prev => prev.filter(f => f._id !== product._id));
+        toast.success("Eliminado de favoritos");
+      } else {
+        await addFavorite(product._id, navigate);
+        setFavorites(prev => [...prev, product]);
+        toast.success("Agregado a favoritos");
+      }
+    } catch (error) {
+      toast.error("Error al actualizar favoritos");
+    }
+  };
 
   const cargarPerfil = async () => {
     try {
@@ -110,7 +141,7 @@ export default function Catalogo() {
 
   const cargarProductos = async () => {
     try {
-      const data = await getAllProducts(navigate);
+      const data = await getStoreProducts({}, navigate);
       setProductos(data);
     } catch (error) {
       toast.error("Error cargando el catálogo");
@@ -241,6 +272,32 @@ export default function Catalogo() {
                   <div className="product-img-container">
                     <img src={auto.imageUrl} className="product-img" alt="auto" />
                     <Badge bg="primary" className="product-badge">{auto.condicion}</Badge>
+                    
+                    <button 
+                      className="favorite-btn"
+                      onClick={(e) => toggleFavorite(e, auto)}
+                      style={{
+                        position: 'absolute',
+                        top: '10px',
+                        right: '10px',
+                        background: 'rgba(255,255,255,0.8)',
+                        border: 'none',
+                        borderRadius: '50%',
+                        width: '32px',
+                        height: '32px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer',
+                        zIndex: 10
+                      }}
+                    >
+                      <Heart 
+                        size={18} 
+                        fill={favorites.some(f => f._id === auto._id) ? "#ef4444" : "none"} 
+                        color={favorites.some(f => f._id === auto._id) ? "#ef4444" : "#6b7280"} 
+                      />
+                    </button>
 
                     {auto.condicion === "Seminuevo" && (
                       <div className="offer-badge">

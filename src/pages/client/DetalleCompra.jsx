@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Row, Col, Card, Alert, Spinner, Table } from 'react-bootstrap';
+import { Container, Row, Col, Card, Alert, Spinner, Table, Button, Modal, Form } from 'react-bootstrap';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getCompraById } from '../../api/compras.api';
-import { getMisPagos } from '../../api/pagos.api';
+import { getMisPagos, registrarPago } from '../../api/pagos.api';
 import StatusBadge from '../../components/shared/StatusBadge';
 import PaymentTable from '../../components/shared/PaymentTable';
 import PaymentSchedule from '../../components/shared/PaymentSchedule';
@@ -17,6 +17,15 @@ const DetalleCompra = () => {
     const [schedule, setSchedule] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    
+    // Payment Modal State
+    const [showPaymentModal, setShowPaymentModal] = useState(false);
+    const [paymentForm, setPaymentForm] = useState({
+        monto: '',
+        metodoPago: 'Tarjeta', // Default for client
+        notas: ''
+    });
+    const [submittingPayment, setSubmittingPayment] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -77,6 +86,29 @@ const DetalleCompra = () => {
 
         fetchData();
     }, [id, navigate]);
+
+    const handlePaymentSubmit = async (e) => {
+        e.preventDefault();
+        setSubmittingPayment(true);
+        try {
+            await registrarPago({
+                compraId: id,
+                monto: parseFloat(paymentForm.monto),
+                metodoPago: 'Tarjeta', // Force Card for client as per requirement
+                notas: paymentForm.notas
+            }, navigate);
+            
+            alert('Pago registrado correctamente');
+            setShowPaymentModal(false);
+            setPaymentForm({ monto: '', metodoPago: 'Tarjeta', notas: '' });
+            // Reload data
+            window.location.reload();
+        } catch (err) {
+            alert('Error al registrar el pago');
+        } finally {
+            setSubmittingPayment(false);
+        }
+    };
 
     if (loading) {
         return (
@@ -185,6 +217,11 @@ const DetalleCompra = () => {
                                     return <p><strong>Total Pagado:</strong> ${totalPagado.toLocaleString('es-ES')}</p>;
                                 })()}
                                 <p><strong>Próximo Pago:</strong> {compra.proximoPago ? new Date(compra.proximoPago).toLocaleDateString('es-ES') : 'N/A'}</p>
+                                <div className="d-grid gap-2 mt-3">
+                                    <Button variant="success" onClick={() => setShowPaymentModal(true)}>
+                                        Realizar Pago (Tarjeta)
+                                    </Button>
+                                </div>
                             </Card.Body>
                         </Card>
                     </Col>
@@ -229,6 +266,49 @@ const DetalleCompra = () => {
                         <PaymentSchedule schedule={schedule} />
                     </Card.Body>
                 </Card>
+
+                {/* Modal Realizar Pago */}
+                <Modal show={showPaymentModal} onHide={() => setShowPaymentModal(false)}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Realizar Pago con Tarjeta</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Form onSubmit={handlePaymentSubmit}>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Monto a Pagar</Form.Label>
+                                <Form.Control
+                                    type="number"
+                                    step="0.01"
+                                    required
+                                    value={paymentForm.monto}
+                                    onChange={(e) => setPaymentForm({ ...paymentForm, monto: e.target.value })}
+                                    placeholder="0.00"
+                                />
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Notas (Opcional)</Form.Label>
+                                <Form.Control
+                                    as="textarea"
+                                    rows={2}
+                                    value={paymentForm.notas}
+                                    onChange={(e) => setPaymentForm({ ...paymentForm, notas: e.target.value })}
+                                    placeholder="Ej: Mensualidad Enero"
+                                />
+                            </Form.Group>
+                            <Alert variant="info">
+                                <small>Nota: Esta es una simulación. El pago se registrará como "Tarjeta".</small>
+                            </Alert>
+                            <div className="d-flex justify-content-end gap-2">
+                                <Button variant="secondary" onClick={() => setShowPaymentModal(false)}>
+                                    Cancelar
+                                </Button>
+                                <Button variant="primary" type="submit" disabled={submittingPayment}>
+                                    {submittingPayment ? 'Procesando...' : 'Pagar Ahora'}
+                                </Button>
+                            </div>
+                        </Form>
+                    </Modal.Body>
+                </Modal>
             </Container>
         </DashboardLayout>
     );

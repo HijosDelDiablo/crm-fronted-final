@@ -4,6 +4,11 @@ export const getAllProducts = async (navigate) => {
     return await fetchApiGet('/products/all', navigate, 'Error al obtener productos');
 };
 
+export const getStoreProducts = async (filters = {}, navigate) => {
+    const queryParams = new URLSearchParams(filters).toString();
+    return await fetchApiGet(`/products/tienda?${queryParams}`, navigate, 'Error al obtener productos de la tienda');
+};
+
 export const createProduct = async (productData, navigate) => {
     return await fetchApiPost('/products', productData, navigate, 'Error al crear producto');
 };
