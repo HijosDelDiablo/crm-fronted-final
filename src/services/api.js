@@ -25,11 +25,11 @@ api.interceptors.request.use((config) => {
     }
   }
 
-  if (token) {
+  if (token && token !== 'undefined' && token !== undefined) {
     config.headers.Authorization = `Bearer ${token}`;
     console.log('[API DEBUG] Header Authorization:', config.headers.Authorization);
   } else {
-    console.warn('[API DEBUG] No se encontró token en Redux ni en localStorage');
+    console.warn('[API DEBUG] No se encontró token válido en Redux ni en localStorage');
   }
   return config;
 });

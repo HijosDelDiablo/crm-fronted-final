@@ -4,13 +4,15 @@ import { useNavigate } from 'react-router-dom';
 import {
     getComprasPendientes,
     getComprasEnRevision,
-    getComprasAprobadas
+    getComprasAprobadas,
+    getAllCompras
 } from '../../api/compras.api';
 import StatusBadge from '../../components/shared/StatusBadge';
 import Sidebar from '../../components/layout/Sidebar';
 
 const RevisarCompras = () => {
     const [compras, setCompras] = useState({
+        todas: [],
         pendientes: [],
         enRevision: [],
         aprobadas: []
@@ -22,13 +24,15 @@ const RevisarCompras = () => {
     useEffect(() => {
         const fetchCompras = async () => {
             try {
-                const [pendientes, enRevision, aprobadas] = await Promise.all([
+                const [todas, pendientes, enRevision, aprobadas] = await Promise.all([
+                    getAllCompras(navigate),
                     getComprasPendientes(navigate),
                     getComprasEnRevision(navigate),
                     getComprasAprobadas(navigate)
                 ]);
 
                 setCompras({
+                    todas,
                     pendientes,
                     enRevision,
                     aprobadas
@@ -71,7 +75,7 @@ const RevisarCompras = () => {
                         <tr key={compra._id}>
                             <td>{compra.cliente?.nombre || 'N/A'}</td>
                             <td>{compra.vendedor?.nombre || 'N/A'}</td>
-                            <td><StatusBadge status={status} /></td>
+                            <td><StatusBadge status={compra.status || status} /></td>
                             <td>{new Date(compra.fechaCreacion).toLocaleDateString('es-ES')}</td>
                             <td>${compra.saldoPendiente?.toLocaleString('es-ES')}</td>
                             <td>
@@ -140,7 +144,10 @@ const RevisarCompras = () => {
             <div className="dashboard-container">
                 <Container className="mt-4">
                     <h2>Revisar Compras</h2>
-                    <Tabs defaultActiveKey="pendientes" className="mb-3">
+                    <Tabs defaultActiveKey="todas" className="mb-3">
+                        <Tab eventKey="todas" title="Todas">
+                            {renderTable(compras.todas, "Todas")}
+                        </Tab>
                         <Tab eventKey="pendientes" title="Pendientes">
                             {renderTable(compras.pendientes, "Pendiente")}
                         </Tab>

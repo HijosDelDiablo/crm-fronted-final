@@ -10,6 +10,7 @@ import {
   getTopSellers,
   getSellerWithMoreActivity,
   getTopSalesByPeriod,
+  getDashboardStats,
 } from "../../../api/statistics.api";
 import "./Dashboard.css";
 
@@ -48,12 +49,14 @@ const Dashboard = () => {
           topProducts,
           topSellers,
           activeSeller,
+          dashboardStats,
         ] = await Promise.all([
           getTopSalesByPeriod(navigate),
           getSalesReport(formattedStart, formattedEnd, navigate),
           getTopProducts(navigate),
           getTopSellers(navigate),
           getSellerWithMoreActivity(navigate),
+          getDashboardStats(navigate),
         ]);
 
         const chartData =
@@ -74,6 +77,7 @@ const Dashboard = () => {
           topProduct: topProducts?.[0],
           topSeller: topSellers?.[0],
           mostActiveSeller: activeSeller,
+          stats: dashboardStats,
           loading: false,
         });
       } catch (error) {

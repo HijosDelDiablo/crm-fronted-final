@@ -95,7 +95,7 @@ export default function Perfil() {
   const getAvatarUrl = () => {
     if (!reduxUser?.fotoPerfil) return "https://via.placeholder.com/150";
     if (reduxUser.fotoPerfil.startsWith("http")) return reduxUser.fotoPerfil;
-    return `https://crm-back-final-production.up.railway.app${reduxUser.fotoPerfil}`;
+    return `${import.meta.env.VITE_APP_API_URL}${reduxUser.fotoPerfil}`;
   };
 
   return (

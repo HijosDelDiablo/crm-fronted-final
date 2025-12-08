@@ -1,26 +1,47 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container, Row, Col, Card, Badge, Spinner, Modal, Form } from "react-bootstrap";
-import { Car, Calendar, DollarSign, Gauge, Settings, Palette, Hash } from "lucide-react";
+import { Car, Calendar, DollarSign, Settings, Palette, Hash } from "lucide-react";
 import toast from "react-hot-toast";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import api from "../services/api";
 import { crearCotizacion } from "../api/pricings.api";
+import { getProfile } from "../api/users.api";
+import { updateUserData } from "../redux/slices/authSlice";
 import DashboardLayout from "../components/layout/DashboardLayaut";
 import "./products.css";
 
 export default function ViewProducts() {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [formData, setFormData] = useState({ enganchePercent: 20, plazoMeses: 12 });
-    const { user } = useSelector((state) => state.auth);
+    const { user, token } = useSelector((state) => state.auth);
 
     useEffect(() => {
-        fetchProducts();
-    }, []);
+        if (token) {
+            fetchProducts();
+            loadUserProfile();
+        } else {
+            setLoading(false);
+        }
+    }, [token]);
+
+    const loadUserProfile = async () => {
+        try {
+            console.log('🔄 ViewProducts: Cargando perfil del usuario...');
+            const profileData = await getProfile(navigate);
+            if (profileData) {
+                console.log('✅ ViewProducts: Perfil obtenido:', profileData);
+                dispatch(updateUserData(profileData));
+            }
+        } catch (error) {
+            console.error('❌ ViewProducts: Error al cargar perfil:', error);
+        }
+    };
 
     const fetchProducts = async () => {
         setLoading(true);
@@ -36,11 +57,15 @@ export default function ViewProducts() {
     };
 
     const handleCotizar = (product) => {
-        // Validación de documentos
+        // Validación de documentos usando la nueva estructura
         const missingFiles = [];
-        if (!user?.uriIneFile) missingFiles.push("INE");
-        if (!user?.uriComprobanteDomicilioFile) missingFiles.push("Comprobante de Domicilio");
-        if (!user?.uriComprobanteIngresoFile) missingFiles.push("Comprobante de Ingresos");
+        if (!user?.documents?.ine?.url) missingFiles.push("INE");
+        if (!user?.documents?.domicilio?.url) missingFiles.push("Comprobante de Domicilio");
+        if (!user?.documents?.ingresos?.url) missingFiles.push("Comprobante de Ingresos");
+
+        console.log('👤 ViewProducts - user:', user);
+        console.log('📄 ViewProducts - documents:', user?.documents);
+        console.log('🚫 ViewProducts - missingFiles:', missingFiles);
 
         if (missingFiles.length > 0) {
             toast((t) => (
@@ -134,7 +159,7 @@ export default function ViewProducts() {
                     <div>
                         <h1 className="display-5 fw-bold mb-2" style={{ color: 'var(--text-main)' }}>
                             <Car className="me-3 text-primary" size={40} />
-                            Catálogo de Vehículos
+                            Catálogo de Vehículosssssss
                         </h1>
                         <p className="text-muted mb-0 fs-5">
                             Descubre el vehículo perfecto para ti
@@ -196,14 +221,6 @@ export default function ViewProducts() {
                                             </div>
 
                                             <div className="specs-grid">
-                                                <div className="spec-item d-flex align-items-center justify-content-between">
-                                                    <div className="d-flex align-items-center">
-                                                        <Gauge size={14} className="me-2 text-muted" />
-                                                        <span className="spec-label">Kilometraje</span>
-                                                    </div>
-                                                    <span className="spec-value fw-medium">{product.kilometraje?.toLocaleString()} km</span>
-                                                </div>
-
                                                 <div className="spec-item d-flex align-items-center justify-content-between">
                                                     <div className="d-flex align-items-center">
                                                         <Settings size={14} className="me-2 text-muted" />

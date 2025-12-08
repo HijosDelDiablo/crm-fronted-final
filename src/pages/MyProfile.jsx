@@ -1,10 +1,10 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Card, Button, Spinner, Badge } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { Camera, FileText, Upload, CheckCircle, AlertCircle, Eye } from 'lucide-react';
 import toast from 'react-hot-toast';
-import api from '../services/api'; // Ajusta la ruta según tu estructura
+import { uploadProfilePhoto, uploadINE, uploadDomicilio, uploadIngresos, getProfile, updateProfile } from '../api/users.api';
 import { updateUserData } from '../redux/slices/authSlice'; // Ajusta la ruta
 
 const MyProfile = () => {
@@ -24,58 +24,107 @@ const MyProfile = () => {
     const [uploadingDomicilio, setUploadingDomicilio] = useState(false);
     const [uploadingIngreso, setUploadingIngreso] = useState(false);
 
+    // Cargar perfil al montar el componente
+    useEffect(() => {
+        console.log('🔄 MyProfile: Montando componente, cargando perfil...');
+        const loadProfile = async () => {
+            try {
+                console.log('📡 MyProfile: Llamando a getProfile...');
+                const profileData = await getProfile(navigate);
+                if (profileData) {
+                    console.log('✅ MyProfile: Perfil obtenido:', profileData);
+                    dispatch(updateUserData(profileData));
+                } else {
+                    console.warn('⚠️ MyProfile: No se pudo obtener el perfil');
+                }
+            } catch (error) {
+                console.error('❌ MyProfile: Error al cargar perfil:', error);
+            }
+        };
+        loadProfile();
+    }, [dispatch, navigate]);
+
     // Helper para obtener URL de la imagen/archivo
     const getFileUrl = (path) => {
-        if (!path) return null;
-        if (path.startsWith('http')) return path;
+        console.log('🔗 MyProfile: getFileUrl llamado con path:', path);
+        if (!path) {
+            console.log('🔗 MyProfile: Path vacío, retornando null');
+            return null;
+        }
+        if (path.startsWith('http')) {
+            console.log('🔗 MyProfile: Path ya es URL completa:', path);
+            return path;
+        }
+        // Special mapping for uploaded images
+       
         // Ajusta la URL base según tu entorno
-        const baseUrl = import.meta.env.VITE_APP_API_URL || 'https://crm-back-final-production.up.railway.app';
-        return `${baseUrl}${path}`;
+        const baseUrl = 'https://8rnc9otm8f.ufs.sh/f/';
+        const fullUrl = `${baseUrl}${path}`;
+        console.log('🔗 MyProfile: Construyendo URL:', fullUrl);
+        return fullUrl;
     };
 
     // Función genérica para subir archivos
-    const handleFileUpload = async (file, endpoint, setLoading) => {
-        if (!file) return;
+    const handleFileUpload = async (file, uploadFunction, setLoading) => {
+        console.log('📤 MyProfile: handleFileUpload iniciado con file:', file?.name, 'tipo:', file?.type);
+        if (!file) {
+            console.warn('⚠️ MyProfile: No hay archivo para subir');
+            return;
+        }
 
         // Validaciones
         const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf'];
         if (!allowedTypes.includes(file.type)) {
+            console.error('❌ MyProfile: Tipo de archivo no permitido:', file.type);
             toast.error('Tipo de archivo no permitido. Solo imágenes y PDF.');
             return;
         }
 
         if (file.size > 5 * 1024 * 1024) { // 5MB
+            console.error('❌ MyProfile: Archivo demasiado grande:', file.size);
             toast.error('El archivo es demasiado grande (Máx 5MB)');
             return;
         }
 
-        const formData = new FormData();
-        formData.append('file', file);
-
         setLoading(true);
+        console.log('⏳ MyProfile: Iniciando subida de archivo...');
         try {
-            const { data } = await api.post(endpoint, formData, {
-                headers: { 'Content-Type': 'multipart/form-data' }
-            });
-
-            // Actualizar Redux con la respuesta (se asume que devuelve el usuario actualizado)
-            dispatch(updateUserData(data));
-            toast.success('Archivo actualizado correctamente');
+            const result = await uploadFunction(file, navigate);
+            if (result) {
+                console.log('✅ MyProfile: Archivo subido exitosamente:', result);
+                // Actualizar Redux con la respuesta (se asume que devuelve el usuario actualizado)
+                dispatch(updateUserData(result));
+                toast.success('Archivo actualizado correctamente');
+            } else {
+                console.error('❌ MyProfile: Error en respuesta de subida');
+                toast.error('Error al subir el archivo');
+            }
         } catch (error) {
-            console.error('Error uploading file:', error);
-            // Mostrar mensaje de error más específico si viene del backend
-            const msg = error.response?.data?.message || 'Error al subir el archivo';
-            toast.error(msg);
+            console.error('❌ MyProfile: Error uploading file:', error);
+            toast.error('Error al subir el archivo');
         } finally {
             setLoading(false);
+            console.log('🏁 MyProfile: Finalizada subida de archivo');
         }
     };
 
     // Handlers específicos
-    const onPhotoChange = (e) => handleFileUpload(e.target.files[0], '/user/profile/upload-photo', setUploadingPhoto);
-    const onIneChange = (e) => handleFileUpload(e.target.files[0], '/user/profile/upload-ine', setUploadingIne);
-    const onDomicilioChange = (e) => handleFileUpload(e.target.files[0], '/user/profile/upload-comprobante-domicilio', setUploadingDomicilio);
-    const onIngresoChange = (e) => handleFileUpload(e.target.files[0], '/user/profile/upload-comprobante-ingreso', setUploadingIngreso);
+    const onPhotoChange = (e) => {
+        console.log('📸 MyProfile: onPhotoChange activado');
+        handleFileUpload(e.target.files[0], uploadProfilePhoto, setUploadingPhoto);
+    };
+    const onIneChange = (e) => {
+        console.log('🆔 MyProfile: onIneChange activado');
+        handleFileUpload(e.target.files[0], uploadINE, setUploadingIne);
+    };
+    const onDomicilioChange = (e) => {
+        console.log('🏠 MyProfile: onDomicilioChange activado');
+        handleFileUpload(e.target.files[0], uploadDomicilio, setUploadingDomicilio);
+    };
+    const onIngresoChange = (e) => {
+        console.log('💰 MyProfile: onIngresoChange activado');
+        handleFileUpload(e.target.files[0], uploadIngresos, setUploadingIngreso);
+    };
 
     // Componente para visualizar archivo (miniatura o link)
     const FilePreview = ({ url, label, onUpdate, loading, inputRef, accept = "image/*,application/pdf" }) => {
@@ -218,7 +267,7 @@ const MyProfile = () => {
                                     <FilePreview
                                         className="seller-card"
                                         label="INE / Identificación"
-                                        url={getFileUrl(user?.uriIneFile)}
+                                        url={getFileUrl(user?.documents?.ine?.url)}
                                         onUpdate={onIneChange}
                                         loading={uploadingIne}
                                         inputRef={ineInputRef}
@@ -227,7 +276,7 @@ const MyProfile = () => {
                                 <Col md={4}>
                                     <FilePreview
                                         label="Comprobante de Ingresos"
-                                        url={getFileUrl(user?.uriComprobanteIngresoFile)}
+                                        url={getFileUrl(user?.documents?.ingresos?.url)}
                                         onUpdate={onIngresoChange}
                                         loading={uploadingIngreso}
                                         inputRef={ingresoInputRef}
@@ -236,7 +285,7 @@ const MyProfile = () => {
                                 <Col md={4}>
                                     <FilePreview
                                         label="Comprobante de Domicilio"
-                                        url={getFileUrl(user?.uriComprobanteDomicilioFile)}
+                                        url={getFileUrl(user?.documents?.domicilio?.url)}
                                         onUpdate={onDomicilioChange}
                                         loading={uploadingDomicilio}
                                         inputRef={domicilioInputRef}

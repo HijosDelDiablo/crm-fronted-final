@@ -248,3 +248,12 @@
     padding: 2.2rem 1.6rem;
   }
 }
+/* Payment Schedule */
+.payment-schedule-container {
+  margin-top: 1rem;
+  overflow-x: auto;
+}
+
+.payment-schedule-container table {
+  min-width: 600px;
+}

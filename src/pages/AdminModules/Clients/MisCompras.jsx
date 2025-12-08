@@ -186,9 +186,8 @@ export default function MisCompras() {
           <>
             <Modal.Header
               closeButton
-              className={`bg-${
-                getStatusConfig(selectedCompra.status).color
-              } text-white`}
+              className={`bg-${getStatusConfig(selectedCompra.status).color
+                } text-white`}
             >
               <Modal.Title className="d-flex align-items-center gap-2">
                 {getStatusConfig(selectedCompra.status).icon}
@@ -198,111 +197,111 @@ export default function MisCompras() {
             <Modal.Body className="p-4">
               {(selectedCompra.status === "Pendiente" ||
                 selectedCompra.status === "En revisión") && (
-                <div className="text-center py-4">
-                  <Spinner
-                    animation="grow"
-                    variant="warning"
-                    className="mb-3"
-                  />
-                  <h4>Analizando tu perfil financiero</h4>
-                  <p className="text-muted px-md-5">
-                    Estamos consultando tu Buró de Crédito y calculando tu
-                    capacidad de pago. Este proceso suele tardar entre 24 y 48
-                    horas. Te notificaremos por correo.
-                  </p>
-                  <ProgressBar
-                    animated
-                    now={60}
-                    label="60%"
-                    variant="warning"
-                    className="mt-3"
-                  />
-                </div>
-              )}
+                  <div className="text-center py-4">
+                    <Spinner
+                      animation="grow"
+                      variant="warning"
+                      className="mb-3"
+                    />
+                    <h4>Analizando tu perfil financiero</h4>
+                    <p className="text-muted px-md-5">
+                      Estamos consultando tu Buró de Crédito y calculando tu
+                      capacidad de pago. Este proceso suele tardar entre 24 y 48
+                      horas. Te notificaremos por correo.
+                    </p>
+                    <ProgressBar
+                      animated
+                      now={60}
+                      label="60%"
+                      variant="warning"
+                      className="mt-3"
+                    />
+                  </div>
+                )}
 
               {(selectedCompra.status === "Aprobada" ||
                 selectedCompra.status === "Completada") && (
-                <div>
-                  <div className="alert alert-success border-0 shadow-sm">
-                    <h4 className="alert-heading fw-bold">
-                      ¡Felicidades! Tu crédito fue autorizado.
-                    </h4>
-                    <p>
-                      Ya puedes pasar a la agencia para firmar contrato y
-                      recoger tu unidad.
-                    </p>
-                  </div>
-
-                  <h6 className="fw-bold mt-4 mb-3">
-                    Condiciones Finales del Banco
-                  </h6>
-                  <Row className="g-3">
-                    <Col sm={6}>
-                      <div className="p-3 border rounded bg-light">
-                        <small className="text-muted d-block">
-                          Monto Aprobado
-                        </small>
-                        <h4 className="fw-bold text-success">
-                          $
-                          {selectedCompra.resultadoBanco?.montoAprobado?.toLocaleString() ||
-                            selectedCompra.cotizacion.montoFinanciado.toLocaleString()}
-                        </h4>
-                      </div>
-                    </Col>
-                    <Col sm={6}>
-                      <div className="p-3 border rounded bg-light">
-                        <small className="text-muted d-block">
-                          Tasa de Interés Anual
-                        </small>
-                        <h4 className="fw-bold text-dark">
-                          {(
-                            (selectedCompra.resultadoBanco?.tasaInteres ||
-                              0.15) * 100
-                          ).toFixed(1)}
-                          %
-                        </h4>
-                      </div>
-                    </Col>
-                    <Col sm={6}>
-                      <div className="p-3 border rounded bg-light">
-                        <small className="text-muted d-block">
-                          Mensualidad Real
-                        </small>
-                        <h5 className="fw-bold">
-                          $
-                          {selectedCompra.resultadoBanco?.pagoMensual?.toLocaleString() ||
-                            "Calculando..."}
-                        </h5>
-                      </div>
-                    </Col>
-                    <Col sm={6}>
-                      <div className="p-3 border rounded bg-light">
-                        <small className="text-muted d-block">
-                          Plazo Autorizado
-                        </small>
-                        <h5 className="fw-bold">
-                          {selectedCompra.resultadoBanco?.plazoAprobado ||
-                            selectedCompra.cotizacion.plazoMeses}{" "}
-                          Meses
-                        </h5>
-                      </div>
-                    </Col>
-                  </Row>
-
-                  {selectedCompra.resultadoBanco?.condiciones && (
-                    <div className="mt-3">
-                      <strong>Condiciones:</strong>
-                      <ul>
-                        {selectedCompra.resultadoBanco.condiciones.map(
-                          (c, i) => (
-                            <li key={i}>{c}</li>
-                          )
-                        )}
-                      </ul>
+                  <div>
+                    <div className="alert alert-success border-0 shadow-sm">
+                      <h4 className="alert-heading fw-bold">
+                        ¡Felicidades! Tu crédito fue autorizado.
+                      </h4>
+                      <p>
+                        Ya puedes pasar a la agencia para firmar contrato y
+                        recoger tu unidad.
+                      </p>
                     </div>
-                  )}
-                </div>
-              )}
+
+                    <h6 className="fw-bold mt-4 mb-3">
+                      Condiciones Finales del Banco
+                    </h6>
+                    <Row className="g-3">
+                      <Col sm={6}>
+                        <div className="p-3 border rounded bg-light">
+                          <small className="text-muted d-block">
+                            Monto Aprobado
+                          </small>
+                          <h4 className="fw-bold text-success">
+                            $
+                            {selectedCompra.resultadoBanco?.montoAprobado?.toLocaleString() ||
+                              selectedCompra.cotizacion.montoFinanciado.toLocaleString()}
+                          </h4>
+                        </div>
+                      </Col>
+                      <Col sm={6}>
+                        <div className="p-3 border rounded bg-light">
+                          <small className="text-muted d-block">
+                            Tasa de Interés Anual
+                          </small>
+                          <h4 className="fw-bold text-dark">
+                            {(
+                              (selectedCompra.resultadoBanco?.tasaInteres ||
+                                0.15) * 100
+                            ).toFixed(1)}
+                            %
+                          </h4>
+                        </div>
+                      </Col>
+                      <Col sm={6}>
+                        <div className="p-3 border rounded bg-light">
+                          <small className="text-muted d-block">
+                            Saldo Pendiente
+                          </small>
+                          <h5 className="fw-bold">
+                            $
+                            {selectedCompra.saldoPendiente?.toLocaleString() ||
+                              "Calculando..."}
+                          </h5>
+                        </div>
+                      </Col>
+                      <Col sm={6}>
+                        <div className="p-3 border rounded bg-light">
+                          <small className="text-muted d-block">
+                            Plazo Autorizado
+                          </small>
+                          <h5 className="fw-bold">
+                            {selectedCompra.resultadoBanco?.plazoAprobado ||
+                              selectedCompra.cotizacion.plazoMeses}{" "}
+                            Meses
+                          </h5>
+                        </div>
+                      </Col>
+                    </Row>
+
+                    {selectedCompra.resultadoBanco?.condiciones && (
+                      <div className="mt-3">
+                        <strong>Condiciones:</strong>
+                        <ul>
+                          {selectedCompra.resultadoBanco.condiciones.map(
+                            (c, i) => (
+                              <li key={i}>{c}</li>
+                            )
+                          )}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                )}
 
               {selectedCompra.status === "Rechazada" && (
                 <div className="text-center">

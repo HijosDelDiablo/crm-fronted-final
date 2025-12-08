@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Form, Button, Card, Alert, Spinner, Row, Col } from 'react-bootstrap';
+import { Container, Form, Button, Card, Alert, Spinner, Row, Col, Modal } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { getCompraById, getAllCompras } from '../../api/compras.api';
-import { getPagosPorCompra } from '../../api/pagos.api';
+import { getPagosPorCompra, registrarPago } from '../../api/pagos.api';
 import PaymentTable from '../../components/shared/PaymentTable';
 import StatusBadge from '../../components/shared/StatusBadge';
 import Sidebar from '../../components/layout/Sidebar';
@@ -16,6 +16,16 @@ const GestionPagos = () => {
     const [loading, setLoading] = useState(false);
     const [loadingCompras, setLoadingCompras] = useState(true);
     const [error, setError] = useState(null);
+    
+    // Modal state
+    const [showModal, setShowModal] = useState(false);
+    const [pagoForm, setPagoForm] = useState({
+        monto: '',
+        metodoPago: 'Transferencia',
+        notas: ''
+    });
+    const [submitting, setSubmitting] = useState(false);
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -62,6 +72,31 @@ const GestionPagos = () => {
         }
     };
 
+    const handleRegistrarPago = async (e) => {
+        e.preventDefault();
+        if (!selectedCompraId) return;
+
+        setSubmitting(true);
+        try {
+            await registrarPago({
+                compraId: selectedCompraId,
+                monto: parseFloat(pagoForm.monto),
+                metodoPago: pagoForm.metodoPago,
+                notas: pagoForm.notas
+            }, navigate);
+
+            // Recargar datos
+            await handleSearch();
+            setShowModal(false);
+            setPagoForm({ monto: '', metodoPago: 'Transferencia', notas: '' });
+            alert('Pago registrado correctamente');
+        } catch (err) {
+            alert('Error al registrar el pago');
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
     return (
         <div className="dashboard-layout">
             <Sidebar />
@@ -102,34 +137,39 @@ const GestionPagos = () => {
                             {error && <Alert variant="danger">{error}</Alert>}
 
                             {compra && (
-                                <Card className="mb-4 admin-card">
-                                    <Card.Header>
-                                        <h5>Detalle de la Compra</h5>
-                                    </Card.Header>
-                                    <Card.Body>
-                                        <Row>
-                                            <Col md={6}>
-                                                <p><strong>ID:</strong> {compra._id}</p>
-                                                <p><strong>Cliente:</strong> {compra.cliente?.nombre}</p>
-                                                <p><strong>Vendedor:</strong> {compra.vendedor?.nombre || 'N/A'}</p>
-                                                <p><strong>Estado:</strong> <StatusBadge status={compra.status} /></p>
-                                                <p><strong>Saldo Pendiente:</strong> ${compra.saldoPendiente}</p>
-                                                <p><strong>Total Pagado:</strong> ${compra.totalPagado}</p>
-                                                <p><strong>Monto Total Crédito:</strong> ${compra.montoTotalCredito}</p>
-                                            </Col>
-                                            <Col md={6}>
-                                                <p><strong>Coche ID:</strong> {compra.cotizacion?.coche}</p>
-                                                <p><strong>Precio Coche:</strong> ${compra.cotizacion?.precioCoche}</p>
-                                                <p><strong>Enganche:</strong> ${compra.cotizacion?.enganche}</p>
-                                                <p><strong>Monto Financiado:</strong> ${compra.cotizacion?.montoFinanciado}</p>
-                                                <p><strong>Pago Mensual:</strong> ${compra.cotizacion?.pagoMensual}</p>
-                                                <p><strong>Plazo Meses:</strong> {compra.cotizacion?.plazoMeses}</p>
-                                                <p><strong>Tasa Interés:</strong> {(compra.cotizacion?.tasaInteres * 100)}%</p>
-                                                <p><strong>Fecha Creación:</strong> {new Date(compra.createdAt).toLocaleDateString('es-ES')}</p>
-                                            </Col>
-                                        </Row>
-                                    </Card.Body>
-                                </Card>
+                                <>
+                                    <div className="d-flex justify-content-end mb-3">
+                                        <Button variant="success" onClick={() => setShowModal(true)}>
+                                            + Registrar Nuevo Pago
+                                        </Button>
+                                    </div>
+
+                                    <Card className="mb-4 admin-card">
+                                        <Card.Header>
+                                            <h5>Detalle de la Compra</h5>
+                                        </Card.Header>
+                                        <Card.Body>
+                                            <Row>
+                                                <Col md={6}>
+                                                    <p><strong>ID:</strong> {compra._id}</p>
+                                                    <p><strong>Cliente:</strong> {compra.cliente?.nombre}</p>
+                                                    <p><strong>Vendedor:</strong> {compra.vendedor?.nombre || 'N/A'}</p>
+                                                    <p><strong>Estado:</strong> <StatusBadge status={compra.status} /></p>
+                                                    <p><strong>Saldo Pendiente:</strong> ${compra.saldoPendiente?.toLocaleString('es-ES')}</p>
+                                                    <p><strong>Total Pagado:</strong> ${compra.totalPagado?.toLocaleString('es-ES')}</p>
+                                                </Col>
+                                                <Col md={6}>
+                                                    <p><strong>Coche ID:</strong> {compra.cotizacion?.coche}</p>
+                                                    <p><strong>Precio Coche:</strong> ${compra.cotizacion?.precioCoche?.toLocaleString('es-ES')}</p>
+                                                    <p><strong>Enganche:</strong> ${compra.cotizacion?.enganche?.toLocaleString('es-ES')}</p>
+                                                    <p><strong>Pago Mensual:</strong> ${compra.cotizacion?.pagoMensual?.toLocaleString('es-ES')}</p>
+                                                    <p><strong>Plazo Meses:</strong> {compra.cotizacion?.plazoMeses}</p>
+                                                    <p><strong>Fecha Creación:</strong> {new Date(compra.createdAt).toLocaleDateString('es-ES')}</p>
+                                                </Col>
+                                            </Row>
+                                        </Card.Body>
+                                    </Card>
+                                </>
                             )}
 
                             {pagos.length > 0 && (
@@ -148,6 +188,56 @@ const GestionPagos = () => {
                             )}
                         </div>
                     )}
+
+                    {/* Modal Registrar Pago */}
+                    <Modal show={showModal} onHide={() => setShowModal(false)}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>Registrar Pago</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <Form onSubmit={handleRegistrarPago}>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Monto</Form.Label>
+                                    <Form.Control
+                                        type="number"
+                                        step="0.01"
+                                        required
+                                        value={pagoForm.monto}
+                                        onChange={(e) => setPagoForm({ ...pagoForm, monto: e.target.value })}
+                                    />
+                                </Form.Group>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Método de Pago</Form.Label>
+                                    <Form.Select
+                                        value={pagoForm.metodoPago}
+                                        onChange={(e) => setPagoForm({ ...pagoForm, metodoPago: e.target.value })}
+                                    >
+                                        <option value="Transferencia">Transferencia</option>
+                                        <option value="Efectivo">Efectivo</option>
+                                        <option value="Tarjeta">Tarjeta</option>
+                                        <option value="Cheque">Cheque</option>
+                                    </Form.Select>
+                                </Form.Group>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Notas</Form.Label>
+                                    <Form.Control
+                                        as="textarea"
+                                        rows={3}
+                                        value={pagoForm.notas}
+                                        onChange={(e) => setPagoForm({ ...pagoForm, notas: e.target.value })}
+                                    />
+                                </Form.Group>
+                                <div className="d-flex justify-content-end gap-2">
+                                    <Button variant="secondary" onClick={() => setShowModal(false)}>
+                                        Cancelar
+                                    </Button>
+                                    <Button variant="primary" type="submit" disabled={submitting}>
+                                        {submitting ? 'Registrando...' : 'Registrar Pago'}
+                                    </Button>
+                                </div>
+                            </Form>
+                        </Modal.Body>
+                    </Modal>
                 </Container>
             </div>
         </div>

@@ -1,12 +1,15 @@
 import { useEffect, useState, useRef } from "react";
 import { Spinner, Form, Modal } from "react-bootstrap";
 import toast from "react-hot-toast";
-import api from "../services/api";
+import { getAllProducts, createProduct, uploadProductImage, deleteProduct } from "../api/products.api";
+import api from "../services/api.js";
 import "./products.css";
 import "./products-form.css";
 import Sidebar from "../components/layout/Sidebar";
+import { useNavigate } from "react-router-dom";
 
 export default function Products() {
+    const navigate = useNavigate();
     const [products, setProducts] = useState([]);
     const [suppliers, setSuppliers] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -43,20 +46,11 @@ export default function Products() {
     const fetchProducts = async () => {
         setLoading(true);
         try {
-            const { data } = await api.get("/products/all");
-            setProducts(data);
+            const data = await getAllProducts(navigate);
+            setProducts(data || []);
         } catch (err) {
-            if (err.response) {
-                if (err.response.status === 401) {
-                    toast.error("No autorizado. Inicia sesión como administrador.");
-                } else if (err.response.status === 403) {
-                    toast.error("Acceso prohibido. No tienes permisos de administrador.");
-                } else {
-                    toast.error("Error al cargar productos: " + (err.response.data?.message || err.message));
-                }
-            } else {
-                toast.error("Error de red al cargar productos");
-            }
+            toast.error("Error al cargar productos");
+            setProducts([]);
         } finally {
             setLoading(false);
         }
@@ -65,9 +59,21 @@ export default function Products() {
     const fetchSuppliers = async () => {
         try {
             const { data } = await api.get("/proveedores/activos");
-            setSuppliers(data);
+            setSuppliers(data || []);
         } catch (err) {
             toast.error("Error al cargar proveedores: " + (err.response?.data?.message || err.message));
+            setSuppliers([]);
+        }
+    };
+
+    const handleDelete = async (id) => {
+        if (!window.confirm("¿Seguro que deseas eliminar este producto?")) return;
+        try {
+            await deleteProduct(id, navigate);
+            toast.success("Producto eliminado");
+            fetchProducts();
+        } catch (err) {
+            toast.error("Error al eliminar producto");
         }
     };
 
@@ -134,13 +140,9 @@ export default function Products() {
             if (form.proveedor) payload.proveedor = form.proveedor;
 
             console.log('Payload a enviar:', payload);
-            const { data } = await api.post("/products", payload);
+            const data = await createProduct(payload, navigate);
             if (image) {
-                const formData = new FormData();
-                formData.append("file", image);
-                await api.post(`/products/${data._id}/upload`, formData, {
-                    headers: { "Content-Type": "multipart/form-data" }
-                });
+                await uploadProductImage(data._id, image, navigate);
             }
             toast.success("Producto creado");
             setShowModal(false);
