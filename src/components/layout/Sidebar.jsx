@@ -4,7 +4,7 @@ import "./dash.css";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import { logout } from "../../redux/slices/authSlice";
-import { House, Box, ShoppingBag, LogOut, Car, Menu, Truck, Users, UserCheck, MessageSquare, Moon, ShoppingCart, CreditCard, ShieldCheck, User, DollarSign } from "lucide-react";
+import { House, Box, ShoppingBag, LogOut, Car, Menu, Truck, Users, UserCheck, MessageSquare, ShoppingCart, CreditCard, ShieldCheck, User, DollarSign } from "lucide-react";
 import logo from "../../assets/logos/logoAuto.jpg";
 import AIChatWidget from "../chat/AIChatWidget.jsx";
 
@@ -108,20 +108,6 @@ export default function Sidebar() {
         </nav>
 
         <div className="sidebar-footer mt-auto">
-          {/* Theme Indicator - Always Dark */}
-          <div className="px-3 mb-3">
-            <div
-              className="btn-theme-indicator w-100 d-flex align-items-center justify-content-center gap-2 p-2 rounded-3"
-              style={{
-                background: "var(--background-soft)",
-                border: "1px solid var(--border-color)",
-                color: "var(--text-main)",
-              }}
-            >
-              <Moon size={18} />
-              {!collapsed && <span>Modo Oscuro</span>}
-            </div>
-          </div>
 
           <div className="user-mini">
             <div className="user-avatar">

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Form, Button, Table, Alert, Spinner } from 'react-bootstrap';
+import { Container, Row, Col, Card, Form, Table, Alert, Spinner } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { createGasto, getGastos, getTotalGastos } from '../../api/gastos.api';
 import Sidebar from '../../components/layout/Sidebar';
@@ -46,7 +46,7 @@ const Gastos = () => {
                 ...form,
                 monto: parseFloat(form.monto)
             }, navigate);
-            
+
             setForm({
                 concepto: '',
                 monto: '',
@@ -68,7 +68,7 @@ const Gastos = () => {
             <div className="dashboard-container">
                 <Container className="mt-4">
                     <h2>Gestión de Gastos</h2>
-                    
+
                     <Row className="mb-4">
                         <Col md={4}>
                             <Card className="admin-card">
@@ -77,28 +77,46 @@ const Gastos = () => {
                                     <Form onSubmit={handleSubmit}>
                                         <Form.Group className="mb-3">
                                             <Form.Label>Concepto</Form.Label>
-                                            <Form.Control 
-                                                type="text" 
-                                                required 
+                                            <Form.Control
+                                                type="text"
+                                                required
                                                 value={form.concepto}
-                                                onChange={e => setForm({...form, concepto: e.target.value})}
+                                                onChange={e => setForm({ ...form, concepto: e.target.value })}
+                                                style={{
+                                                    background: 'var(--background-soft)',
+                                                    border: '1px solid var(--border-color)',
+                                                    color: 'var(--text-main)',
+                                                    borderRadius: '0.375rem'
+                                                }}
                                             />
                                         </Form.Group>
                                         <Form.Group className="mb-3">
                                             <Form.Label>Monto</Form.Label>
-                                            <Form.Control 
-                                                type="number" 
-                                                step="0.01" 
-                                                required 
+                                            <Form.Control
+                                                type="number"
+                                                step="0.01"
+                                                required
                                                 value={form.monto}
-                                                onChange={e => setForm({...form, monto: e.target.value})}
+                                                onChange={e => setForm({ ...form, monto: e.target.value })}
+                                                style={{
+                                                    background: 'var(--background-soft)',
+                                                    border: '1px solid var(--border-color)',
+                                                    color: 'var(--text-main)',
+                                                    borderRadius: '0.375rem'
+                                                }}
                                             />
                                         </Form.Group>
                                         <Form.Group className="mb-3">
                                             <Form.Label>Categoría</Form.Label>
-                                            <Form.Select 
+                                            <Form.Select
                                                 value={form.categoria}
-                                                onChange={e => setForm({...form, categoria: e.target.value})}
+                                                onChange={e => setForm({ ...form, categoria: e.target.value })}
+                                                style={{
+                                                    background: 'var(--background-soft)',
+                                                    border: '1px solid var(--border-color)',
+                                                    color: 'var(--text-main)',
+                                                    borderRadius: '0.375rem'
+                                                }}
                                             >
                                                 <option value="Servicios">Servicios</option>
                                                 <option value="Mantenimiento">Mantenimiento</option>
@@ -109,16 +127,37 @@ const Gastos = () => {
                                         </Form.Group>
                                         <Form.Group className="mb-3">
                                             <Form.Label>Fecha</Form.Label>
-                                            <Form.Control 
-                                                type="date" 
-                                                required 
+                                            <Form.Control
+                                                type="date"
+                                                required
                                                 value={form.fechaGasto}
-                                                onChange={e => setForm({...form, fechaGasto: e.target.value})}
+                                                onChange={e => setForm({ ...form, fechaGasto: e.target.value })}
+                                                style={{
+                                                    background: 'var(--background-soft)',
+                                                    border: '1px solid var(--border-color)',
+                                                    color: 'var(--text-main)',
+                                                    borderRadius: '0.375rem'
+                                                }}
                                             />
                                         </Form.Group>
-                                        <Button variant="primary" type="submit" disabled={submitting} className="w-100">
+                                        <button
+                                            type="submit"
+                                            disabled={submitting}
+                                            className="w-100 btn btn-primary"
+                                            style={{
+                                                background: 'var(--primary)',
+                                                border: '1px solid var(--primary)',
+                                                color: 'white',
+                                                borderRadius: '0.375rem',
+                                                padding: '0.5rem 1rem',
+                                                fontWeight: '500',
+                                                transition: 'all 0.2s ease',
+                                                cursor: submitting ? 'not-allowed' : 'pointer',
+                                                opacity: submitting ? 0.6 : 1
+                                            }}
+                                        >
                                             {submitting ? 'Registrando...' : 'Registrar Gasto'}
-                                        </Button>
+                                        </button>
                                     </Form>
                                 </Card.Body>
                             </Card>

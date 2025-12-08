@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Row, Col, Button, Modal, Form, Spinner } from 'react-bootstrap';
+import { Container, Row, Col, Modal, Form, Spinner } from 'react-bootstrap';
 import { Plus, ShieldCheck, UserPlus } from 'lucide-react';
 import Sidebar from '../../../components/layout/Sidebar';
 import AdminCard from './AdminCard';
@@ -82,14 +82,23 @@ const Admins = () => {
                             </h1>
                             <p className="text-muted">Gestión de usuarios con privilegios de administrador</p>
                         </div>
-                        <Button
-                            variant="primary"
-                            className="d-flex align-items-center gap-2 px-4 py-2 shadow-sm"
+                        <button
+                            type="button"
+                            className="d-flex align-items-center gap-2 px-4 py-2 shadow-sm btn btn-primary"
                             onClick={() => setShowModal(true)}
+                            style={{
+                                background: 'var(--primary)',
+                                border: '1px solid var(--primary)',
+                                color: 'white',
+                                borderRadius: '0.375rem',
+                                fontWeight: '500',
+                                transition: 'all 0.2s ease',
+                                cursor: 'pointer'
+                            }}
                         >
                             <Plus size={20} />
                             Nuevo Admin
-                        </Button>
+                        </button>
                     </div>
 
                     {loading ? (
@@ -175,12 +184,39 @@ const Admins = () => {
                                 </Form.Group>
 
                                 <div className="d-flex justify-content-end gap-2">
-                                    <Button variant="light" onClick={handleCloseModal}>
+                                    <button
+                                        type="button"
+                                        className="btn btn-light"
+                                        onClick={handleCloseModal}
+                                        style={{
+                                            background: 'var(--background-card)',
+                                            border: '1px solid var(--border-color)',
+                                            color: 'var(--text-main)',
+                                            borderRadius: '0.375rem',
+                                            padding: '0.5rem 1rem',
+                                            fontWeight: '500',
+                                            transition: 'all 0.2s ease',
+                                            cursor: 'pointer'
+                                        }}
+                                    >
                                         Cancelar
-                                    </Button>
-                                    <Button variant="primary" type="submit">
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className="btn btn-primary"
+                                        style={{
+                                            background: 'var(--primary)',
+                                            border: '1px solid var(--primary)',
+                                            color: 'white',
+                                            borderRadius: '0.375rem',
+                                            padding: '0.5rem 1rem',
+                                            fontWeight: '500',
+                                            transition: 'all 0.2s ease',
+                                            cursor: 'pointer'
+                                        }}
+                                    >
                                         Crear Administrador
-                                    </Button>
+                                    </button>
                                 </div>
                             </Form>
                         </Modal.Body>

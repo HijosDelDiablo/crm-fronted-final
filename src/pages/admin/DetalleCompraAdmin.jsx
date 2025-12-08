@@ -25,7 +25,9 @@ const DetalleCompraAdmin = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
+                console.log(`🔍 DetalleCompraAdmin - Fetching compra with ID: ${id}`);
                 const compraData = await getCompraById(id, navigate);
+                console.log(`✅ DetalleCompraAdmin - Compra data received:`, compraData);
                 setCompra(compraData);
 
                 if (compraData?.cotizacion) {
@@ -42,6 +44,7 @@ const DetalleCompraAdmin = () => {
                 }
 
                 const pagosData = await getPagosPorCompra(id, navigate);
+                console.log(`✅ DetalleCompraAdmin - Pagos data received:`, pagosData);
                 setPagos(pagosData);
             } catch (err) {
                 setError('Error al cargar los detalles de la compra');

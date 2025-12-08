@@ -8,7 +8,8 @@ export const ThemeProvider = ({ children }) => {
     useEffect(() => {
         const root = window.document.documentElement;
         root.setAttribute("data-theme", "dark"); // Always set dark theme
-        localStorage.setItem("theme", "dark");
+        // Remove any stored theme preference
+        localStorage.removeItem("theme");
     }, []);
 
     const toggleTheme = () => {
