@@ -114,7 +114,7 @@ const DetalleCompraAdmin = () => {
         );
     }
 
-    const { cotizacion, cliente, vendedor, status, saldoPendiente, createdAt } = compra;
+    const { cotizacion, cliente, vendedor, status, saldoPendiente, createdAt, estado } = compra;
 
     return (
         <div className="dashboard-layout">
@@ -141,7 +141,7 @@ const DetalleCompraAdmin = () => {
                                     <Row>
                                         <Col md={6}>
                                             <p><strong>ID:</strong> {compra._id}</p>
-                                            <p><strong>Estado:</strong> <StatusBadge status={status} /></p>
+                                            <p><strong>Estado:</strong> <StatusBadge status={status || estado} /></p>
                                             <p><strong>Fecha de Creación:</strong> {new Date(createdAt).toLocaleDateString('es-ES')}</p>
                                             <p><strong>Saldo Pendiente:</strong> ${saldoPendiente}</p>
                                         </Col>

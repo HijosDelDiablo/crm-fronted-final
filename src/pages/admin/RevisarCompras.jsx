@@ -75,8 +75,8 @@ const RevisarCompras = () => {
                         <tr key={compra._id}>
                             <td>{compra.cliente?.nombre || 'N/A'}</td>
                             <td>{compra.vendedor?.nombre || 'N/A'}</td>
-                            <td><StatusBadge status={compra.status || status} /></td>
-                            <td>{new Date(compra.fechaCreacion).toLocaleDateString('es-ES')}</td>
+                            <td><StatusBadge status={compra.status || compra.estado || status} /></td>
+                            <td>{new Date(compra.createdAt || compra.fechaCreacion).toLocaleDateString('es-ES')}</td>
                             <td>${compra.saldoPendiente?.toLocaleString('es-ES')}</td>
                             <td>
                                 <button
