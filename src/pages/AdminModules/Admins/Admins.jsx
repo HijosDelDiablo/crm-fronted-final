@@ -29,7 +29,7 @@ const Admins = () => {
         if (data) {
             // Filtrar solo usuarios con role "admin"
             // Nota: La API puede devolver "role" o "rol", verificamos ambos por seguridad
-            const adminUsers = data.filter(user => user.role === 'admin' || user.rol === 'admin');
+            const adminUsers = data.filter(user => user.role === 'admin' || user.rol === 'ADMIN');
             setAdmins(adminUsers);
         }
         setLoading(false);
