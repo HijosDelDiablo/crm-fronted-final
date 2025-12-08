@@ -5,6 +5,8 @@ import { getCompraById, evaluarFinanciamiento, aprobarCompra } from '../../api/c
 import { getPagosPorCompra } from '../../api/pagos.api';
 import StatusBadge from '../../components/shared/StatusBadge';
 import PaymentTable from '../../components/shared/PaymentTable';
+import PaymentSchedule from '../../components/shared/PaymentSchedule';
+import { calculateAmortizationSchedule } from '../../utils/amortization.util';
 import Sidebar from '../../components/layout/Sidebar';
 
 const DetalleCompraAdmin = () => {
@@ -12,6 +14,7 @@ const DetalleCompraAdmin = () => {
     const navigate = useNavigate();
     const [compra, setCompra] = useState(null);
     const [pagos, setPagos] = useState([]);
+    const [schedule, setSchedule] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [showEvaluarModal, setShowEvaluarModal] = useState(false);
@@ -24,6 +27,19 @@ const DetalleCompraAdmin = () => {
             try {
                 const compraData = await getCompraById(id, navigate);
                 setCompra(compraData);
+
+                if (compraData?.cotizacion) {
+                    const precio = compraData.cotizacion.coche?.precioBase || 0;
+                    const enganche = compraData.cotizacion.enganche || 0;
+                    const principal = compraData.cotizacion.montoFinanciar || (precio - enganche);
+                    const rate = (compraData.cotizacion.tasaInteres || 0) * 100; 
+                    const months = compraData.cotizacion.plazoMeses || 0;
+
+                    if (principal > 0 && months > 0) {
+                        const calculatedSchedule = calculateAmortizationSchedule(principal, rate, months);
+                        setSchedule(calculatedSchedule);
+                    }
+                }
 
                 const pagosData = await getPagosPorCompra(id, navigate);
                 setPagos(pagosData);
@@ -176,6 +192,15 @@ const DetalleCompraAdmin = () => {
                         </Card.Header>
                         <Card.Body>
                             <PaymentTable payments={pagos} />
+                        </Card.Body>
+                    </Card>
+
+                    <Card className="mt-4 mb-5 admin-card">
+                        <Card.Header>
+                            <h5>Calendario de Pagos (Proyección)</h5>
+                        </Card.Header>
+                        <Card.Body>
+                            <PaymentSchedule schedule={schedule} />
                         </Card.Body>
                     </Card>
 

@@ -5,6 +5,8 @@ import { getCompraById } from '../../api/compras.api';
 import { getMisPagos } from '../../api/pagos.api';
 import StatusBadge from '../../components/shared/StatusBadge';
 import PaymentTable from '../../components/shared/PaymentTable';
+import PaymentSchedule from '../../components/shared/PaymentSchedule';
+import { calculateAmortizationSchedule } from '../../utils/amortization.util';
 import DashboardLayout from '../../components/layout/DashboardLayaut';
 
 const DetalleCompra = () => {
@@ -12,6 +14,7 @@ const DetalleCompra = () => {
     const navigate = useNavigate();
     const [compra, setCompra] = useState(null);
     const [pagos, setPagos] = useState([]);
+    const [schedule, setSchedule] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -23,6 +26,21 @@ const DetalleCompra = () => {
                 const compraData = await getCompraById(id, navigate);
                 console.log('🔍 DetalleCompra - Datos de compra recibidos:', compraData);
                 setCompra(compraData);
+
+                // Calcular calendario de pagos si hay datos de cotización
+                if (compraData?.cotizacion) {
+                    const precio = compraData.cotizacion.coche?.precioBase || 0;
+                    const enganche = compraData.cotizacion.enganche || 0;
+                    const principal = compraData.cotizacion.montoFinanciar || (precio - enganche);
+                    // Asumiendo que tasaInteres viene como decimal (ej: 0.15 para 15%)
+                    const rate = (compraData.cotizacion.tasaInteres || 0) * 100; 
+                    const months = compraData.cotizacion.plazoMeses || 0;
+
+                    if (principal > 0 && months > 0) {
+                        const calculatedSchedule = calculateAmortizationSchedule(principal, rate, months);
+                        setSchedule(calculatedSchedule);
+                    }
+                }
 
                 // Obtener todos los pagos del usuario y filtrar por compra
                 console.log('🔍 DetalleCompra - Obteniendo todos los pagos del usuario...');
@@ -200,6 +218,15 @@ const DetalleCompra = () => {
                     <Card.Body>
                         {console.log('🔍 DetalleCompra - Render: pagos a pasar a PaymentTable:', pagos)}
                         <PaymentTable payments={pagos} />
+                    </Card.Body>
+                </Card>
+
+                <Card className="mt-4 mb-5">
+                    <Card.Header>
+                        <h5>Calendario de Pagos (Proyección)</h5>
+                    </Card.Header>
+                    <Card.Body>
+                        <PaymentSchedule schedule={schedule} />
                     </Card.Body>
                 </Card>
             </Container>
