@@ -16,8 +16,7 @@ const AdminCard = ({ user }) => {
         : 'Fecha no disponible';
 
     return (
-        <Card className="h-100 shadow-sm border-0" style={{
-            background: 'var(--card-bg, #fff)',
+        <Card className="seller-card" style={{
             transition: 'transform 0.2s ease-in-out'
         }}>
             <Card.Body>
