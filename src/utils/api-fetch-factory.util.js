@@ -1,17 +1,26 @@
 import { fetchHeader } from "../utils/fetch-header.util";
 
 export const fetchApiGet = async (url, navigate, errorMessage) => {
-    const response = await fetch(import.meta.env.VITE_APP_API_URL + url, {
+    const fullUrl = import.meta.env.VITE_APP_API_URL + url;
+    console.log(`🌐 fetchApiGet - URL completa: ${fullUrl}`);
+    console.log(`🔑 fetchApiGet - Headers:`, fetchHeader());
+    
+    const response = await fetch(fullUrl, {
         method: 'GET',
         ...fetchHeader()
     });
+    
+    console.log(`📡 fetchApiGet - Response status: ${response.status}`);
+    
     if (response.ok) {
-        return response.json();
+        const data = await response.json();
+        console.log(`✅ fetchApiGet - Datos recibidos:`, data);
+        return data;
     } else {
         if (response.status === 401 && navigate && typeof navigate === 'function') {
             navigate('/login');
         }
-        console.error(`${errorMessage} - Status: ${response.status}`);
+        console.error(`❌ ${errorMessage} - Status: ${response.status}`);
         return null;
     }
 };

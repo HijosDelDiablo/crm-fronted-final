@@ -112,11 +112,11 @@ function App() {
               </ClientGuard>
             } />
 
-            {/* Ruta Compartida - Mi Perfil */}
+            {/* Ruta Compartida - Mi Perfil (Solo para Clientes) */}
             <Route path="/perfil" element={
-              <AuthGuard>
+              <ClientGuard>
                 <MyProfile />
-              </AuthGuard>
+              </ClientGuard>
             } />
 
             <Route path="/panel/carros" element={

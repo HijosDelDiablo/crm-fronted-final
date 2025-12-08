@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { getAllProducts } from "../../api/products.api";
 import { crearCotizacion } from "../../api/pricings.api";
 import { Container, Row, Col, Modal, Form, Button, Badge, Table, InputGroup } from "react-bootstrap";
@@ -7,12 +8,18 @@ import toast from "react-hot-toast";
 import "./ClientStyles.css";
 import Sidebar from "../../components/layout/Sidebar";
 import AIChatWidget from "../../components/chat/AIChatWidget";
+import { useSelector, useDispatch } from 'react-redux';
+import { updateUserData } from "../../redux/slices/authSlice";
+import { getProfile } from "../../api/users.api";
+import api from "../../services/api.js";
 
 export default function Catalogo() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [productos, setProductos] = useState([]);
   const [selectedAuto, setSelectedAuto] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const [profileLoading, setProfileLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterCondicion, setFilterCondicion] = useState("Todos");
 
@@ -27,9 +34,79 @@ export default function Catalogo() {
     deudasActuales: 0
   });
 
+  const { user } = useSelector((state) => state.auth);
+  
+  // Verificar si todos los documentos están subidos
+  const hasDocuments = user?.documents?.ine?.url && 
+                       user?.documents?.ingresos?.url && 
+                       user?.documents?.domicilio?.url;
+
+  const getMissingDocuments = () => {
+    const missing = [];
+    if (!user?.documents?.ine?.url) missing.push("INE");
+    if (!user?.documents?.domicilio?.url) missing.push("Comprobante de Domicilio");
+    if (!user?.documents?.ingresos?.url) missing.push("Comprobante de Ingresos");
+    return missing;
+  };
+
+  // Logs para debugging
+  console.log('👤 Catalogo: user =', user);
+  console.log('📋 Catalogo: hasDocuments =', hasDocuments);
+  console.log('📄 Catalogo: documents =', user?.documents);
+  console.log('⏳ Catalogo: profileLoading =', profileLoading);
+
   useEffect(() => {
+    // Cargar desde localStorage PRIMERO si no hay user
+    if (!user) {
+      const storedProfile = localStorage.getItem('userProfile');
+      if (storedProfile) {
+        try {
+          const parsedProfile = JSON.parse(storedProfile);
+          console.log('Catalogo: Cargando perfil desde localStorage al montar:', parsedProfile);
+          dispatch(updateUserData(parsedProfile));
+        } catch (error) {
+          console.error('Error al parsear perfil desde localStorage:', error);
+        }
+      }
+    }
+    
     cargarProductos();
+    cargarPerfil();
   }, []);
+
+  const cargarPerfil = async () => {
+    try {
+      console.log('🔄 Catalogo: Iniciando carga de perfil del usuario...');
+      console.log('🌐 Catalogo: API URL:', import.meta.env.VITE_APP_API_URL);
+      const profileData = await getProfile(navigate);
+      console.log('📦 Catalogo: Respuesta de getProfile:', profileData);
+      
+      if (profileData) {
+        console.log('✅ Catalogo: Perfil obtenido exitosamente');
+        console.log('📄 Catalogo: Documentos en perfil:', profileData.documents);
+        dispatch(updateUserData(profileData));
+        // Guardar en localStorage para persistencia
+        localStorage.setItem('userProfile', JSON.stringify(profileData));
+      } else {
+        console.warn('⚠️ Catalogo: getProfile retornó null o undefined');
+      }
+    } catch (error) {
+      console.error('❌ Catalogo: Error al cargar perfil:', error);
+      console.error('❌ Catalogo: Error details:', error.message);
+      // Intentar cargar desde localStorage si falla la API
+      const storedProfile = localStorage.getItem('userProfile');
+      if (storedProfile) {
+        const parsedProfile = JSON.parse(storedProfile);
+        console.log('💾 Catalogo: Cargando perfil desde localStorage:', parsedProfile);
+        dispatch(updateUserData(parsedProfile));
+      }
+    } finally {
+      setProfileLoading(false);
+      console.log('🏁 Catalogo: Finalizada carga de perfil');
+    }
+  };
+
+
 
   const cargarProductos = async () => {
     try {
@@ -98,6 +175,8 @@ export default function Catalogo() {
 
 
   const openModal = (auto, type) => {
+    console.log('openModal: auto =', auto, 'type =', type);
+    console.log('openModal: hasDocuments =', hasDocuments, 'profileLoading =', profileLoading, 'documents =', user?.documents);
     setSelectedAuto(auto);
     setModalType(type);
     setEnganche(auto.precioBase * 0.20);
@@ -188,14 +267,14 @@ export default function Catalogo() {
                         <Info size={18} /><span>Detalles</span>
                       </Button>
 
-                      <div className="d-flex gap-2 flex-fill">
-                        <Button variant="outline-primary" className="btn-action flex-fill" onClick={() => openModal(auto, 'cotizar')}>
-                          <FileText size={18} />
-                        </Button>
-                        <Button variant="primary" className="btn-action flex-fill" onClick={() => openModal(auto, 'comprar')}>
-                          <ShoppingCart size={18} />
-                        </Button>
-                      </div>
+                      <button
+                        className="btn-cotizar w-100"
+                        onClick={() => openModal(auto, 'cotizar')}
+                        disabled={!hasDocuments || profileLoading}
+                        title={!hasDocuments ? "Debe cargar sus documentos primero" : profileLoading ? "Cargando perfil..." : "Cotizar vehículo"}
+                      >
+                        {profileLoading ? "Cargando..." : "Cotizar Vehículo"}
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -245,7 +324,7 @@ export default function Catalogo() {
                   </div>
                 )}
 
-                {(modalType === "cotizar" || modalType === "comprar") && (
+                {modalType === "cotizar" && (
                   <>
                     <h4 className="fw-bold mb-3">
                       {selectedAuto.marca} {selectedAuto.modelo}
@@ -255,113 +334,124 @@ export default function Catalogo() {
                       Precio base: <strong>${selectedAuto.precioBase.toLocaleString()} MXN</strong>
                     </p>
 
-                    <Row className="mt-3">
+                    {profileLoading ? (
+                      <div className="alert alert-info" role="alert">
+                        <strong>Verificando documentos...</strong> Por favor espere.
+                      </div>
+                    ) : !hasDocuments ? (
+                      <div className="alert alert-warning" role="alert">
+                        <strong>¡Atención!</strong> Primero debe de cargar los archivos ({getMissingDocuments().join(', ')}) en el apartado de su perfil para proceder.
+                      </div>
+                      <>
+                        <Row className="mt-3">
+                          <Col md={6}>
+                            <Form.Group className="mb-3">
+                              <Form.Label>Enganche (mínimo 20%)</Form.Label>
+                              <Form.Control
+                                type="number"
+                                value={enganche}
+                                min={selectedAuto.precioBase * 0.2}
+                                max={selectedAuto.precioBase - 1}
+                                onChange={(e) => setEnganche(Number(e.target.value))}
+                              />
+                            </Form.Group>
+                          </Col>
+
+                          <Col md={6}>
+                            <Form.Group className="mb-3">
+                              <Form.Label>Plazo (meses)</Form.Label>
+                              <Form.Select value={plazo} onChange={(e) => setPlazo(Number(e.target.value))}>
+                                {[12, 24, 36, 48].map(p => (
+                                  <option key={p} value={p}>{p} meses</option>
+                                ))}
+                              </Form.Select>
+                            </Form.Group>
+                          </Col>
+                        </Row>
+
+                        {enganche > 0 && (
+                          <div className="bg-light p-3 rounded border mt-2">
+                            <h5 className="fw-bold">Resumen Aproximado</h5>
+                            <p className="mb-1">Enganche: ${enganche.toLocaleString()}</p>
+
+                            <p className="mb-1">
+                              Monto a financiar: <strong>
+                                ${(selectedAuto.precioBase - enganche).toLocaleString()}
+                              </strong>
+                            </p>
+
+                            <p className="fw-bold text-primary">
+                              Mensualidad estimada: ${((selectedAuto.precioBase - enganche) / plazo).toLocaleString(undefined, { maximumFractionDigits: 0 })} MXN
+                            </p>
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </>
+                )}
+
+                {modalType === "comprar" && hasDocuments && (
+                  <>
+                    <hr className="my-4" />
+                    <h4 className="fw-bold mb-3">Datos Financieros</h4>
+
+                    <Row className="g-3">
                       <Col md={6}>
-                        <Form.Group className="mb-3">
-                          <Form.Label>Enganche (mínimo 20%)</Form.Label>
+                        <Form.Group>
+                          <Form.Label>Ingreso Mensual</Form.Label>
                           <Form.Control
                             type="number"
-                            value={enganche}
-                            min={selectedAuto.precioBase * 0.2}
-                            max={selectedAuto.precioBase - 1}
-                            onChange={(e) => setEnganche(Number(e.target.value))}
+                            placeholder="Ej: 18000"
+                            value={financialData.ingresoMensual}
+                            onChange={(e) =>
+                              setFinancialData({ ...financialData, ingresoMensual: e.target.value })
+                            }
                           />
                         </Form.Group>
                       </Col>
 
                       <Col md={6}>
-                        <Form.Group className="mb-3">
-                          <Form.Label>Plazo (meses)</Form.Label>
-                          <Form.Select value={plazo} onChange={(e) => setPlazo(Number(e.target.value))}>
-                            {[12, 24, 36, 48].map(p => (
-                              <option key={p} value={p}>{p} meses</option>
-                            ))}
-                          </Form.Select>
+                        <Form.Group>
+                          <Form.Label>Gastos Mensuales</Form.Label>
+                          <Form.Control
+                            type="number"
+                            placeholder="Ej: 6000"
+                            value={financialData.gastosMensuales}
+                            onChange={(e) =>
+                              setFinancialData({ ...financialData, gastosMensuales: e.target.value })
+                            }
+                          />
+                        </Form.Group>
+                      </Col>
+
+                      <Col md={6}>
+                        <Form.Group>
+                          <Form.Label>Otros Ingresos</Form.Label>
+                          <Form.Control
+                            type="number"
+                            placeholder="Opcional"
+                            value={financialData.otrosIngresos}
+                            onChange={(e) =>
+                              setFinancialData({ ...financialData, otrosIngresos: e.target.value })
+                            }
+                          />
+                        </Form.Group>
+                      </Col>
+
+                      <Col md={6}>
+                        <Form.Group>
+                          <Form.Label>Deudas Actuales</Form.Label>
+                          <Form.Control
+                            type="number"
+                            placeholder="Ej: 2000"
+                            value={financialData.deudasActuales}
+                            onChange={(e) =>
+                              setFinancialData({ ...financialData, deudasActuales: e.target.value })
+                            }
+                          />
                         </Form.Group>
                       </Col>
                     </Row>
-
-                    {enganche > 0 && (
-                      <div className="bg-light p-3 rounded border mt-2">
-                        <h5 className="fw-bold">Resumen Aproximado</h5>
-                        <p className="mb-1">Enganche: ${enganche.toLocaleString()}</p>
-
-                        <p className="mb-1">
-                          Monto a financiar: <strong>
-                            ${(selectedAuto.precioBase - enganche).toLocaleString()}
-                          </strong>
-                        </p>
-
-                        <p className="fw-bold text-primary">
-                          Mensualidad estimada: ${((selectedAuto.precioBase - enganche) / plazo).toLocaleString(undefined, { maximumFractionDigits: 0 })} MXN
-                        </p>
-                      </div>
-                    )}
-
-                    {modalType === "comprar" && (
-                      <>
-                        <hr className="my-4" />
-                        <h4 className="fw-bold mb-3">Datos Financieros</h4>
-
-                        <Row className="g-3">
-                          <Col md={6}>
-                            <Form.Group>
-                              <Form.Label>Ingreso Mensual</Form.Label>
-                              <Form.Control
-                                type="number"
-                                placeholder="Ej: 18000"
-                                value={financialData.ingresoMensual}
-                                onChange={(e) =>
-                                  setFinancialData({ ...financialData, ingresoMensual: e.target.value })
-                                }
-                              />
-                            </Form.Group>
-                          </Col>
-
-                          <Col md={6}>
-                            <Form.Group>
-                              <Form.Label>Gastos Mensuales</Form.Label>
-                              <Form.Control
-                                type="number"
-                                placeholder="Ej: 6000"
-                                value={financialData.gastosMensuales}
-                                onChange={(e) =>
-                                  setFinancialData({ ...financialData, gastosMensuales: e.target.value })
-                                }
-                              />
-                            </Form.Group>
-                          </Col>
-
-                          <Col md={6}>
-                            <Form.Group>
-                              <Form.Label>Otros Ingresos</Form.Label>
-                              <Form.Control
-                                type="number"
-                                placeholder="Opcional"
-                                value={financialData.otrosIngresos}
-                                onChange={(e) =>
-                                  setFinancialData({ ...financialData, otrosIngresos: e.target.value })
-                                }
-                              />
-                            </Form.Group>
-                          </Col>
-
-                          <Col md={6}>
-                            <Form.Group>
-                              <Form.Label>Deudas Actuales</Form.Label>
-                              <Form.Control
-                                type="number"
-                                placeholder="Ej: 2000"
-                                value={financialData.deudasActuales}
-                                onChange={(e) =>
-                                  setFinancialData({ ...financialData, deudasActuales: e.target.value })
-                                }
-                              />
-                            </Form.Group>
-                          </Col>
-                        </Row>
-                      </>
-                    )}
                   </>
                 )}
               </Modal.Body>
@@ -372,13 +462,13 @@ export default function Catalogo() {
                 </Button>
 
                 {modalType === "cotizar" && (
-                  <Button variant="primary" onClick={handleCotizar}>
-                    <FileText size={18} className="me-2" /> Generar Cotización
+                  <Button variant="primary" onClick={handleCotizar} disabled={!hasDocuments || profileLoading}>
+                    <FileText size={18} className="me-2" /> {profileLoading ? "Cargando..." : "Generar Cotización"}
                   </Button>
                 )}
 
                 {modalType === "comprar" && (
-                  <Button variant="success" onClick={handleComprar}>
+                  <Button variant="success" onClick={handleComprar} disabled={!hasDocuments}>
                     <CheckCircle size={18} className="me-2" /> Enviar Solicitud
                   </Button>
                 )}
