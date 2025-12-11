@@ -1,7 +1,7 @@
 // src/components/layout/Navbar.jsx
 import { Navbar as BsNavbar, Nav, Container, Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import logo from "../../assets/logos/logoAuto.jpg";
+import logo from "../../assets/logos/logoAuto.png";
 import "./nav.css";
 
 export default function MainNavbar() {

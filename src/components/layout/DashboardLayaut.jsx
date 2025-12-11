@@ -1,7 +1,7 @@
 // src/components/layout/DashboardLayout.jsx
 import { Nav } from "react-bootstrap";
 import { Link, useLocation } from "react-router-dom";
-import logo from "../../assets/logos/logoAuto.jpg";
+import logo from "../../assets/logos/logoAuto.png";
 import "./dash.css"; // opcional, si quieres estilos extra
 import { useState } from "react";
 import AIChatWidget from "../chat/AIChatWidget.jsx";
