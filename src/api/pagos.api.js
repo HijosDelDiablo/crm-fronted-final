@@ -21,13 +21,14 @@ export const registrarPago = async (payload, file, navigate) => {
     // payload debe incluir: { compraId, monto, metodoPago, notas }
     const formData = new FormData();
     // Append payload fields
-    Object.keys(payload).forEach(key => {
-        formData.append(key, payload[key]);
-    });
+    formData.append('compraId', payload.compraId);
+    formData.append('monto', payload.monto);
+    formData.append('metodoPago', payload.metodoPago);
+    formData.append('notas', payload.notas);
 
     // Append file if exists
     if (file) {
-        formData.append('comprobante', file);
+        formData.append('file', file);
     }
 
     try {

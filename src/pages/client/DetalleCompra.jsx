@@ -10,6 +10,7 @@ import PaymentSchedule from '../../components/shared/PaymentSchedule';
 import { calculateAmortizationSchedule } from '../../utils/amortization.util';
 import DashboardLayout from '../../components/layout/DashboardLayaut';
 import { Star } from 'lucide-react';
+import { notifyError, notifySuccess } from '../../components/shared/Alerts';
 
 const DetalleCompra = () => {
     const { id } = useParams();
@@ -99,6 +100,7 @@ const DetalleCompra = () => {
         e.preventDefault();
         setSubmittingPayment(true);
         try {
+            console.log("paymentFile", paymentFile);
             await registrarPago({
                 compraId: id,
                 monto: parseFloat(paymentForm.monto),
@@ -106,14 +108,16 @@ const DetalleCompra = () => {
                 notas: paymentForm.notas
             }, paymentFile, navigate);
 
-            alert('Pago registrado correctamente');
+            notifySuccess('Pago registrado correctamente');
+            return;
             setShowPaymentModal(false);
             setPaymentForm({ monto: '', metodoPago: 'Tarjeta', notas: '' });
             setPaymentFile(null);
             // Reload data
             window.location.reload();
         } catch (err) {
-            alert('Error al registrar el pago');
+            console.error('❌ DetalleCompra - Error al registrar el pago:', err);
+            notifyError('Error al registrar el pago');
         } finally {
             setSubmittingPayment(false);
         }
