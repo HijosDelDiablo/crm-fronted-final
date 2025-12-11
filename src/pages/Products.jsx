@@ -144,7 +144,7 @@ export default function Products() {
             const data = await createProduct(payload, navigate);
             let isUpPhoto = false;
             if (image) {
-                const response = await uploadProductImage(data._id, image, navigate);
+                const response = await uploadProductImage((data._id ? data._id : data.id), image, navigate);
                 if (response && response !== null && response !== undefined) isUpPhoto = true;
             }
             if (isUpPhoto && data && data !== null) {
@@ -173,8 +173,8 @@ export default function Products() {
                     console.error("Error al cargar la foto del producto")
                 }
                 if (!data || data === null || data === undefined) {
-                    notifyError("Error al cargar el producto");
-                    console.error("Error al cargar el producto")
+                    notifyError("Error al cargar el producto" + data.message);
+                    console.error("Error al cargar el producto" + data.message)
                 }
             }
         } catch (err) {

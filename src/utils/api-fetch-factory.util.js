@@ -4,14 +4,14 @@ export const fetchApiGet = async (url, navigate, errorMessage) => {
     const fullUrl = import.meta.env.VITE_APP_API_URL + url;
     console.log(`🌐 fetchApiGet - URL completa: ${fullUrl}`);
     console.log(`🔑 fetchApiGet - Headers:`, fetchHeader());
-    
+
     const response = await fetch(fullUrl, {
         method: 'GET',
         ...fetchHeader()
     });
-    
+
     console.log(`📡 fetchApiGet - Response status: ${response.status}`);
-    
+
     if (response.ok) {
         const data = await response.json();
         console.log(`✅ fetchApiGet - Datos recibidos:`, data);
@@ -37,7 +37,7 @@ export const fetchApiPost = async (url, body, navigate, errorMessage) => {
         if (response.status === 401 && navigate && typeof navigate === 'function') {
             navigate('/login');
         }
-        console.error(`${errorMessage} - Status: ${response.status}`);
+        console.error(`${errorMessage} - Status: ${response.status}\n${response.error ? response.error : response}`);
         return null;
     }
 };

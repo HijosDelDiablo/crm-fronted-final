@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Card, Button, Alert, Spinner, Form, Modal } from 'react-bootstrap';
 import { useParams, useNavigate } from 'react-router-dom';
+import { Eye } from 'lucide-react';
 import { getCompraById, evaluarFinanciamiento, aprobarCompra, cancelarCompra } from '../../api/compras.api';
 import { getPagosPorCompra } from '../../api/pagos.api';
 import StatusBadge from '../../components/shared/StatusBadge';
@@ -146,9 +147,22 @@ const DetalleCompraAdmin = () => {
                                     Cancelar Compra
                                 </Button>
                             ) : (
-                                <Button variant="danger" disabled>
-                                    Compra Cancelada
-                                </Button>
+                                <div className="d-flex gap-2">
+                                    <Button variant="danger" disabled>
+                                        Compra Cancelada
+                                    </Button>
+                                    {compra?.documentoCancelacion && (
+                                        <Button
+                                            variant="secondary"
+                                            disabled={!compra?.documentoCancelacion}
+                                            onClick={() => window.open(compra?.documentoCancelacion, '_blank')}
+                                            className="d-flex align-items-center gap-2"
+                                        >
+                                            <Eye size={16} />
+                                            Ver comprobante de cancelación
+                                        </Button>
+                                    )}
+                                </div>
                             )}
                         </Col>
                     </Row>
