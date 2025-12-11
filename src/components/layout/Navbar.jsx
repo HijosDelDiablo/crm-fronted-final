@@ -2,7 +2,7 @@ import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useTheme } from "../../context/ThemeContext";
 import { Sun, Moon } from "lucide-react";
-import logo from '../../assets/logos/logoAuto.jpg';
+import logo from '../../assets/logos/logoAuto.png';
 
 
 export default function NavbarTop() {
@@ -16,8 +16,8 @@ export default function NavbarTop() {
           to="/"
           className="d-flex align-items-center gap-2"
         >
-          <img src={logo} className="nav-logo" alt="Autobots" />
-          <span className="logo-text">Autobots IA Manager</span>
+          <img src={logo} className="nav-logo" alt="Grandline Motors" />
+          <span className="logo-text">Grandline Motors IA Manager</span>
         </Navbar.Brand>
 
         {/* Botón hamburguesa */}

@@ -67,7 +67,7 @@ export default function DashboardHome() {
                 <div className="mb-5">
                     <div className="text-center mb-4">
                         <h1 className="display-4 fw-bold text-white mb-3">
-                            ¡Bienvenido a Autobots IA! 👋
+                            ¡Bienvenido a Grandline Motors IA! 👋
                         </h1>
                         <p className="lead text-muted mb-4">
                             {user?.nombre ? `Hola ${user.nombre},` : "Hola,"} estamos encantados de tenerte aquí.

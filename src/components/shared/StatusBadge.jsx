@@ -15,6 +15,8 @@ const StatusBadge = ({ status }) => {
                 return 'primary';
             case 'rechazada':
                 return 'danger';
+            case 'cancelada':
+                return 'danger';
             case 'registrado':
                 return 'secondary';
             default:

@@ -65,7 +65,7 @@ export default function AIChatWidget({ externalIsOpen, onExternalClose, hideFloa
 
     return {
       role: "assistant",
-      content: `${greeting} ${name}! Soy tu asistente IA de Autobots. \n\nPuedo ayudarte con:\n• Información de vehículos\n• Gestión de tareas\n• Reportes y análisis\n• Soporte y preguntas\n\nEscribe "/" para ver comandos rápidos o simplemente pregúntame lo que necesites.`,
+      content: `${greeting} ${name}! Soy tu asistente IA de Grandline Motors. \n\nPuedo ayudarte con:\n• Información de vehículos\n• Gestión de tareas\n• Reportes y análisis\n• Soporte y preguntas\n\nEscribe "/" para ver comandos rápidos o simplemente pregúntame lo que necesites.`,
       type: "text",
       timestamp: new Date().toISOString()
     };
@@ -299,19 +299,19 @@ export default function AIChatWidget({ externalIsOpen, onExternalClose, hideFloa
 
       case "financing_explain":
         return {
-          content: `**¿Cómo funciona el financiamiento en Autobots?**\n\n🏦 **Proceso simple:**\n• Elige tu auto ideal\n• Define el enganche (mínimo 20%)\n• Selecciona el plazo (hasta 72 meses)\n• Obtén aprobación inmediata\n\n💡 **Beneficios:**\n• Tasas competitivas desde 12%\n• Sin comisiones ocultas\n• Pago mensual fijo\n• Posibilidad de prepago sin penalización\n\n📞 **¿Necesitas más detalles?** Contacta a un asesor o llama al 477 123 4567`,
+          content: `**¿Cómo funciona el financiamiento en Grandline Motors?**\n\n🏦 **Proceso simple:**\n• Elige tu auto ideal\n• Define el enganche (mínimo 20%)\n• Selecciona el plazo (hasta 72 meses)\n• Obtén aprobación inmediata\n\n💡 **Beneficios:**\n• Tasas competitivas desde 12%\n• Sin comisiones ocultas\n• Pago mensual fijo\n• Posibilidad de prepago sin penalización\n\n📞 **¿Necesitas más detalles?** Contacta a un asesor o llama al 477 123 4567`,
           type: "text"
         };
 
       case "schedule_test_drive":
         return {
-          content: `¡Excelente! Para agendar una prueba de manejo:\n\n📅 **Pasos a seguir:**\n1. Elige el auto que te interesa\n2. Selecciona fecha y hora disponible\n3. Proporciona tus datos básicos\n4. Recibe confirmación inmediata\n\n🚗 **Disponibilidad:** Lunes a sábado, 9:00 AM - 6:00 PM\n\n📱 **¿Quieres proceder?** Dime qué auto te interesa y te ayudo con el proceso.\n\nO contacta directamente: soporte@autobots.mx | 477 123 4567`,
+          content: `¡Excelente! Para agendar una prueba de manejo:\n\n📅 **Pasos a seguir:**\n1. Elige el auto que te interesa\n2. Selecciona fecha y hora disponible\n3. Proporciona tus datos básicos\n4. Recibe confirmación inmediata\n\n🚗 **Disponibilidad:** Lunes a sábado, 9:00 AM - 6:00 PM\n\n📱 **¿Quieres proceder?** Dime qué auto te interesa y te ayudo con el proceso.\n\nO contacta directamente: soporte@grandline.mx | 477 123 4567`,
           type: "text"
         };
 
       case "contact_info":
         return {
-          content: `**Información de contacto - Autobots Concesionaria**\n\n📍 **Ubicación:**\nAv. Tecnológico #123, León, Guanajuato\n\n📞 **Teléfonos:**\n• Ventas: 477 123 4567\n• Soporte: 477 123 4568\n• WhatsApp: 477 999 8888\n\n🕒 **Horarios:**\n• Lunes a viernes: 9:00 AM - 7:00 PM\n• Sábado: 9:00 AM - 5:00 PM\n• Domingo: Cerrado\n\n📧 **Email:** info@autobots.mx\n\n🌐 **Redes sociales:** @autobots_mx`,
+          content: `**Información de contacto - Grandline Motors**\n\n📍 **Ubicación:**\nAv. Tecnológico #123, León, Guanajuato\n\n📞 **Teléfonos:**\n• Ventas: 477 123 4567\n• Soporte: 477 123 4568\n• WhatsApp: 477 999 8888\n\n🕒 **Horarios:**\n• Lunes a viernes: 9:00 AM - 7:00 PM\n• Sábado: 9:00 AM - 5:00 PM\n• Domingo: Cerrado\n\n📧 **Email:** info@grandline.mx\n\n🌐 **Redes sociales:** @grandline_mx`,
           type: "text"
         };
 
@@ -331,7 +331,7 @@ export default function AIChatWidget({ externalIsOpen, onExternalClose, hideFloa
 
       case "contact_support":
         return {
-          content: `**¿Necesitas ayuda?**\n\n📧 **Email:** soporte@autobots.mx\n📞 **Teléfono:** 477 123 4567\n💬 **Chat en línea:** Disponible 24/7\n\n*Respuesta garantizada en menos de 24 horas*`,
+          content: `**¿Necesitas ayuda?**\n\n📧 **Email:** soporte@grandline.mx\n📞 **Teléfono:** 477 123 4567\n💬 **Chat en línea:** Disponible 24/7\n\n*Respuesta garantizada en menos de 24 horas*`,
           type: "text"
         };
 
@@ -698,11 +698,11 @@ export default function AIChatWidget({ externalIsOpen, onExternalClose, hideFloa
       default:
         try {
           // Fallback to AI for unknown intents
-          const aiResponse = await queryAI({ 
-            query: intentData.originalText || "Hola", 
-            role: role 
+          const aiResponse = await queryAI({
+            query: intentData.originalText || "Hola",
+            role: role
           }, navigate);
-          
+
           return {
             content: aiResponse.answer || aiResponse.message || aiResponse.response || "Lo siento, no pude generar una respuesta.",
             type: "text"
@@ -710,7 +710,7 @@ export default function AIChatWidget({ externalIsOpen, onExternalClose, hideFloa
         } catch (error) {
           console.error("AI Query Error:", error);
           return {
-            content: "De momento no puedo responder esa pregunta. Contacta con: soporte@autobots.mx o llama al 477 123 4567",
+            content: "De momento no puedo responder esa pregunta. Contacta con: soporte@grandline.mx o llama al 477 123 4567",
             type: "text"
           };
         }
@@ -1143,7 +1143,7 @@ export default function AIChatWidget({ externalIsOpen, onExternalClose, hideFloa
                   <Bot size={18} className="text-white" />
                 </div>
                 <div>
-                  <h6 className="m-0 fw-bold">Autobots Assistant</h6>
+                  <h6 className="m-0 fw-bold">Grandline Motors Assistant</h6>
                   <span className="ai-status">
                     <span className="dot"></span> En línea • {user?.rol}
                   </span>
@@ -1224,7 +1224,7 @@ export default function AIChatWidget({ externalIsOpen, onExternalClose, hideFloa
                         <div className="message-bubble">
                           <div className="message-header">
                             <span className="message-sender">
-                              {msg.role === "assistant" ? "Autobots Assistant" : user?.nombre}
+                              {msg.role === "assistant" ? "Grandline Motors Assistant" : user?.nombre}
                             </span>
                             <span className="message-time">
                               {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}

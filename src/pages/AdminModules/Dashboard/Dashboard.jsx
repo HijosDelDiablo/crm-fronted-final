@@ -59,17 +59,27 @@ const Dashboard = () => {
           getDashboardStats(navigate),
         ]);
 
-        const chartData =
-          salesByPeriod.map((item) => {
-            let fecha = new Date(item.createdAt);
-            let formatedDate = fecha.toISOString().split("T")[0];
-            return {
-              time: formatedDate,
-              value: parseInt(item.cotizacion.totalPagado.toFixed(2)),
-            };
-          }) || [];
+        // Agrupar ventas por fecha para evitar duplicados
+        const salesByDate = salesByPeriod.reduce((acc, item) => {
+          const fecha = new Date(item.createdAt);
+          const formatedDate = fecha.toISOString().split("T")[0];
+          const value = parseInt(item.cotizacion.totalPagado.toFixed(2));
 
-        chartData.sort((a, b) => new Date(a.time) - new Date(b.time));
+          if (acc[formatedDate]) {
+            acc[formatedDate] += value;
+          } else {
+            acc[formatedDate] = value;
+          }
+          return acc;
+        }, {});
+
+        // Convertir a array y ordenar
+        const chartData = Object.keys(salesByDate)
+          .map((date) => ({
+            time: date,
+            value: salesByDate[date],
+          }))
+          .sort((a, b) => new Date(a.time) - new Date(b.time));
 
         setDashboardData({
           totalSales: salesReport || 0,

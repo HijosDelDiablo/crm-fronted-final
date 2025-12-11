@@ -1,7 +1,7 @@
 // src/components/layout/Navbar.jsx
 import { Navbar as BsNavbar, Nav, Container, Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import logo from "../../assets/logos/logoAuto.jpg";
+import logo from "../../assets/logos/logoAuto.png";
 import "./nav.css";
 
 export default function MainNavbar() {
@@ -16,8 +16,8 @@ export default function MainNavbar() {
           to="/"
           className="d-flex align-items-center gap-2"
         >
-          <img src={logo} className="nav-logo" alt="Autobots" />
-          <span className="logo-text">Autobots IA</span>
+          <img src={logo} className="nav-logo" alt="Grandline_Motors" />
+          <span className="logo-text">Grandline Motors IA</span>
         </BsNavbar.Brand>
 
         {/* Botón hamburguesa */}

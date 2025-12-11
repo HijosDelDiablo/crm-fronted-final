@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Card, Button, Alert, Spinner, Form, Modal } from 'react-bootstrap';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getCompraById, evaluarFinanciamiento, aprobarCompra } from '../../api/compras.api';
+import { getCompraById, evaluarFinanciamiento, aprobarCompra, cancelarCompra } from '../../api/compras.api';
 import { getPagosPorCompra } from '../../api/pagos.api';
 import StatusBadge from '../../components/shared/StatusBadge';
 import PaymentTable from '../../components/shared/PaymentTable';
 import Sidebar from '../../components/layout/Sidebar';
+import { notifyError, notifySuccess } from '../../components/shared/Alerts';
 
 const DetalleCompraAdmin = () => {
     const { id } = useParams();
@@ -18,6 +19,9 @@ const DetalleCompraAdmin = () => {
     const [showAprobarModal, setShowAprobarModal] = useState(false);
     const [evalForm, setEvalForm] = useState({ aprobado: false, comentarios: '' });
     const [aprobarForm, setAprobarForm] = useState({ aprobado: true, comentarios: '' });
+    const [showCancelModal, setShowCancelModal] = useState(false);
+    const [cancelFile, setCancelFile] = useState(null);
+    const [submittingCancel, setSubmittingCancel] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -68,6 +72,25 @@ const DetalleCompraAdmin = () => {
         }
     };
 
+    const handleCancelSubmit = async () => {
+        setSubmittingCancel(true);
+        try {
+            const response = await cancelarCompra(id, cancelFile, navigate);
+            if (response) {
+                notifySuccess('La compra ha sido cancelada');
+                setShowCancelModal(false);
+                window.location.reload();
+            }
+            else {
+                notifyError('Error al cancelar la compra');
+            }
+        } catch (err) {
+            notifyError('Error al cancelar la compra');
+        } finally {
+            setSubmittingCancel(false);
+        }
+    };
+
     if (loading) {
         return (
             <div className="dashboard-layout">
@@ -103,6 +126,8 @@ const DetalleCompraAdmin = () => {
     }
 
     const { cotizacion, cliente, vendedor, status, saldoPendiente, createdAt, estado } = compra;
+    console.log("status", status);
+
 
     return (
         <div className="dashboard-layout">
@@ -112,10 +137,19 @@ const DetalleCompraAdmin = () => {
                     <h2>Detalle de Compra (Admin)</h2>
 
                     <Row className="mb-3">
-                        <Col>
+                        <Col className="d-flex justify-content-between align-items-center">
                             <Button variant="secondary" onClick={() => navigate('/admin/compras')}>
                                 ← Volver a Revisar Compras
                             </Button>
+                            {status !== 'Cancelada' ? (
+                                <Button variant="danger" onClick={() => setShowCancelModal(true)}>
+                                    Cancelar Compra
+                                </Button>
+                            ) : (
+                                <Button variant="danger" disabled>
+                                    Compra Cancelada
+                                </Button>
+                            )}
                         </Col>
                     </Row>
 
@@ -255,6 +289,39 @@ const DetalleCompraAdmin = () => {
                             </Button>
                             <Button variant="primary" onClick={handleAprobar}>
                                 Aprobar
+                            </Button>
+                        </Modal.Footer>
+                    </Modal>
+
+                    {/* Modal Cancelar Compra */}
+                    <Modal show={showCancelModal} onHide={() => setShowCancelModal(false)}>
+                        <Modal.Header closeButton className="bg-danger text-white">
+                            <Modal.Title>Cancelar Compra</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <Alert variant="warning">
+                                ¿Estás seguro de que deseas cancelar esta compra? Esta acción puede no ser reversible.
+                            </Alert>
+                            <Form>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Archivo de Justificación (Obligatorio)</Form.Label>
+                                    <Form.Control
+                                        type="file"
+                                        required
+                                        onChange={(e) => setCancelFile(e.target.files[0])}
+                                    />
+                                    <Form.Text className="text-muted">
+                                        Puedes subir un documento que justifique la cancelación.
+                                    </Form.Text>
+                                </Form.Group>
+                            </Form>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button variant="secondary" onClick={() => setShowCancelModal(false)}>
+                                Cerrar
+                            </Button>
+                            <Button variant="danger" onClick={handleCancelSubmit} disabled={submittingCancel}>
+                                {submittingCancel ? 'Cancelando...' : 'Confirmar Cancelación'}
                             </Button>
                         </Modal.Footer>
                     </Modal>

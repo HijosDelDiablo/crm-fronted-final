@@ -1,7 +1,7 @@
 // src/components/layout/DashboardLayout.jsx
 import { Nav } from "react-bootstrap";
 import { Link, useLocation } from "react-router-dom";
-import logo from "../../assets/logos/logoAuto.jpg";
+import logo from "../../assets/logos/logoAuto.png";
 import "./dash.css"; // opcional, si quieres estilos extra
 import { useState } from "react";
 import AIChatWidget from "../chat/AIChatWidget.jsx";
@@ -70,8 +70,8 @@ export default function DashboardLayout({ children }) {
           {/* Logo y título solo si NO está colapsado */}
           {!collapsed && (
             <div className="sidebar-brand">
-              <img src={logo} alt="Autobots IA" className="sidebar-logo" />
-              <span className="sidebar-title">Autobots IA</span>
+              <img src={logo} alt="Grandline Motors IA" className="sidebar-logo" />
+              <span className="sidebar-title">Grandline Motors IA</span>
             </div>
           )}
 

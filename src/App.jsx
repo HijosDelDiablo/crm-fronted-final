@@ -44,6 +44,7 @@ const MisPagos = lazy(() => import("./pages/client/MisPagos"));
 const MisCotizaciones = lazy(() => import("./pages/client/MisCotizaciones"));
 const MyProfile = lazy(() => import("./pages/MyProfile"));
 
+
 // Guards
 const AuthGuard = lazy(() => import("./guards/AuthGuard"));
 const AdminGuard = lazy(() => import("./guards/AdminGuard"));
@@ -73,7 +74,7 @@ function App() {
           animation: 'spin 1s linear infinite',
           margin: '0 auto 1rem'
         }}></div>
-        Cargando Autobots CRM...
+        Cargando Grandline Motors CRM...
       </div>
       <style>{`
         @keyframes spin {

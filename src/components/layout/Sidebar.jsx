@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import { logout } from "../../redux/slices/authSlice";
 import { House, Box, ShoppingBag, LogOut, Car, Menu, Truck, Users, UserCheck, MessageSquare, ShoppingCart, CreditCard, ShieldCheck, User, DollarSign } from "lucide-react";
-import logo from "../../assets/logos/logoAuto.jpg";
+import logo from "../../assets/logos/logoAuto.png";
 import AIChatWidget from "../chat/AIChatWidget.jsx";
 
 // Menú del Administrador

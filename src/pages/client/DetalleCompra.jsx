@@ -10,6 +10,7 @@ import PaymentSchedule from '../../components/shared/PaymentSchedule';
 import { calculateAmortizationSchedule } from '../../utils/amortization.util';
 import DashboardLayout from '../../components/layout/DashboardLayaut';
 import { Star } from 'lucide-react';
+import { notifyError, notifySuccess } from '../../components/shared/Alerts';
 
 const DetalleCompra = () => {
     const { id } = useParams();
@@ -27,6 +28,7 @@ const DetalleCompra = () => {
         metodoPago: 'Tarjeta', // Default for client
         notas: ''
     });
+    const [paymentFile, setPaymentFile] = useState(null);
     const [submittingPayment, setSubmittingPayment] = useState(false);
 
     // Review Modal State
@@ -98,20 +100,25 @@ const DetalleCompra = () => {
         e.preventDefault();
         setSubmittingPayment(true);
         try {
-            await registrarPago({
+            console.log("paymentFile", paymentFile);
+            const response = await registrarPago({
                 compraId: id,
                 monto: parseFloat(paymentForm.monto),
                 metodoPago: 'Tarjeta', // Force Card for client as per requirement
                 notas: paymentForm.notas
-            }, navigate);
+            }, paymentFile, navigate);
+            if (response && response !== null) {
+                notifySuccess('Pago registrado correctamente');
+                setShowPaymentModal(false);
+                setPaymentForm({ monto: '', metodoPago: 'Tarjeta', notas: '' });
+                setPaymentFile(null);
 
-            alert('Pago registrado correctamente');
-            setShowPaymentModal(false);
-            setPaymentForm({ monto: '', metodoPago: 'Tarjeta', notas: '' });
-            // Reload data
-            window.location.reload();
+                // Reload data
+                window.location.reload();
+            }
         } catch (err) {
-            alert('Error al registrar el pago');
+            console.error('❌ DetalleCompra - Error al registrar el pago:', err);
+            notifyError('Error al registrar el pago');
         } finally {
             setSubmittingPayment(false);
         }
@@ -317,6 +324,14 @@ const DetalleCompra = () => {
                                     value={paymentForm.monto}
                                     onChange={(e) => setPaymentForm({ ...paymentForm, monto: e.target.value })}
                                     placeholder="0.00"
+                                />
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Comprobante de Pago (Obligatorio)</Form.Label>
+                                <Form.Control
+                                    type="file"
+                                    required
+                                    onChange={(e) => setPaymentFile(e.target.files[0])}
                                 />
                             </Form.Group>
                             <Form.Group className="mb-3">
