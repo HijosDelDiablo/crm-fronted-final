@@ -75,10 +75,15 @@ const DetalleCompraAdmin = () => {
     const handleCancelSubmit = async () => {
         setSubmittingCancel(true);
         try {
-            await cancelarCompra(id, cancelFile, navigate);
-            notifySuccess('La compra ha sido cancelada');
-            setShowCancelModal(false);
-            window.location.reload();
+            const response = await cancelarCompra(id, cancelFile, navigate);
+            if (response) {
+                notifySuccess('La compra ha sido cancelada');
+                setShowCancelModal(false);
+                window.location.reload();
+            }
+            else {
+                notifyError('Error al cancelar la compra');
+            }
         } catch (err) {
             notifyError('Error al cancelar la compra');
         } finally {
@@ -121,6 +126,8 @@ const DetalleCompraAdmin = () => {
     }
 
     const { cotizacion, cliente, vendedor, status, saldoPendiente, createdAt, estado } = compra;
+    console.log("status", status);
+
 
     return (
         <div className="dashboard-layout">
@@ -134,9 +141,15 @@ const DetalleCompraAdmin = () => {
                             <Button variant="secondary" onClick={() => navigate('/admin/compras')}>
                                 ← Volver a Revisar Compras
                             </Button>
-                            <Button variant="danger" onClick={() => setShowCancelModal(true)}>
-                                Cancelar Compra
-                            </Button>
+                            {status !== 'Cancelada' ? (
+                                <Button variant="danger" onClick={() => setShowCancelModal(true)}>
+                                    Cancelar Compra
+                                </Button>
+                            ) : (
+                                <Button variant="danger" disabled>
+                                    Compra Cancelada
+                                </Button>
+                            )}
                         </Col>
                     </Row>
 

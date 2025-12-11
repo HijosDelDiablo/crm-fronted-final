@@ -65,13 +65,21 @@ export const evaluarFinanciamiento = async (compraId, navigate) => {
 };
 
 export const cancelarCompra = async (compraId, cancelFile, navigate) => {
+    if (!compraId) {
+        notifyError('Debe seleccionar una compra para cancelar');
+        return;
+    }
+    if (!cancelFile) {
+        notifyError('Debe seleccionar un archivo para cancelar la compra');
+        return;
+    }
     const formData = new FormData();
     formData.append('file', cancelFile);
 
     try {
         const token = localStorage.getItem('token') || localStorage.getItem('accessToken');
         const response = await fetch(import.meta.env.VITE_APP_API_URL + `/compra/${compraId}/cancelar`, {
-            method: 'POST',
+            method: 'PATCH',
             headers: {
                 'Authorization': `Bearer ${token}`
             },
