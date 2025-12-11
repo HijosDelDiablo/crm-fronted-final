@@ -16,8 +16,8 @@ export default function MainNavbar() {
           to="/"
           className="d-flex align-items-center gap-2"
         >
-          <img src={logo} className="nav-logo" alt="Autobots" />
-          <span className="logo-text">Autobots IA</span>
+          <img src={logo} className="nav-logo" alt="Grandline_Motors" />
+          <span className="logo-text">Grandline Motors IA</span>
         </BsNavbar.Brand>
 
         {/* Botón hamburguesa */}

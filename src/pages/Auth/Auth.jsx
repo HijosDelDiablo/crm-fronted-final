@@ -148,7 +148,7 @@ const Auth = () => {
         <div className="logo-container">
           <div className="logo-icon">AI</div>
           <div className="logo-text">
-            <span className="logo-title">Autobots IA</span>
+            <span className="logo-title">Grandline Motors IA</span>
             <span className="logo-subtitle">CRM automotriz con IA</span>
           </div>
         </div>

@@ -73,7 +73,7 @@ function App() {
           animation: 'spin 1s linear infinite',
           margin: '0 auto 1rem'
         }}></div>
-        Cargando Autobots CRM...
+        Cargando Grandline Motors CRM...
       </div>
       <style>{`
         @keyframes spin {

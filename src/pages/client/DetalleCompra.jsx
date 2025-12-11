@@ -101,20 +101,21 @@ const DetalleCompra = () => {
         setSubmittingPayment(true);
         try {
             console.log("paymentFile", paymentFile);
-            await registrarPago({
+            const response = await registrarPago({
                 compraId: id,
                 monto: parseFloat(paymentForm.monto),
                 metodoPago: 'Tarjeta', // Force Card for client as per requirement
                 notas: paymentForm.notas
             }, paymentFile, navigate);
+            if (response && response !== null) {
+                notifySuccess('Pago registrado correctamente');
+                setShowPaymentModal(false);
+                setPaymentForm({ monto: '', metodoPago: 'Tarjeta', notas: '' });
+                setPaymentFile(null);
 
-            notifySuccess('Pago registrado correctamente');
-            return;
-            setShowPaymentModal(false);
-            setPaymentForm({ monto: '', metodoPago: 'Tarjeta', notas: '' });
-            setPaymentFile(null);
-            // Reload data
-            window.location.reload();
+                // Reload data
+                window.location.reload();
+            }
         } catch (err) {
             console.error('❌ DetalleCompra - Error al registrar el pago:', err);
             notifyError('Error al registrar el pago');

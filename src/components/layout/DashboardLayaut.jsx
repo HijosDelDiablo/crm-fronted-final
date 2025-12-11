@@ -70,8 +70,8 @@ export default function DashboardLayout({ children }) {
           {/* Logo y título solo si NO está colapsado */}
           {!collapsed && (
             <div className="sidebar-brand">
-              <img src={logo} alt="Autobots IA" className="sidebar-logo" />
-              <span className="sidebar-title">Autobots IA</span>
+              <img src={logo} alt="Grandline Motors IA" className="sidebar-logo" />
+              <span className="sidebar-title">Grandline Motors IA</span>
             </div>
           )}
 
