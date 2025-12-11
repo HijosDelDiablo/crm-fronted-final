@@ -322,9 +322,10 @@ const DetalleCompra = () => {
                                 />
                             </Form.Group>
                             <Form.Group className="mb-3">
-                                <Form.Label>Comprobante de Pago (Opcional)</Form.Label>
+                                <Form.Label>Comprobante de Pago (Obligatorio)</Form.Label>
                                 <Form.Control
                                     type="file"
+                                    required
                                     onChange={(e) => setPaymentFile(e.target.files[0])}
                                 />
                             </Form.Group>
