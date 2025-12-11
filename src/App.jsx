@@ -39,7 +39,7 @@ const DashboardHome = lazy(() => import("./pages/DashboardHome"));
 const ViewProducts = lazy(() => import("./pages/ViewProducts"));
 const ViewPurchases = lazy(() => import("./pages/ViewPurchases"));
 const MisCompras = lazy(() => import("./pages/Client/MisCompras"));
-const DetalleCompra = lazy(() => import("./pages/client/DetalleCompra"));
+const DetalleCompra = lazy(() => import("./pages/Client/DetalleCompra"));
 const MisPagos = lazy(() => import("./pages/client/MisPagos"));
 const MisCotizaciones = lazy(() => import("./pages/client/MisCotizaciones"));
 const MyProfile = lazy(() => import("./pages/MyProfile"));
