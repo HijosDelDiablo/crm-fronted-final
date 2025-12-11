@@ -63,3 +63,30 @@ export const evaluarFinanciamiento = async (compraId, navigate) => {
     const response = await fetchApiPostWithParams(`/compra/${compraId}/evaluar`, navigate, 'Error al evaluar financiamiento', 'PATCH');
     return response;
 };
+
+export const cancelarCompra = async (compraId, cancelFile, navigate) => {
+    const formData = new FormData();
+    formData.append('file', cancelFile);
+
+    try {
+        const token = localStorage.getItem('token') || localStorage.getItem('accessToken');
+        const response = await fetch(import.meta.env.VITE_APP_API_URL + `/compra/${compraId}/cancelar`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+            body: formData
+        });
+
+        if (response.ok) {
+            return await response.json();
+        } else {
+            if (response.status === 401) navigate('/login');
+            console.error('Error al subir imagen del producto');
+            return null;
+        }
+    } catch (error) {
+        console.error('Error al subir imagen del producto:', error);
+        return null;
+    }
+};
