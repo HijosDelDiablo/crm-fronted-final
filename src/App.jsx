@@ -19,16 +19,6 @@ const NotFound = lazy(() => import("./pages/NotFound/NotFound"));
 const Home = lazy(() => import("./pages/inicio/Home"));
 const LoginGoogle = lazy(() => import("./pages/Auth/LoginGoogle"));
 
-// Client components
-const DashboardHome = lazy(() => import("./pages/DashboardHome"));
-const ViewProducts = lazy(() => import("./pages/ViewProducts"));
-const MisPagos = lazy(() => import("./pages/Client/MisPagos"));
-const ViewPurchases = lazy(() => import("./pages/ViewPurchases"));
-const MisCompras = lazy(() => import("./pages/Client/MisCompras"));
-const MisCotizaciones = lazy(() => import("./pages/Client/MisCotizaciones"));
-const MyProfile = lazy(() => import("./pages/MyProfile"));
-const DetalleCompra = lazy(() => import("./pages/Client/DetalleCompra"));
-
 // Admin components
 const Dashboard = lazy(() => import("./pages/AdminModules/Dashboard/Dashboard"));
 const Pricings = lazy(() => import("./pages/AdminModules/Pricings/Pricings"));
@@ -43,6 +33,16 @@ const ComprasPorVendedor = lazy(() => import("./pages/admin/ComprasPorVendedor")
 const GestionPagos = lazy(() => import("./pages/admin/GestionPagos"));
 const Gastos = lazy(() => import("./pages/admin/Gastos"));
 const Admins = lazy(() => import("./pages/AdminModules/Admins/Admins"));
+
+// Client components
+const DashboardHome = lazy(() => import("./pages/DashboardHome"));
+const ViewProducts = lazy(() => import("./pages/ViewProducts"));
+const ViewPurchases = lazy(() => import("./pages/ViewPurchases"));
+const MisCompras = lazy(() => import("./pages/Client/MisCompras"));
+const DetalleCompra = lazy(() => import("./pages/client/DetalleCompra"));
+const MisPagos = lazy(() => import("./pages/client/MisPagos"));
+const MisCotizaciones = lazy(() => import("./pages/client/MisCotizaciones"));
+const MyProfile = lazy(() => import("./pages/MyProfile"));
 
 
 // Guards
