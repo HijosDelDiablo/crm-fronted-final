@@ -2,7 +2,7 @@ import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useTheme } from "../../context/ThemeContext";
 import { Sun, Moon } from "lucide-react";
-import logo from '../../assets/logos/logoAuto.jpg';
+import logo from '../../assets/logos/logoAuto.png';
 
 
 export default function NavbarTop() {
