@@ -15,6 +15,7 @@ const PaymentTable = ({ payments }) => {
                     <th>Monto</th>
                     <th>Método de Pago</th>
                     <th>Registrado por</th>
+                    <th>Comprobante</th>
                     <th>Estado</th>
                 </tr>
             </thead>
@@ -28,13 +29,27 @@ const PaymentTable = ({ payments }) => {
                                 <td>${payment.monto?.toLocaleString('es-ES')}</td>
                                 <td>{payment.metodoPago}</td>
                                 <td>{payment.registradoPor?.nombre || 'Sistema'}</td>
+                                <td>
+                                    {payment.comprobante ? (
+                                        <a
+                                            href={`${import.meta.env.VITE_APP_API_URL}/${payment.comprobante}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-info text-decoration-underline"
+                                        >
+                                            Ver Comprobante
+                                        </a>
+                                    ) : (
+                                        <span className="text-muted">N/A</span>
+                                    )}
+                                </td>
                                 <td><StatusBadge status={payment.status} /></td>
                             </tr>
                         );
                     })
                 ) : (
                     <tr>
-                        <td colSpan="5" className="text-center">
+                        <td colSpan="6" className="text-center">
                             No hay pagos registrados
                         </td>
                     </tr>
