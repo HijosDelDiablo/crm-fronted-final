@@ -7,6 +7,7 @@ import "./products.css";
 import "./products-form.css";
 import Sidebar from "../components/layout/Sidebar";
 import { useNavigate } from "react-router-dom";
+import { notifyError, notifySuccess } from "../components/shared/Alerts.js";
 
 export default function Products() {
     const navigate = useNavigate();
@@ -141,7 +142,7 @@ export default function Products() {
 
             console.log('Payload a enviar:', payload);
             const data = await createProduct(payload, navigate);
-            const isUpPhoto = false;
+            let isUpPhoto = false;
             if (image) {
                 const response = await uploadProductImage(data._id, image, navigate);
                 if (response && response !== null && response !== undefined) isUpPhoto = true;
@@ -232,7 +233,14 @@ export default function Products() {
                                     style={{ cursor: 'pointer' }}
                                 >
                                     {p.imageUrl && (
-                                        <img src={p.imageUrl} alt={p.modelo} className="product-card-img" />
+                                        <img
+                                            src={p.imageUrl.startsWith("/uploads")
+                                                ? `${import.meta.env.VITE_APP_API_URL}${p.imageUrl}`
+                                                : p.imageUrl
+                                            }
+                                            alt={p.modelo}
+                                            className="product-card-img"
+                                        />
                                     )}
                                     <button
                                         className="product-card-delete"
