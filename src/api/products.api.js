@@ -10,7 +10,10 @@ export const getStoreProducts = async (filters = {}, navigate) => {
 };
 
 export const createProduct = async (productData, navigate) => {
-    return await fetchApiPost('/products', productData, navigate, 'Error al crear producto');
+    const response = await fetchApiPost('/products', productData, navigate, 'Error al crear producto');
+    console.log("RESPUESTA CREATEpRODUCT: ", response);
+    return response;
+
 };
 
 export const getProductById = async (id, navigate) => {

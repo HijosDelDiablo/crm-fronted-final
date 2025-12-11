@@ -7,6 +7,7 @@ import "./products.css";
 import "./products-form.css";
 import Sidebar from "../components/layout/Sidebar";
 import { useNavigate } from "react-router-dom";
+import { notifyError, notifySuccess } from "../components/shared/Alerts.js";
 
 export default function Products() {
     const navigate = useNavigate();
@@ -141,32 +142,45 @@ export default function Products() {
 
             console.log('Payload a enviar:', payload);
             const data = await createProduct(payload, navigate);
+            let isUpPhoto = false;
             if (image) {
-                await uploadProductImage(data._id, image, navigate);
+                const response = await uploadProductImage(data._id, image, navigate);
+                if (response && response !== null && response !== undefined) isUpPhoto = true;
             }
-            toast.success("Producto creado");
-            setShowModal(false);
-            setForm({
-                marca: "",
-                modelo: "",
-                ano: "",
-                precioBase: "",
-                kilometraje: "",
-                descripcion: "",
-                tipo: "",
-                transmision: "",
-                motor: "",
-                color: "",
-                numPuertas: "",
-                vin: "",
-                proveedor: ""
-            });
-            setImage(null);
-            fetchProducts();
+            if (isUpPhoto && data && data !== null) {
+                notifySuccess("Producto creado!")
+                setShowModal(false);
+                setForm({
+                    marca: "",
+                    modelo: "",
+                    ano: "",
+                    precioBase: "",
+                    kilometraje: "",
+                    descripcion: "",
+                    tipo: "",
+                    transmision: "",
+                    motor: "",
+                    color: "",
+                    numPuertas: "",
+                    vin: "",
+                    proveedor: ""
+                });
+                setImage(null);
+                fetchProducts();
+            } else {
+                if (!isUpPhoto || isUpPhoto === null || isUpPhoto === undefined) {
+                    notifyError("Error al cargar la foto del producto");
+                    console.error("Error al cargar la foto del producto")
+                }
+                if (!data || data === null || data === undefined) {
+                    notifyError("Error al cargar el producto");
+                    console.error("Error al cargar el producto")
+                }
+            }
         } catch (err) {
             const msg = err.response?.data?.message || err.message;
             setFormError(msg);
-            toast.error("Error al crear producto: " + msg);
+            notifyError("Error al crear producto: " + msg);
         } finally {
             setUploading(false);
         }
@@ -219,7 +233,14 @@ export default function Products() {
                                     style={{ cursor: 'pointer' }}
                                 >
                                     {p.imageUrl && (
-                                        <img src={p.imageUrl} alt={p.modelo} className="product-card-img" />
+                                        <img
+                                            src={p.imageUrl.startsWith("/uploads")
+                                                ? `${import.meta.env.VITE_APP_API_URL}${p.imageUrl}`
+                                                : p.imageUrl
+                                            }
+                                            alt={p.modelo}
+                                            className="product-card-img"
+                                        />
                                     )}
                                     <button
                                         className="product-card-delete"
