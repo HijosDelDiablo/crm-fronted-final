@@ -17,8 +17,38 @@ export const getPagosPorCompra = async (compraId, navigate) => {
     return response?.pagos || response || [];
 };
 
-export const registrarPago = async (payload, navigate) => {
+export const registrarPago = async (payload, file, navigate) => {
     // payload debe incluir: { compraId, monto, metodoPago, notas }
-    const response = await fetchApiPost('/pagos', payload, navigate, 'Error al registrar pago');
-    return response;
+    const formData = new FormData();
+    // Append payload fields
+    Object.keys(payload).forEach(key => {
+        formData.append(key, payload[key]);
+    });
+
+    // Append file if exists
+    if (file) {
+        formData.append('comprobante', file);
+    }
+
+    try {
+        const token = localStorage.getItem('token') || localStorage.getItem('accessToken');
+        const response = await fetch(import.meta.env.VITE_APP_API_URL + '/pagos', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+            body: formData
+        });
+
+        if (response.ok) {
+            return await response.json();
+        } else {
+            if (response.status === 401) navigate('/login');
+            console.error('Error al registrar pago');
+            return null;
+        }
+    } catch (error) {
+        console.error('Error al registrar pago:', error);
+        return null;
+    }
 };

@@ -27,6 +27,7 @@ const DetalleCompra = () => {
         metodoPago: 'Tarjeta', // Default for client
         notas: ''
     });
+    const [paymentFile, setPaymentFile] = useState(null);
     const [submittingPayment, setSubmittingPayment] = useState(false);
 
     // Review Modal State
@@ -103,11 +104,12 @@ const DetalleCompra = () => {
                 monto: parseFloat(paymentForm.monto),
                 metodoPago: 'Tarjeta', // Force Card for client as per requirement
                 notas: paymentForm.notas
-            }, navigate);
+            }, paymentFile, navigate);
 
             alert('Pago registrado correctamente');
             setShowPaymentModal(false);
             setPaymentForm({ monto: '', metodoPago: 'Tarjeta', notas: '' });
+            setPaymentFile(null);
             // Reload data
             window.location.reload();
         } catch (err) {
@@ -317,6 +319,13 @@ const DetalleCompra = () => {
                                     value={paymentForm.monto}
                                     onChange={(e) => setPaymentForm({ ...paymentForm, monto: e.target.value })}
                                     placeholder="0.00"
+                                />
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Comprobante de Pago (Opcional)</Form.Label>
+                                <Form.Control
+                                    type="file"
+                                    onChange={(e) => setPaymentFile(e.target.files[0])}
                                 />
                             </Form.Group>
                             <Form.Group className="mb-3">
